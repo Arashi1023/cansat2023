@@ -6,6 +6,8 @@ import time
 import signal
 
 
+#aa
+
 def pressdetect_release(thd_press_release, t_delta_release):
     global press_count_release
     global press_judge_release

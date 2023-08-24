@@ -565,7 +565,7 @@ def drive(lon_dest, lat_dest, thd_distance, t_run, log_path, t_start=0):
         # -----PID制御による角度調整-----#
         PID_adjust_direction(target_azimuth, magx_off, magy_off, theta_array)
         # stop_controller.reset()
-        #running_controller.reset()
+        running_controller.reset()
         # PID_adjust_direction2(stop_controller, target_azimuth, magx_off, magy_off)
 
         # -----現在のローバーの情報取得-----#

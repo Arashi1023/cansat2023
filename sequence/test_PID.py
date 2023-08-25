@@ -495,7 +495,7 @@ if __name__ == "__main__":
     theta_array = []
     theta_differential_array = []
 
-    #-----要素数10の空配列の作成-----#
+    #-----要素数5の空配列の作成-----#
     theta_array = make_theta_array(theta_array, 5)
 
     #-----オフセットの取得-----#
@@ -504,6 +504,11 @@ if __name__ == "__main__":
     magx_off, magy_off = calibration.cal(30, -30, 40)
 
     #-----PID制御-----#
+
+    while True:
+        input_azimuth = float(input('目標角度は？'))
+        PID_adjust_direction(input_azimuth, magx_off, magy_off, theta_array)
+
     # PID_adjust_direction(180, magx_off, magy_off, theta_array)
 
     # time.sleep(1)
@@ -522,12 +527,12 @@ if __name__ == "__main__":
 
     #-----PID制御によるGPS走行-----#
     #-----目標地点の設定-----#
-    lat_goal = 35.9242411
-    lon_goal = 139.9120618
+    # lat_goal = 35.9242411
+    # lon_goal = 139.9120618
 
 
 
-    drive(lon_dest=lon_goal, lat_dest=lat_goal, thd_distance=5, t_run=60, log_path='/home/dendenmushi/cansat2023/sequence/log/gpsrunningLog.txt')
+    # drive(lon_dest=lon_goal, lat_dest=lat_goal, thd_distance=5, t_run=60, log_path='/home/dendenmushi/cansat2023/sequence/log/gpsrunningLog.txt')
 
     
     

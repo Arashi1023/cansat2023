@@ -128,12 +128,15 @@ def detect_goal(path):
 
     return area_ratio, angle
 
+import take
+
 if __name__ == "__main__":
     motor.setup()
     original_img_path = 'ImageGuide-0758.jpg'
     original_img = cv2.imread(original_img_path)
 
     t_start = time.time()
+    take.picture()
     motor.motor_continue(30, 30)
     detect_goal(original_img_path)
     motor.motor_stop(0.1)

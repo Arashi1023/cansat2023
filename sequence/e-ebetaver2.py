@@ -162,43 +162,31 @@ def move_to_bulearea(count, lat_human, lon_human):
 
 
     print(count)
-    #青点から5m以内か
+    
     if count == 1:
-        # condition =1
-        # while condition == 1:
-        #     if data_dist_bulearea1['distance']<=5:
-        #         print("第"+count+"エリア到着")
-        #         condition =0
-        #     print("第"+count+"エリア外です")
-        gps_running1.drive(lon_n, lat_n, thd_distance=10, t_adj_gps=60,logpath=log_humandetect,t_start=t_start)#60秒もいるのか？
+        PID.drive(lon_n, lat_n, thd_distance=3, t_run=60, logpath=log_humandetect,t_start=t_start)
         print("第1エリアです")
     elif count == 2:
-        # condition =1
-        # while condition == 1:
-        #     if data_dist_bulearea2['distance']<=5:
-        #         print("第"+count+"エリア到着")
-        #         condition =0
-        #     print("第"+count+"エリア外です")
-        gps_running1.drive(lon_e, lat_e, thd_distance=10, t_adj_gps=60,logpath=log_humandetect,t_start=t_start) 
+        PID.drive(lon_e, lat_e, thd_distance=3, t_run=60, logpath=log_humandetect,t_start=t_start) 
         print("第2エリアです")  
     elif count == 3:
-        # condition =1
-        # while condition == 1:
-        #     if data_dist_bulearea3['distance']<=5:
-        #         print("第"+count+"エリア到着")
-        #         condition =0
-        #     print("第"+count+"エリア外です")
-        gps_running1.drive(lon_s, lat_s, thd_distance=10, t_adj_gps=60,logpath=log_humandetect,t_start=t_start)
+        PID.drive(lon_s, lat_s, thd_distance=3, t_run=60, logpath=log_humandetect,t_start=t_start)
         print("第3エリアです")
     elif count == 4:
-        # condition =1
-        # while condition == 1:
-        #     if data_dist_bulearea4['distance']<=5:
-        #         print("第"+count+"エリア到着")
-        #         condition =0
-        #     print("第"+count+"エリア外です")
-        gps_running1.drive(lon_w, lat_w, thd_distance=10, t_adj_gps=60,logpath=log_humandetect,t_start=t_start)
+        PID.drive(lon_w, lat_w, thd_distance=3, t_run=60, logpath=log_humandetect,t_start=t_start)
         print("第4エリアです")
+    elif count == 5:
+        PID.drive(lon_w, lat_n, thd_distance=3, t_run=60, logpath=log_humandetect,t_start=t_start)
+        print("第5エリアです")
+    elif count == 6:
+        PID.drive(lon_e, lat_n, thd_distance=3, t_run=60, logpath=log_humandetect,t_start=t_start)
+        print("第6エリアです")
+    elif count == 7:
+        PID.drive(lon_e, lat_s, thd_distance=3, t_run=60, logpath=log_humandetect,t_start=t_start)
+        print("第7エリアです")
+    elif count == 8:
+        PID.drive(lon_w, lat_s, thd_distance=3, t_run=60, logpath=log_humandetect,t_start=t_start)
+        print("第8エリアです")
     else:
         print("青点エリア捜索終了")
 if __name__=='__main__':

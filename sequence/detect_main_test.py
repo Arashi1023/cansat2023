@@ -137,7 +137,8 @@ if __name__ == "__main__":
 
     t_start = time.time()
     take.picture('imgs/ImageGuide-', 240, 320)
-    motor.motor_continue(30, 30)
+    take.picture('imgs/ImageGuide-', 320, 240)
+    # motor.motor_continue(30, 30)
     detect_goal(original_img_path)
-    motor.motor_stop(0.1)
+    # motor.motor_stop(0.1)
     print(time.time() - t_start)

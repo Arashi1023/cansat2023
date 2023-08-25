@@ -72,7 +72,7 @@ def picture(path, width=240, height=320):
 
         with picamera.Picamera2() as camera:
             # camera.set_logging(camera.ERROR)
-            camera.start_preview('')
+            # camera.start_preview('')
             filepath = filename(path, 'jpg') # カメラのファイル名作成
             camera_config = camera.create_still_configuration(main={"size": (width, height)}, lores={"size": (width, height)}, display="lores")
             camera.configure(camera_config)

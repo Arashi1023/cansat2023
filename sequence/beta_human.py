@@ -290,7 +290,7 @@ if __name__ == "__main__":
             else:
                 #lat_now, lon_now = gps.location()
                 count += 1
-                move_to_bulearea(count, lat_human, lon_human)
+                # move_to_bulearea(count, lat_human, lon_human)
                 human_judge_count, break_outer_loop = take_and_rotation(human_judge_count=human_judge_count, break_outer_loop=break_outer_loop,judge_probability=judge_probability,start_time=start_time,logpath=log_humandetect,model=ML_people)
     print("human detection finish!!!")
     

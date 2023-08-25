@@ -65,7 +65,9 @@ def picture(path, width=320, height=240):
       
     
     try:
+        t_dir = time.time()
         make_dir(path)
+        print('dir', time.time()-t_dir)
         # picam2 =  Picamera2()
 
         with picamera.Picamera2() as camera:

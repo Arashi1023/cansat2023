@@ -13,7 +13,7 @@ import other
 import datetime
 import test_PID as PID
 
-log_humandetect=other.filename('/home/dendenmushi/cansat2023/sequence/log/humandetectlog','txt')
+log_humandetect=other.filename('/home/dendenmushi/cansat2023/sequence/log/humandetectlog/humandetectlog','txt')
 
 
 #グローバル変数として宣言
@@ -98,7 +98,7 @@ def get_locations(lat_human, lon_human):
         'lon_w':lon_w
         }
 
-def take_and_rotation(human_judge_count, break_outer_loop,judge_probability,logpath, model):
+def take_and_rotation(human_judge_count, break_outer_loop,judge_probability,start_time,logpath, model):
 
 
     #for i in range(6):
@@ -171,18 +171,18 @@ def move_to_bulearea(count, lat_human, lon_human):
 
 
     print(count)
-    
+
     if count == 1:
-        PID.drive(lon_n, lat_n, thd_distance=3, t_adj_gps=60)
+        PID.drive(lon_n, lat_n, thd_distance=3, t_run=60, logpath=log_humandetect,t_start=t_start)
         print("第1エリアです")
     elif count == 2:
-        PID.drive(lon_e, lat_e, thd_distance=3, t_adj_gps=60) 
+        PID.drive(lon_e, lat_e, thd_distance=3, t_run=60, logpath=log_humandetect,t_start=t_start) 
         print("第2エリアです")  
     elif count == 3:
-        PID.drive(lon_s, lat_s, thd_distance=3, t_adj_gps=60)
+        PID.drive(lon_s, lat_s, thd_distance=3, t_run=60, logpath=log_humandetect,t_start=t_start)
         print("第3エリアです")
     elif count == 4:
-        PID.drive(lon_w, lat_w, thd_distance=3, t_adj_gps=60)
+        PID.drive(lon_w, lat_w, thd_distance=3, t_run=60, logpath=log_humandetect,t_start=t_start)
         print("第4エリアです")
     elif count == 5:
         PID.drive(lon_w, lat_n, thd_distance=3, t_run=60, logpath=log_humandetect,t_start=t_start)
@@ -200,7 +200,7 @@ def move_to_bulearea(count, lat_human, lon_human):
         print("青点エリア捜索終了")             
     
 if __name__ == "__main__":
-    t_start = time.eime()
+    t_start = time.time()
     count = 0
     human_judge_count = 0
     break_outer_loop = False
@@ -291,7 +291,7 @@ if __name__ == "__main__":
                 #lat_now, lon_now = gps.location()
                 count += 1
                 move_to_bulearea(count, lat_human, lon_human)
-                human_judge_count, break_outer_loop = take_and_rotation(human_judge_count=human_judge_count, break_outer_loop=break_outer_loop,judge_probability=judge_probability,logpath=log_humandetect,model=ML_people)
+                human_judge_count, break_outer_loop = take_and_rotation(human_judge_count=human_judge_count, break_outer_loop=break_outer_loop,judge_probability=judge_probability,start_time=start_time,logpath=log_humandetect,model=ML_people)
     print("human detection finish!!!")
     
 

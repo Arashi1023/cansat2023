@@ -1,6 +1,7 @@
 import numpy as np
 import cv2
 import time
+import motor
 
 #細かいノイズを除去するために画像を圧縮
 def mosaic(original_img, ratio=0.9):
@@ -132,5 +133,6 @@ if __name__ == "__main__":
     original_img = cv2.imread(original_img_path)
 
     t_start = time.time()
+    motor.motor_continue(30, 30)
     detect_goal(original_img_path)
     print(time.time() - t_start)

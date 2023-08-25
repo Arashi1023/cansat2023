@@ -6,6 +6,7 @@ import logging
 import os
 #from PIL import Image
 import cv2
+import time
 
 logging.getLogger('picmaera2').setLevel(logging.WARNING)
 os.environ["LIBCAMERA_LOG_LEVELS"] = "3"
@@ -80,10 +81,12 @@ def picture(path, width=320, height=240):
             latest_picture_path=filepath
 
             #画像を読み込んで回転させる
+            t_start = time.time()
             image = cv2.imread(filepath)
             image = cv2.resize(image, (width, height))
             image = cv2.rotate(image, cv2.ROTATE_90_COUNTERCLOCKWISE)
             cv2.imwrite(filepath, image)
+            print("time", time.time()-t_start)
 
             # image = Image.open(filepath)
             # rotated_image = image.rotate(90, expand=True)

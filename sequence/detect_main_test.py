@@ -92,7 +92,7 @@ def get_angle(cx, cy, original_img):
 
     return angle
 
-def detect_goal():
+def detect_goal(path):
     #画像の撮影から「角度」と「占める割合」を求めるまでの一連の流れ
     # path_all_photo = '/home/dendenmushi/cansat2023/sequence/photo_imageguide/ImageGuide-'
     # path_detected_photo = './photo_imageguide/detected/detected_img.jpg'
@@ -100,7 +100,7 @@ def detect_goal():
     # original_img = cv2.imread(photoname)
 
     #original_img_path = './goal_imgs/ImageGuide-0002.jpg'
-    original_img = cv2.imread('photo0022.jpg')
+    original_img = cv2.imread(path)
 
     #画像を圧縮
     small_img = mosaic(original_img, ratio=0.3)
@@ -132,5 +132,5 @@ if __name__ == "__main__":
     original_img = cv2.imread(original_img_path)
 
     t_start = time.time()
-    detect_goal()
+    detect_goal(original_img_path)
     print(time.time() - t_start)

@@ -14,7 +14,7 @@ os.environ["LIBCAMERA_LOG_LEVELS"] = "3"
    
 
 
-def picture(path, width=240, height=320):
+def picture(path, width=320, height=240):
     """写真を取るための関数"""
     global latest_picture_path
     filepath = None

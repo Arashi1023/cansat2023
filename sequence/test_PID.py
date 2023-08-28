@@ -335,9 +335,9 @@ def PID_run(target_azimuth, magx_off, magy_off, theta_array: list, loop_num: int
 
         #-----モータの出力-----#
 
-        #直進補正分(m=0のとき直進するように設定するため)
-        s_r = 15
-        s_l = 15
+        #直進補正分(m=0のとき直進するように設定するため) # 35
+        s_r = 20
+        s_l = 20
 
         # モータ出力の最大値と最小値を設定
         m = min(m, 15)

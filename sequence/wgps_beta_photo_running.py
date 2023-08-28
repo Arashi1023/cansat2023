@@ -432,7 +432,7 @@ def TEST_img_guide_drive(thd_distance_goal=10, thd_red_area=75):
                 t_start_run = time.time()
                 while t_start_run - time.time() <= 1:
                     PID.PID_run(target_azimuth, magx_off, magy_off, theta_array=theta_array, loop_num=20)
-                # motor.motor_stop()
+                motor.motor_stop()
 
             ###-----撮像した画像の中にゴールが映っていない場合の処理-----###
             elif area_ratio == 0:

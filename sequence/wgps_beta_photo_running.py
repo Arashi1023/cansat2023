@@ -389,6 +389,7 @@ def TEST_img_guide_drive(thd_distance_goal=10, thd_red_area=75):
     '''
 
     distance_to_goal = 5
+    isReach_goal = 0
 
     ###-----画像誘導のセットアップ キャリブレーションを行う-----###
     magx_off, magy_off = calibration.cal(30, -30, 30)

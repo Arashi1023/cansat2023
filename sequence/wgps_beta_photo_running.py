@@ -168,7 +168,7 @@ def detect_goal(lat2, lon2, thd_dist_goal=10, run_t=2):
         
     return area_ratio, angle
 
-def detect_goal():
+def TEST_detect_goal():
     #画像の撮影から「角度」と「占める割合」を求めるまでの一連の流れ
     path_all_photo = '/home/dendenmushi/cansat2023/sequence/photo_imageguide/ImageGuide-'
     path_detected_photo = './photo_imageguide/detected'
@@ -404,7 +404,7 @@ def TEST_img_guide_drive(thd_distance_goal=10, thd_red_area=75):
             ###-----画像誘導モードの範囲内にいた場合の処理-----###
         if distance_to_goal <= thd_distance_goal:
             print('画像誘導モードの範囲内にいます\n画像誘導を行います')
-            area_ratio, angle = detect_goal()
+            area_ratio, angle = TEST_detect_goal()
             print(f'area_ratio = {area_ratio}, angle = {angle}')
             mag_data = bmx055.mag_dataRead()
             mag_x, mag_y = mag_data[0], mag_data[1]

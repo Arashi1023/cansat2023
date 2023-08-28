@@ -372,7 +372,7 @@ def PID_run(target_azimuth, magx_off, magy_off, theta_array: list, loop_num: int
 
     # motor.motor_stop(1)
 
-def drive(lon_dest, lat_dest, thd_distance, t_run, log_path, t_start=0, loop_num=25, ):
+def drive(lon_dest :float, lat_dest: float, thd_distance: int, t_run, log_path, t_start=0, loop_num=25):
     '''
     任意の地点までPID制御により走行する関数
     

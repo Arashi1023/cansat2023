@@ -441,7 +441,7 @@ def TEST_img_guide_drive(thd_distance_goal=10, thd_red_area=75):
                 '''
                 pwr_unfound = 25
                 motor.motor_move(pwr_unfound, -pwr_unfound, 0.15)
-                motor.motor_stop(0.5)
+                motor.motor_stop(0.2)
         
         ###-----画像誘導モードの範囲外にいた場合の処理-----###
         else:

@@ -1,17 +1,34 @@
-import gps_navigate
-import time 
-#import rotation
-import machine_learning
-from machine_learning import DetectPeople
-# import gps_running1
-import take
-import gps
-from math import sqrt
-import motor
-import bmx055
-import other
 import datetime
-import test_PID as PID
+import time
+import sys
+import cv2
+import pigpio
+import traceback
+from math import sqrt
+
+import libs.bme280 as bme280
+import libs.bmx055 as bmx055
+import libs.motor as motor
+import libs.save_photo as save_img
+import libs.send as send
+import libs.gps as gps
+import libs.stuck2 as stuck2
+import libs.other as other
+import libs.send_photo as send_photo
+import libs.take as take
+from libs.machine_learning import DetectPeople
+import libs.calibration as calibration
+import libs.test_PID as PID
+import libs.log as log
+
+from const import *
+import release
+import land
+import melt
+import beta_gps_running as gps_running
+import human_detection
+import beta_para_avoid as para_avoid
+import wgps_beta_photo_running as imgguide
 
 log_humandetect=other.filename('/home/dendenmushi/cansat2023/sequence/log/humandetectlog/humandetectlog','txt')
 

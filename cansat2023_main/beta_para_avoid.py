@@ -1,17 +1,35 @@
 #パラシュート回避
-import wgps_beta_photo_running as photo_running
-import cv2
-from save_photo import save_img
-import take
-import motor
+import datetime
 import time
-import gps
-import gps_navigate
-import calibration
-import stuck2
-import test_PID
-import bmx055
-import basics
+import sys
+import cv2
+import pigpio
+import traceback
+from math import sqrt
+
+import libs.bme280 as bme280
+import libs.bmx055 as bmx055
+import libs.motor as motor
+import libs.save_photo as save_img
+import libs.send as send
+import libs.gps as gps
+import libs.stuck2 as stuck2
+import libs.other as other
+import libs.send_photo as send_photo
+import libs.take as take
+from libs.machine_learning import DetectPeople
+import libs.calibration as calibration
+import libs.test_PID as PID
+import libs.log as log
+
+from const import *
+import release
+import land
+import melt
+import beta_gps_running as gps_running
+import human_detection
+import beta_para_avoid as para_avoid
+import wgps_beta_photo_running as imgguide
 
 def detect_para():
     #画像の撮影

@@ -1,11 +1,12 @@
 import numpy as np
 import cv2
-import motor
-import take
 import sys
-import gps_navigate
 import datetime
-import save_photo
+
+import libs.motor as motor
+import libs.take as take
+import libs.gps_navigate as gps_navigate
+import libs.save_photo as save_photo
 
 #細かいノイズを除去するために画像を圧縮
 def mosaic(original_img, ratio=0.1):

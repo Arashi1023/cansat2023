@@ -1,14 +1,34 @@
 import datetime
 import time
-import gps_navigate
-import gps
-import bmx055
-import motor #motor.move(l,r,t)
-import im920sl
-import calibration
-import stuck2
-import other
-import send
+import sys
+import cv2
+import pigpio
+import traceback
+from math import sqrt
+
+import libs.bme280 as bme280
+import libs.bmx055 as bmx055
+import libs.motor as motor
+import libs.save_photo as save_img
+import libs.send as send
+import libs.gps as gps
+import libs.stuck2 as stuck2
+import libs.other as other
+import libs.send_photo as send_photo
+import libs.take as take
+from libs.machine_learning import DetectPeople
+import libs.calibration as calibration
+import libs.test_PID as PID
+import libs.log as log
+
+from const import *
+import release
+import land
+import melt
+import beta_gps_running as gps_running
+import human_detection
+import beta_para_avoid as para_avoid
+import wgps_beta_photo_running as imgguide
 
 def angle_goal(magx_off, magy_off, lon2, lat2):
     """

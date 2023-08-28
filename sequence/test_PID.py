@@ -120,6 +120,10 @@ theta_differential_array = []
 #         return self.output
     
 def make_theta_array(array: list, array_num: int):
+    '''
+    クソコでした by 田口 8/28
+    '''
+
     #-----決められた数の要素を含む空配列の作成-----#
 
     for i in range(array_num):

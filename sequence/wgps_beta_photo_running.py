@@ -323,7 +323,7 @@ def img_guide_drive(lat_dest, lon_dest, thd_distance_goal, thd_red_area, pwr, t_
         try:
             ###-----ゴールまでの距離を測定-----###
             lat_now, lon_now = gps.location()
-            goal_info = gps_navigate.vincenty_inverse(lat_now, lon_now, lat2, lon2)
+            goal_info = gps_navigate.vincenty_inverse(lat_now, lon_now, lat_dest, lon_dest)
             distance_to_goal = goal_info['distance']
             print(f'{distance_to_goal}m')
 
@@ -353,9 +353,7 @@ def img_guide_drive(lat_dest, lon_dest, thd_distance_goal, thd_red_area, pwr, t_
                         
                     ###-----PID制御により前進-----###
                     theta_array = [0]*5
-                    t_start_run = time.time()
-                    while t_start_run - time.time() <= 3:
-                        PID.PID_run(target_azimuth, magx_off, magy_off, theta_array=theta_array, loop_num=20)
+                    PID.PID_run(target_azimuth, magx_off, magy_off, theta_array=theta_array, loop_num=20)
                     # motor.motor_stop()
 
                 ###-----撮像した画像の中にゴールが映っていない場合の処理-----###

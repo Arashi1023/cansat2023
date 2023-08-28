@@ -38,24 +38,19 @@ class DetectPeople():
         # predicted_class = np.argmax(output_data, axis=1)
         # predicted_label = self.class_names[predicted_class[0]]
 
-
-
         # print("予測結果:", predicted_label)
         # print(output_data)
 
         # print(predicted_class)
         return pro_people
     
-
-
-
 if __name__ == "__main__":
-    ML_people = DetectPeople(model_path="model_mobile.tflite" )
+    ML_people = DetectPeople(model_path="../model_mobile.tflite" )
     # image_path = 'imgs/hiroyuki.jpg'
     # image_path = 'imgs/saru.jpg'
     # ML_people.predict(image_path)
     while 1:
-        img_path = take.picture('ML_imgs/image', 320, 240)
+        img_path = take.picture('../../imgs/human_detect/image', 320, 240)
         # img_path = './imgs/overhead_people.jpg'
         ML_people.predict(image_path=img_path)
         # time.sleep(3)

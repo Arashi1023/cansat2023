@@ -429,7 +429,7 @@ if __name__=='__main__':
     threshold = 20 * 60
     # elapsed_time = time.time()-start_time
 
-    ML_people = DetectPeople(model_path="model_mobile.tflite" )
+    ML_people = DetectPeople(model_path="../model_mobile.tflite" )
 
     lat_n, lon_n, lat_e, lon_e, lat_s, lon_s, lat_w, lon_w = get_locations(lat_human, lon_human)
     
@@ -442,7 +442,7 @@ if __name__=='__main__':
             motor.move(25, -25, 0.15)
             human_judge_count = 0
             #撮影
-            img_path = take.picture('ML_imgs/image', 320, 240)
+            img_path = take.picture('../imgs/image', 320, 240)
             
             #モデルの読み込み
             result = ML_people.predict(image_path=img_path)

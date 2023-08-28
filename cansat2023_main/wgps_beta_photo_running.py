@@ -146,8 +146,8 @@ def detect_goal(lat2, lon2, thd_dist_goal=10, run_t=2):
     #-----赤色検知モードの範囲内にいた場合の処理-----#
     if dist_flag <= thd_dist_goal:
         #画像の撮影から「角度」と「占める割合」を求めるまでの一連の流れ
-        path_all_photo = '/home/dendenmushi/cansat2023/sequence/photo_imageguide/ImageGuide-'
-        path_detected_photo = './photo_imageguide/detected'
+        path_all_photo = '../imgs/goal_detect/all/ImageGuide-'
+        path_detected_photo = '../imgs/goal_detect/detected'
         photoname = take.picture(path_all_photo)
         original_img = cv2.imread(photoname)
 
@@ -167,14 +167,14 @@ def detect_goal(lat2, lon2, thd_dist_goal=10, run_t=2):
         #ゴールを検出した場合に画像を保存
         if area_ratio != 0:
             area_ratio = int(area_ratio) #小数点以下を切り捨てる（画像ファイル名にピリオドを使えないため）
-            save_photo.save_img(path_detected_photo, 'detected', str(area_ratio), original_img)
+            save_photo.save_img(path_detected_photo, 'Detected-', str(area_ratio), original_img)
         
     return area_ratio, angle
 
 def TEST_detect_goal():
     #画像の撮影から「角度」と「占める割合」を求めるまでの一連の流れ
-    path_all_photo = '/home/dendenmushi/cansat2023/sequence/photo_imageguide/ImageGuide-'
-    path_detected_photo = './photo_imageguide/detected'
+    path_all_photo = '../imgs/goal_detect/all/ImageGuide-'
+    path_detected_photo = '../imgs/goal_detect/detected'
     photoname = take.picture(path_all_photo)
     original_img = cv2.imread(photoname)
 
@@ -486,24 +486,5 @@ if __name__ == "__main__":
     motor.setup()
     gps.open_gps()
     bmx055.bmx055_setup()
-
-    # angle = 0
-    # t_running = 0
-
-    # try:
-    #     angle = 0
-    #     area_ratio, angle = detect_goal(lat2, lon2)
-    #     image_guided_driving(area_ratio, angle, lat2, lon2,75,10,log_photorunning,0)
-
-    # except KeyboardInterrupt:
-    #     print("stop")
-
-    # print("目的地周辺に到着しました。案内を終了します。")
-    # print("お疲れさまでした。")
-
-    # except Exception as e:
-    #     tb = sys.exc_info()[2]
-
-
 
     TEST_img_guide_drive()

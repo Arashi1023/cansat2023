@@ -367,7 +367,7 @@ def TEST_img_guide_drive(thd_distance_goal=10, thd_red_area=75):
     magx_off, magy_off = calibration.cal(30, -30, 30)
 
     while True:
-        try:
+        # try:
             ###-----ゴールまでの距離を測定-----###
             # lat_now, lon_now = gps.location()
             # goal_info = gps_navigate.vincenty_inverse(lat_now, lon_now, lat2, lon2)
@@ -375,61 +375,61 @@ def TEST_img_guide_drive(thd_distance_goal=10, thd_red_area=75):
             # print(f'{distance_to_goal}m')
 
             ###-----画像誘導モードの範囲内にいた場合の処理-----###
-            if distance_to_goal <= thd_distance_goal:
-                print('画像誘導モードの範囲内にいます\n画像誘導を行います')
-                area_ratio, angle = detect_goal()
-                print(f'area_ratio = {area_ratio}, angle = {angle}')
-                mag_data = bmx055.mag_dataRead()
-                mag_x, mag_y = mag_data[0], mag_data[1]
-                rover_azimuth = calibration.angle(mag_x, mag_y, magx_off, magy_off)
-                rover_azimuth = basics.standarize_angle(rover_azimuth)
-                
-                ###-----撮像した画像の中にゴールが映っていた場合の処理-----###
-                if area_ratio >= thd_red_area:
-                    isReach_goal = 1
-                elif 0 < area_ratio < thd_red_area:
-                    ###-----ゴールが真正面にあるときの処理-----###
-                    if angle == 2:
-                        # rover_azimuth はそのまま使用
-                        target_azimuth = rover_azimuth
-                    ###------ゴールが真正面にないときの処理------###
-                    ###-----目標角度を少しずらす-----###
-                    elif angle == 1:
-                        target_azimuth = rover_azimuth - 15
-                    elif angle == 3:
-                        target_azimuth = rover_azimuth + 15
-                        
-                    ###-----PID制御により前進-----###
-                    theta_array = [0]*5
-                    t_start_run = time.time()
-                    while t_start_run - time.time() <= 1:
-                        PID.PID_run(target_azimuth, magx_off, magy_off, theta_array=theta_array, loop_num=20)
-                    # motor.motor_stop()
-
-                ###-----撮像した画像の中にゴールが映っていない場合の処理-----###
-                elif area_ratio == 0:
-                    print('Lost Goal')
-                    '''
-                    ここにコードを書く
-                    '''
-                    pwr_unfound = 25
-                    motor.motor_move(pwr_unfound, -pwr_unfound, 0.15)
-                    motor.motor_stop(0.5)
+        if distance_to_goal <= thd_distance_goal:
+            print('画像誘導モードの範囲内にいます\n画像誘導を行います')
+            area_ratio, angle = detect_goal()
+            print(f'area_ratio = {area_ratio}, angle = {angle}')
+            mag_data = bmx055.mag_dataRead()
+            mag_x, mag_y = mag_data[0], mag_data[1]
+            rover_azimuth = calibration.angle(mag_x, mag_y, magx_off, magy_off)
+            rover_azimuth = basics.standarize_angle(rover_azimuth)
             
-            ###-----画像誘導モードの範囲外にいた場合の処理-----###
-            else:
-                pass
-                # print('ゴールから遠すぎます\nGPS誘導を行います')
-                # PID.drive(lon_dest, lat_dest, thd_distance_goal, 2)
+            ###-----撮像した画像の中にゴールが映っていた場合の処理-----###
+            if area_ratio >= thd_red_area:
+                isReach_goal = 1
+            elif 0 < area_ratio < thd_red_area:
+                ###-----ゴールが真正面にあるときの処理-----###
+                if angle == 2:
+                    # rover_azimuth はそのまま使用
+                    target_azimuth = rover_azimuth
+                ###------ゴールが真正面にないときの処理------###
+                ###-----目標角度を少しずらす-----###
+                elif angle == 1:
+                    target_azimuth = rover_azimuth - 15
+                elif angle == 3:
+                    target_azimuth = rover_azimuth + 15
+                    
+                ###-----PID制御により前進-----###
+                theta_array = [0]*5
+                t_start_run = time.time()
+                while t_start_run - time.time() <= 1:
+                    PID.PID_run(target_azimuth, magx_off, magy_off, theta_array=theta_array, loop_num=20)
+                # motor.motor_stop()
 
-            time.sleep(0.04) #9軸センサ読み取り用
+            ###-----撮像した画像の中にゴールが映っていない場合の処理-----###
+            elif area_ratio == 0:
+                print('Lost Goal')
+                '''
+                ここにコードを書く
+                '''
+                pwr_unfound = 25
+                motor.motor_move(pwr_unfound, -pwr_unfound, 0.15)
+                motor.motor_stop(0.5)
+        
+        ###-----画像誘導モードの範囲外にいた場合の処理-----###
+        else:
+            pass
+            # print('ゴールから遠すぎます\nGPS誘導を行います')
+            # PID.drive(lon_dest, lat_dest, thd_distance_goal, 2)
 
-            ###-----ゴールした場合の処理-----###
-            if isReach_goal == 1:
-                print('ゴールしました。画像誘導を終了します。')
-                break
-        except:
-            print('Error\nTry again')
+        time.sleep(0.04) #9軸センサ読み取り用
+
+        ###-----ゴールした場合の処理-----###
+        if isReach_goal == 1:
+            print('ゴールしました。画像誘導を終了します。')
+            break
+        # except:
+        #     print('Error\nTry again')
 
 
 if __name__ == "__main__":

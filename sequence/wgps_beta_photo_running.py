@@ -455,9 +455,9 @@ if __name__ == "__main__":
     # lon2 = 139.9120618
     # log_photorunning =other.filename( '/home/dendenmushi/cansat2023/sequence/log/photorunninglog/photorunninglog','txt')
     # #セットアップ系
-    # motor.setup()
-    # gps.open_gps()
-    # bmx055.bmx055_setup()
+    motor.setup()
+    gps.open_gps()
+    bmx055.bmx055_setup()
 
     # angle = 0
     # t_running = 0
@@ -475,5 +475,7 @@ if __name__ == "__main__":
 
     # except Exception as e:
     #     tb = sys.exc_info()[2]
+
+
 
     TEST_img_guide_drive()

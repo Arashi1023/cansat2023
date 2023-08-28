@@ -1,8 +1,6 @@
 import time
-
-import bme280
-
-import send
+import libs.bme280 as bme280
+import libs.send as send
 
 
 def pressdetect_land(thd_press_land):

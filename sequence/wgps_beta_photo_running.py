@@ -378,6 +378,7 @@ def TEST_img_guide_drive(thd_distance_goal=10, thd_red_area=75):
             if distance_to_goal <= thd_distance_goal:
                 print('画像誘導モードの範囲内にいます\n画像誘導を行います')
                 area_ratio, angle = detect_goal()
+                print(f'area_ratio = {area_ratio}, angle = {angle}')
                 mag_data = bmx055.mag_dataRead()
                 mag_x, mag_y = mag_data[0], mag_data[1]
                 rover_azimuth = calibration.angle(mag_x, mag_y, magx_off, magy_off)

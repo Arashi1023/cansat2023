@@ -451,27 +451,29 @@ if __name__ == "__main__":
     #lon2 = 139.9071493
 
     #ゴール
-    lat2 = 35.9242411
-    lon2 = 139.9120618
-    log_photorunning =other.filename( '/home/dendenmushi/cansat2023/sequence/log/photorunninglog/photorunninglog','txt')
-    #セットアップ系
-    motor.setup()
-    gps.open_gps()
-    bmx055.bmx055_setup()
+    # lat2 = 35.9242411
+    # lon2 = 139.9120618
+    # log_photorunning =other.filename( '/home/dendenmushi/cansat2023/sequence/log/photorunninglog/photorunninglog','txt')
+    # #セットアップ系
+    # motor.setup()
+    # gps.open_gps()
+    # bmx055.bmx055_setup()
 
-    angle = 0
-    t_running = 0
+    # angle = 0
+    # t_running = 0
 
-    try:
-        angle = 0
-        area_ratio, angle = detect_goal(lat2, lon2)
-        image_guided_driving(area_ratio, angle, lat2, lon2,75,10,log_photorunning,0)
+    # try:
+    #     angle = 0
+    #     area_ratio, angle = detect_goal(lat2, lon2)
+    #     image_guided_driving(area_ratio, angle, lat2, lon2,75,10,log_photorunning,0)
 
-    except KeyboardInterrupt:
-        print("stop")
+    # except KeyboardInterrupt:
+    #     print("stop")
 
-    print("目的地周辺に到着しました。案内を終了します。")
-    print("お疲れさまでした。")
+    # print("目的地周辺に到着しました。案内を終了します。")
+    # print("お疲れさまでした。")
 
     # except Exception as e:
     #     tb = sys.exc_info()[2]
+
+    TEST_img_guide_drive()

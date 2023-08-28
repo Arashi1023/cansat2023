@@ -290,7 +290,7 @@ def PID_adjust_direction(target_azimuth, magx_off, magy_off, theta_array: list):
 
     motor.motor_stop(1)
 
-def PID_run(target_azimuth, magx_off, magy_off, theta_array: list, loop_num):
+def PID_run(target_azimuth, magx_off, magy_off, theta_array: list, loop_num: int):
     '''
     目標地点までの方位角が既知の場合にPID制御により走行する関数
     '''
@@ -339,6 +339,7 @@ def PID_run(target_azimuth, magx_off, magy_off, theta_array: list, loop_num):
         s_r = 35
         s_l = 35
 
+        # モータ出力の最大値と最小値を設定
         m = min(m, 15)
         m = max(m, -15)
 

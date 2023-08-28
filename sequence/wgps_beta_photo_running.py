@@ -325,13 +325,11 @@ def img_guide_drive(lat_dest, lon_dest, thd_distance_goal, thd_red_area, pwr, t_
                         target_azimuth = rover_azimuth + 15
                         
                     ###-----PID制御により前進-----###
-                    PID.PID
-
-                    '''
-                    ここにコードを書く
-                    '''
-                
-
+                    theta_array = [0]*5
+                    t_start_run = time.time()
+                    while t_start_run - time.time() <= 3:
+                        PID.PID_run(target_azimuth, magx_off, magy_off, theta_array=theta_array, loop_num=20)
+                    motor.motor_stop()
 
                 ###-----撮像した画像の中にゴールが映っていない場合の処理-----###
                 elif area_ratio == 0:

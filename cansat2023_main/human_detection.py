@@ -32,6 +32,8 @@ import libs.test_PID as PID
 log_humandetect=other.filename('/home/dendenmushi/cansat2023/sequence/log/humandetectlog/humandetectlog','txt')
 
 
+
+
 #グローバル変数として宣言
 # global human_judge_count
 # global break_outer_loop
@@ -116,17 +118,17 @@ def get_locations(lat_human, lon_human):
 
 def take_and_rotation(human_judge_count, break_outer_loop,logpath, model):
 
-
     #for i in range(6):
     for i in range(24):
         if break_outer_loop == False:
             human_judge_count = 0
             # 撮影
-            img_path = take.picture('ML_imgs/image', 320, 240)
+            img_path = take.picture('../imgs/human_detect/all/image-', 320, 240)
 
             # モデルの読み込み
+            ML_people = DetectPeople(model_path="model_mobile.tflite")
             #result = ML_people.predict(image_path=img_path)
-            result = model.predict(image_path=img_path)
+            result = ML_people.predict(image_path=img_path)
             other.log(logpath, datetime.datetime.now(), time.time() -
                       t_start,result,additional_result,human_judge_count,break_outer_loop,elapsed_time)
             # hitoの確率50%かどうか
@@ -135,9 +137,9 @@ def take_and_rotation(human_judge_count, break_outer_loop,logpath, model):
                 print(human_judge_count)
                 # 追加の写真を撮影
                 for j in range(2):
-                    additional_img_path = take.picture('ML_imgs/additional_image', 320, 240)
+                    additional_img_path = take.picture('../imgs/human_detect/additional/additional_image-', 320, 240)
                     #additional_result = ML_people.predict(image_path=additional_img_path)
-                    additional_result = model.predict(image_path=additional_img_path)
+                    additional_result = ML_people.predict(image_path=additional_img_path)
                     other.log(logpath, datetime.datetime.now(), time.time() -
                       t_start,result,additional_result,human_judge_count,break_outer_loop,elapsed_time)
                     if additional_result >= 0.50:
@@ -254,7 +256,7 @@ if __name__ == "__main__":
         if break_outer_loop == False:
             human_judge_count = 0
             #撮影
-            img_path = take.picture('ML_imgs/image', 320, 240)
+            img_path = take.picture('../imgs/human_detect/all/image-', 320, 240)
             
             #モデルの読み込み
             result = ML_people.predict(image_path=img_path)
@@ -265,7 +267,7 @@ if __name__ == "__main__":
                 human_judge_count += 1
                 # 追加の写真を撮影
                 for h in range(2):
-                    additional_img_path = take.picture('ML_imgs/additional_image', 320, 240)
+                    additional_img_path = take.picture('../imgs/human_detect/additional/additional_image', 320, 240)
                     additional_result = ML_people.predict(image_path=additional_img_path)
                     other.log(log_humandetect, datetime.datetime.now(), time.time() -
                       t_start,result,additional_result,human_judge_count,break_outer_loop,elapsed_time)

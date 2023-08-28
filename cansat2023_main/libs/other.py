@@ -105,6 +105,7 @@ def phase(path):
 
 if __name__ == "__main__":
     import time
-    path = '/home/dendenmushi/cansat2023/sequence/log3/phaseLog'
+    # path = '/home/dendenmushi/cansat2023/sequence/log3/phaseLog'
+    path = '../../logs/testLog'
     print(dir(path))
     log(path, time.time())

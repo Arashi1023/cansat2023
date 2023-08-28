@@ -431,7 +431,7 @@ def TEST_img_guide_drive(thd_distance_goal=10, thd_red_area=75):
                 theta_array = [0]*5
                 PID.PID_run(target_azimuth, magx_off, magy_off, theta_array=theta_array, loop_num=20)
                 motor.deceleration(15, 15)
-                motor.motor_stop()
+                motor.motor_stop(0.2)
 
             ###-----撮像した画像の中にゴールが映っていない場合の処理-----###
             elif area_ratio == 0:

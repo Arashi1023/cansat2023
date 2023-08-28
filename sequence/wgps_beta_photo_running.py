@@ -168,6 +168,33 @@ def detect_goal(lat2, lon2, thd_dist_goal=10, run_t=2):
         
     return area_ratio, angle
 
+def detect_goal():
+    #画像の撮影から「角度」と「占める割合」を求めるまでの一連の流れ
+    path_all_photo = '/home/dendenmushi/cansat2023/sequence/photo_imageguide/ImageGuide-'
+    path_detected_photo = './photo_imageguide/detected'
+    photoname = take.picture(path_all_photo)
+    original_img = cv2.imread(photoname)
+
+    #画像を圧縮
+    small_img = mosaic(original_img, 0.8)
+    
+    mask, masked_img = detect_red(small_img)
+
+    original_img, max_contour, cx, cy = get_center(mask, small_img)
+
+    #赤が占める割合を求める
+    area_ratio = get_area(max_contour, original_img)
+
+    #重心から現在位置とゴールの相対角度を大まかに計算
+    angle = get_angle(cx, cy, original_img)
+
+    #ゴールを検出した場合に画像を保存
+    if area_ratio != 0:
+        area_ratio = int(area_ratio) #小数点以下を切り捨てる（画像ファイル名にピリオドを使えないため）
+        save_photo.save_img(path_detected_photo, 'detected', str(area_ratio), original_img)
+    
+    return area_ratio, angle
+
 def image_guided_driving(area_ratio, angle, lat2, lon2, thd_full_red, thd_dist_goal, log_path, t_start):
     #thd_full_red = 0mゴールと判断するときの赤色が画像を占める割合の閾値
     #thd_dist_goal = 赤色検知モードの範囲の円の半径。ゴールから5mのとき赤色検知モードに入る。

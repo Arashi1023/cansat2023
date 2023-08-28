@@ -19,8 +19,9 @@ import libs.send_photo as send_photo
 import libs.take as take
 from libs.machine_learning import DetectPeople
 import libs.calibration as calibration
-import libs.test_PID as PID
+import libs.test_PID as test_PID
 import libs.log as log
+import libs.basics as basics
 
 from const import *
 import release
@@ -29,12 +30,13 @@ import melt
 import beta_gps_running as gps_running
 import human_detection
 import beta_para_avoid as para_avoid
-import wgps_beta_photo_running as imgguide
+import wgps_beta_photo_running as photo_running
 
 def detect_para():
     #画像の撮影
-    path_all_para = '/home/dendenmushi/cansat2023/sequence/photo_storage/para_all/para_detect-'
-    path_para_detect = './photo_storage/para_detected'
+
+    path_all_para = '../imgs/parachute_avoid/all/para_image-'
+    path_para_detect = '../imgs/parachute_avoid/detected'
     photoname = take.picture(path_all_para)
     para_img = cv2.imread(photoname)
     angle = 0

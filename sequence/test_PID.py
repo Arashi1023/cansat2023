@@ -11,6 +11,9 @@ import time
 import other
 import send
 from collections import deque
+import basics
+
+
 
 
 #PID制御のテストコード
@@ -49,10 +52,7 @@ def get_theta_dest_gps(lon_dest, lat_dest, magx_off, magy_off):
     theta_dest = rover_angle - azimuth
 
     #-----相対角度の範囲を-180~180度にする-----#
-    if theta_dest >= 180:
-        theta_dest -= 360
-    elif theta_dest <= -180:
-        theta_dest += 360
+    theta_dest = basics.standarize_angle(theta_dest)
 
     return theta_dest
 
@@ -88,10 +88,7 @@ def get_theta_dest(target_azimuth, magx_off, magy_off):
     theta_dest = rover_azimuth - target_azimuth
 
     #-----相対角度の範囲を-180~180度にする-----#
-    if theta_dest >= 180:
-        theta_dest -= 360
-    elif theta_dest <= -180:
-        theta_dest += 360
+    theta_dest = basics.standarize_angle(theta_dest)
 
     return theta_dest
 
@@ -121,9 +118,8 @@ theta_differential_array = []
     
 def make_theta_array(array: list, array_num: int):
     '''
-    クソコでした by 田口 8/28
+    クソコでした by 田口 8/28 -> [0]*5で可能
     '''
-
     #-----決められた数の要素を含む空配列の作成-----#
 
     for i in range(array_num):
@@ -205,6 +201,36 @@ def PID_control(theta, theta_array: list, Kp=0.1, Ki=0.04, Kd=2.5):
     m = mp + mi - md
 
     return m
+
+def PID_control2(theta, theta_array: list, Kp=0.1, Ki=0.04, Kd=2.5):
+    ###-----初期設定-----#
+    ###-----角度情報の更新-----###
+    del theta_array[0]
+    theta_array.append(theta)
+
+    ###-----P制御-----###
+    theta_deviation = theta_array[-1]
+    mp = Kp * theta_deviation
+
+    ###-----I制御-----###
+    theta_integral = sum(theta_array)
+    mi = Ki * theta_integral
+
+    ###-----D制御-----###
+    for i in range(len(theta_array)):
+        theta_differential_value = theta_array[i] - theta_array[i-1]
+        theta_differential_array.append(theta_differential_value)
+
+    ###-----最新のthetaの微分値を取得-----###
+    theta_differential = theta_differential_array[-1]
+
+    md = Kd * theta_differential
+
+    ###-----PID制御-----###
+    m = mp + mi - md
+
+    return m
+
 
 def PID_adjust_direction(target_azimuth, magx_off, magy_off, theta_array: list):
     '''
@@ -406,14 +432,12 @@ def drive(lon_dest :float, lat_dest: float, thd_distance: int, t_run, log_path, 
     direction = calibration.calculate_direction(lon_dest, lat_dest)
     distance = direction["distance"]
 
-    theta_array = []
-    theta_array = make_theta_array(theta_array, 5)
+    theta_array = [0]*5
 
     while distance > thd_distance:
         #-----初期設定-----#
         stuck_count = 1
-        theta_array = []
-        theta_array = make_theta_array(theta_array, 5)
+        theta_array = [0]*5
 
         #-----上向き判定-----#
         stuck2.ue_jug()
@@ -501,7 +525,7 @@ if __name__ == "__main__":
     theta_differential_array = []
 
     #-----要素数5の空配列の作成-----#
-    theta_array = make_theta_array(theta_array, 5)
+    theta_array = []*5
 
     #-----オフセットの取得-----#
     #-----キャリブレーション-----#

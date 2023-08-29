@@ -8,7 +8,7 @@ import time
 import pigpio
 import numpy as np
 import traceback
-import send
+import cansat2023_main.libs.send as send
 
 def compress_image(image_path, output_path, quality):
     image = Image.open(image_path)

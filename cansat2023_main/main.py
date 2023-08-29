@@ -113,10 +113,11 @@ while True:
     direction = calibration.calculate_direction(lon_dest=LON_GOAL, lat_dest=LAT_GOAL)
     distance_to_goal = direction["distance"]
 
-    lat_now, lon_now, distance_to_dest, rover_azimuth, isReach_dest = drive2()
+    lat_now, lon_now, distance_to_dest, rover_azimuth, isReach_dest = PID.drive2(lon_dest=LON_GOAL, lat_dest=LAT_GOAL, thd_distance=THD_DISTANCE_DEST, t_cal=T_CAL, loop_num=LOOP_NUM)
 
     #-Log-#
     gps_running_goal_log.save_log(lat_now, lon_now, distance_to_dest, rover_azimuth, isReach_dest)    
+    
     if isReach_dest == 1: #ゴール判定
         break
 

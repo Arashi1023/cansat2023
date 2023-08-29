@@ -528,7 +528,7 @@ def PID_control2(theta, theta_array: list, Kp=0.1, Ki=0.04, Kd=2.5):
 
     return m
 
-def drive2(lon_dest :float, lat_dest: float, thd_distance: int, t_cal: float, log_path, t_start=0, loop_num=20):
+def drive2(lon_dest :float, lat_dest: float, thd_distance: int, t_cal: float, loop_num=20):
     '''
     任意の地点までPID制御により走行する関数
     

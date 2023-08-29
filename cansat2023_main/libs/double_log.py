@@ -15,7 +15,7 @@ import cv2
 import save_photo as save_img
 import take
 import motor
-import beta_para_avoid as para_avoid
+import para_avoid
 import stuck2
 
 #variable for log

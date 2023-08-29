@@ -1,4 +1,3 @@
-#gps running のdriveを一から作成
 import datetime
 import time
 import sys
@@ -19,17 +18,19 @@ import libs.send_photo as send_photo
 import libs.take as take
 from libs.machine_learning import DetectPeople
 import libs.calibration as calibration
-import libs.test_PID as PID
+import libs.PID as PID
 import libs.log as log
 
-from const import *
+from main_const import *
 import release
 import land
 import melt
 import beta_gps_running as gps_running
 import human_detection
-import beta_para_avoid as para_avoid
+import para_avoid
 import wgps_beta_photo_running as imgguide
+
+
 def angle_goal(magx_off, magy_off, lon2, lat2):
     """
     ゴールとの相対角度を算出する関数

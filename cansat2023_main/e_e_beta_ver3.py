@@ -18,15 +18,17 @@ import libs.send_photo as send_photo
 import libs.take as take
 from libs.machine_learning import DetectPeople
 import libs.calibration as calibration
+import libs.PID as PID
+import libs.log as log
 
+from main_const import *
 import release
 import land
 import melt
 import beta_gps_running as gps_running
 import human_detection
-import beta_para_avoid as para_avoid
+import para_avoid
 import wgps_beta_photo_running as imgguide
-import libs.test_PID as PID
 
 #variable for log
 log_phase=other.filename('/home/dendenmushi/cansat2023/sequence/log/phaselog/phaselog','txt')

@@ -1,21 +1,34 @@
-import time
 import datetime
-import numpy as np
-import cv2
-import pigio
+import time
 import sys
+import cv2
+import pigpio
+import traceback
+from math import sqrt
 
-import libs.motor as motor
-import libs.take as take
-import libs.gps_navigate as gps_navigate
-import libs.gps as gps
+import libs.bme280 as bme280
 import libs.bmx055 as bmx055
-import libs.calibration as calibration
-import libs.save_photo as save_photo
+import libs.motor as motor
+import libs.save_photo as save_img
+import libs.send as send
+import libs.gps as gps
+import libs.stuck2 as stuck2
 import libs.other as other
-import libs.basics as basics
-import libs.test_PID as PID
+import libs.send_photo as send_photo
+import libs.take as take
+from libs.machine_learning import DetectPeople
+import libs.calibration as calibration
+import libs.PID as PID
 import libs.log as log
+
+from main_const import *
+import release
+import land
+import melt
+import beta_gps_running as gps_running
+import human_detection
+import para_avoid
+import wgps_beta_photo_running as imgguide
 
 import gps_running1
 

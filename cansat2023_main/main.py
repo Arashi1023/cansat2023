@@ -32,7 +32,7 @@ import land
 import melt
 import beta_gps_running as gps_running
 import human_detection
-import beta_para_avoid as para_avoid
+import para_avoid
 import wgps_beta_photo_running as img_guide
 
 #####=====clock setup=====#####

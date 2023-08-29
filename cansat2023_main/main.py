@@ -77,13 +77,18 @@ lat_melt, lon_melt = gps.location()
 melt.main(meltPin=MELT_PIN, t_melt=MELT_TIME)
 print('Melt Sequence: End')
 
+time.sleep(15) #スタビライザーの復元待ち
+
 #####===== 4 Parachute Avoid Sequence=====#####
 print('Parachute Avoid Sequence: Start')
 
+#-Log-#
+print('Saving Log...')
+lat_log, lon_log = gps.location()
+phase_log.save_log('4', 'Parachute Avoid Sequence: Start', lat_log, lon_log)
 
+#-Parachute Avoid-#
 stuck2.ue_jug()
-time.sleep(15) #スタビライザーの復元待ち
-
 
 
 
@@ -107,6 +112,8 @@ print('Parachute Avoid Sequence: End')
 
 #####===== 5 GPS Running Sequence to Human =====#####
 print('#####-----GPS Running Sequence to Human: Start-----#####')
+
+#-Log-#
 print('Saving Log...')
 lat_log, lon_log = gps.location()
 phase_log.save_log('5', 'GPS Running Sequence to Human: Start', lat_log, lon_log)

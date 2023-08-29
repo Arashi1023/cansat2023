@@ -42,6 +42,7 @@ import wgps_beta_photo_running as imgguide
 # log_gpsrunning2=other.filename('/home/dendenmushi/cansat2023/sequence/log/gpsrunning2log/gpsrunning2log','txt')
 # log_photorunning =other.filename( '/home/dendenmushi/cansat2023/sequence/log/photorunninglog/photorunninglog','txt')
 
+#log path setup
 log_phase=other.filename('../logs/ver2_logs/phaselog/phaselog','txt')
 log_report=other.filename('../logs/ver2_logs/reportlog/reportlog','txt')
 log_release=other.filename('../logs/ver2_logs/releaselog/releaselog','txt')

@@ -5,6 +5,7 @@ import cv2
 import pigpio
 import traceback
 from math import sqrt
+import numpy as np
 
 import libs.bme280 as bme280
 import libs.bmx055 as bmx055

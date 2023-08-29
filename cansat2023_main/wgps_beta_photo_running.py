@@ -10,9 +10,10 @@ import numpy as np
 import libs.bme280 as bme280
 import libs.bmx055 as bmx055
 import libs.motor as motor
-import libs.save_photo as save_img
+import libs.save_photo as save_photo
 import libs.send as send
 import libs.gps as gps
+import libs.gps_navigate as gps_navigate
 import libs.stuck2 as stuck2
 import libs.other as other
 import libs.send_photo as send_photo
@@ -21,6 +22,7 @@ from libs.machine_learning import DetectPeople
 import libs.calibration as calibration
 import libs.PID as PID
 import libs.log as log
+import libs.basics as basics
 
 from main_const import *
 import release

@@ -262,7 +262,7 @@ if __name__=='__main__':
 
     other.log(log_release, "release judge start")
     other.log(log_release, "datetime.datetime.now()", "time.time() - t_start",
-                          "bme280.bme280_read()", "press_count_release","press_judge_release","timeout_release-time.time()")
+                          "temp","press","hum","alt", "press_count_release","press_judge_release","timeout_release-time.time()")
 
     while time.time() < timeout_release:
         press_count_release, press_judge_release = release.pressdetect_release(thd_press_release, t_delta_release)
@@ -289,7 +289,7 @@ if __name__=='__main__':
 
     other.log(log_landing, "land judge start")
     other.log(log_landing, "datetime.datetime.now()", "time.time() - t_start",
-                           "bme280.bme280_read()","landcount","presslandjudge","timeout_land-time.time()")
+                           "temp","press","hum","alt","landcount","presslandjudge","timeout_land-time.time()")
     #while True:
     while time.time() < timeout_land:
         presslandjudge = 0

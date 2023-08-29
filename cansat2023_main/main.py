@@ -33,7 +33,7 @@ import melt
 import beta_gps_running as gps_running
 import human_detection
 import beta_para_avoid as para_avoid
-import wgps_beta_photo_running as imgguide
+import wgps_beta_photo_running as img_guide
 
 #####=====clock setup=====#####
 t_start = time.time()
@@ -92,21 +92,36 @@ print('Parachute Avoid Sequence: End')
 
 #####=====GPS Running Sequence to Human=====#####
 
+
+
+
 #####=====Human Detection Sequence=====#####
 
+
+
+
 #####=====GPS Running Sequence to Goal=====#####
+
+
+
 
 #####=====Image Guide Sequence=====#####
 print('Image Guide Sequence: Start')
 
 #-----Image Guide Log-----#
-imguide_lat, imguide_lon = gps.location()
-phase_log.save_log('9', 'Image Guide Sequence', str(imguide_lat), str(imguide_lon))
-image_guide_log.save_log('Image Guide Sequence: Start', str(imguide_lat), str(imguide_lon))
+img_guide_start_lat, img_guide_start_lon = gps.location()
+phase_log.save_log('9', 'Image Guide Sequence', img_guide_start_lat, img_guide_start_lon)
+image_guide_log.save_log('Image Guide Sequence: Start')
 
-#-----Image Guide-----#
+#-----Image Guide Drive-----#
+while True:
+    lat_now, lon_now, distance_to_goal, area_ratio, angle, isReach_goal = img_guide.img_guide_drive(lat_dest=LAT_GOAL, lon_dest=LON_GOAL, thd_distance_goal=THD_DISTANCE_GOAL, thd_red_area=THD_RED_AREA)
+    image_guide_log.save_log(lat_now, lon_now, distance_to_goal, area_ratio, angle, isReach_goal)
+    if isReach_goal == 1: #ゴール判定
+        break
 
-
+#-----Image Guide Log-----#
+image_guide_log.save_log('Image Guide Sequence: End')
 
 print('Image Guide Sequence: End')
 

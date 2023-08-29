@@ -102,9 +102,6 @@ def adjust_direction(theta, magx_off, magy_off, lon2, lat2):
 
     print("-----角度調整終了。お疲れ様でした。------")
 
-def drive():
-    
-
 
 if __name__ == '__main__':
     
@@ -134,5 +131,3 @@ if __name__ == '__main__':
     gps.open_gps()
     bmx055.bmx055_setup()
     motor.setup()
-
-    drive(lon2, lat2, thd_distance=10, t_adj_gps=10)

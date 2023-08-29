@@ -12,6 +12,7 @@ import libs.motor as motor
 import libs.save_photo as save_img
 import libs.send as send
 import libs.gps as gps
+import libs.gps_navigate as gps_navigate
 import libs.stuck2 as stuck2
 import libs.other as other
 import libs.send_photo as send_photo

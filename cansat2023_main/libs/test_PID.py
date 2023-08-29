@@ -288,9 +288,24 @@ def PID_adjust_direction(target_azimuth, magx_off, magy_off, theta_array: list):
 
     motor.motor_stop(1)
 
-def PID_run(target_azimuth, magx_off, magy_off, theta_array: list, loop_num: int):
+def PID_run(target_azimuth: float, magx_off: float, magy_off: float, theta_array: list, loop_num: int):
     '''
     目標地点までの方位角が既知の場合にPID制御により走行する関数
+
+    Parameters
+    ----------
+    target_azimuth : float
+        ローバーを向かせたい方位角
+    magx_off : float
+        地磁気x軸オフセット
+    magy_off : float
+        地磁気y軸オフセット
+    theta_array : list
+        thetaの値を蓄積するリスト
+    loop_num : int
+        PID制御を行う回数 loop_num=20のとき1秒でこのプログラムが終了する
+
+    
     '''
     #-----パラメータの設定-----#
     #Kp = 0.4
@@ -343,7 +358,8 @@ def PID_run(target_azimuth, magx_off, magy_off, theta_array: list, loop_num: int
         pwr_l = -m + s_l
         pwr_r = m + s_r
 
-        print(f"{error_theta=}")
+        # print(f"{error_theta=}")
+        print(f'{error_theta}=')
         print('left', pwr_l, 'right', pwr_r)
 
         #-----モータの操作-----#
@@ -598,6 +614,7 @@ def drive2(lon_dest :float, lat_dest: float, thd_distance: int, t_cal: float, lo
             PID_run(target_azimuth, magx_off, magy_off, theta_array, loop_num)
         else:
             isReach_dest = 1 #ゴール判定用のフラグ
+            break
 
         stuck_count += 1 #25回に一回スタックチェックを行う
 

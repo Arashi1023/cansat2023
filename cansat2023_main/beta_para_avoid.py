@@ -23,7 +23,7 @@ import libs.test_PID as test_PID
 import libs.log as log
 import libs.basics as basics
 
-from const import *
+from main_const import *
 import release
 import land
 import melt

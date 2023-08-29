@@ -60,15 +60,15 @@ image_guide_log = log.Logger(dir='../logs/8_image_guide_log', filename='image_gu
 #####=====Mission Sequence=====#####
 
 
-#####=====Release Detect Sequence=====#####
+#####===== 1 Release Detect Sequence=====#####
 print('Release Detect Sequence: Start')
 release_log.save_log('start')
 
 
-#####=====Land Detect Sequence=====#####
+#####===== 2 Land Detect Sequence=====#####
 print('Land Detect Sequence: Start')
 
-#####=====Melt Sequence=====#####
+#####===== 3 Melt Sequence=====#####
 print('Melt Sequence: Start')
 lat_melt, lon_melt = gps.location()
 
@@ -77,7 +77,7 @@ lat_melt, lon_melt = gps.location()
 melt.main(meltPin=MELT_PIN, t_melt=MELT_TIME)
 print('Melt Sequence: End')
 
-#####=====Parachute Avoid Sequence=====#####
+#####===== 4 Parachute Avoid Sequence=====#####
 print('Parachute Avoid Sequence: Start')
 
 
@@ -111,8 +111,7 @@ print('Saving Log...')
 lat_log, lon_log = gps.location()
 phase_log.save_log('5', 'GPS Running Sequence to Human: Start', lat_log, lon_log)
 
-#-GPS Running2-#
-
+#-GPS Running1-#
 while True: #1ループおおよそT_CAL秒
     direction = calibration.calculate_direction(lon_dest=LON_HUMAN, lat_dest=LAT_HUMAN)
     distance_to_goal = direction["distance"]
@@ -143,7 +142,8 @@ print('#####-----GPS Running Sequence to Human: End-----#####')
 
 
 
-#####=====Human Detection Sequence=====#####
+
+#####===== 6 Human Detection Sequence=====#####
 
 
 
@@ -219,25 +219,6 @@ print('#####-----GPS Running Sequence to Goal: End-----#####')
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #####===== 8 Image Guide Sequence=====#####
 print('#####-----Image Guide Sequence: Start-----#####')
 
@@ -267,14 +248,17 @@ print('#####-----Image Guide Sequence: End-----#####')
 
 
 
+
+
 #####=====Mission End=====#####
 print('Mission Accomlished')
 send.send_data('Mission Accompished')
 time.sleep(10)
 
 #-Log-#
+print('Saving Log...')
 last_lat, last_lon = gps.location()
 phase_log.save_log('10', 'All Phase Comleted', last_lat, last_lon)
 release_log.save_log('(PDT)', 'N', last_lat, 'W', last_lon)
 
-print("Saved Log\nEnding Program")
+print("Log saved\nEnding Program")

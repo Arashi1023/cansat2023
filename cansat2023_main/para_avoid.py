@@ -20,6 +20,7 @@ import libs.take as take
 from libs.machine_learning import DetectPeople
 import libs.calibration as calibration
 import libs.PID as PID
+import libs.basics as basics
 import libs.log as log
 
 from main_const import *

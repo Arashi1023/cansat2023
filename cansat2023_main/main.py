@@ -107,6 +107,13 @@ phase_log.save_log('8', 'GPS Running Sequence to Goal', lat_log, lon_log)
 gps_running_goal_log.save_log('GPS Running Sequence to Goal: Start')
 
 
+#-GPS Running2-#
+
+#-Log-#
+
+send.send_data('Run2 finished')
+time.sleep(10)
+
 print('GPS Running Sequence to Goal: End')
 
 

@@ -134,7 +134,7 @@ time.sleep(10)
 
 #-----Mission End Log-----#
 last_lat, last_lon = gps.location()
-phase_log.save_log('10', 'All Phase Comleted', str(last_lat), str(last_lon))
-release_log.save_log('(PDT)', 'N', str(last_lat), 'W', str(last_lon))
+phase_log.save_log('10', 'All Phase Comleted', last_lat, last_lon)
+release_log.save_log('(PDT)', 'N', last_lat, 'W', last_lon)
 
 print("Saved Log\nEnding Program")

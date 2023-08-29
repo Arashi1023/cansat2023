@@ -90,10 +90,30 @@ time.sleep(15) #スタビライザーの復元待ち
 
 print('Parachute Avoid Sequence: End')
 
-#####=====GPS Running Sequence to Human=====#####
-print('GPS Running Sequence to Human: Start')
 
-while True:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#####===== 5 GPS Running Sequence to Human =====#####
+print('#####-----GPS Running Sequence to Human: Start-----#####')
+print('Saving Log...')
+lat_log, lon_log = gps.location()
+phase_log.save_log('5', 'GPS Running Sequence to Human: Start', lat_log, lon_log)
+
+#-GPS Running2-#
+
+while True: #1ループおおよそT_CAL秒
     direction = calibration.calculate_direction(lon_dest=LON_HUMAN, lat_dest=LAT_HUMAN)
     distance_to_goal = direction["distance"]
 
@@ -101,13 +121,24 @@ while True:
     lat_now, lon_now, distance_to_dest, rover_azimuth, isReach_dest = PID.drive2(lon_dest=LON_HUMAN, lat_dest=LAT_HUMAN, thd_distance=THD_DISTANCE_DEST, t_cal=T_CAL, loop_num=LOOP_NUM)
 
     #-Log-#
-    gps_running_human_log.save_log(lat_now, lon_now, distance_to_dest, rover_azimuth, isReach_dest)    
+    gps_running_goal_log.save_log(lat_now, lon_now, distance_to_dest, rover_azimuth, isReach_dest)    
     
     if isReach_dest == 1: #ゴール判定
         break
 
-print(f'{distance_to_dest}m to Human')
-print('GPS Running Sequence to Human: End')
+print(f'{distance_to_dest}m to Goal')
+
+#-Log-#
+print('Saving Log...')
+lat_log, lon_log = gps.location()
+phase_log.save_log('5', 'GPS Running Sequence to Human: End', lat_log, lon_log)
+
+#-send-#
+print('Sending Data...')
+send.send_data('Run1 finished')
+time.sleep(10)
+
+print('#####-----GPS Running Sequence to Human: End-----#####')
 
 
 
@@ -141,16 +172,23 @@ print('GPS Running Sequence to Human: End')
 
 
 
-#####=====GPS Running Sequence to Goal=====#####
-print('GPS Running Sequence to Goal: Start')
-lat_log, lon_log = gps.location()
-phase_log.save_log('8', 'GPS Running Sequence to Goal', lat_log, lon_log)
-gps_running_goal_log.save_log('GPS Running Sequence to Goal: Start')
 
+
+
+
+
+
+
+#####===== 7 GPS Running Sequence to Goal=====#####
+print('#####-----GPS Running Sequence to Goal: Start-----#####')
+
+#-Log-#
+print('Saving Log...')
+lat_log, lon_log = gps.location()
+phase_log.save_log('7', 'GPS Running Sequence to Goal: Start', lat_log, lon_log)
 
 #-GPS Running2-#
-
-while True:
+while True: #1ループおおよそT_CAL秒
     direction = calibration.calculate_direction(lon_dest=LON_GOAL, lat_dest=LAT_GOAL)
     distance_to_goal = direction["distance"]
 
@@ -163,15 +201,19 @@ while True:
     if isReach_dest == 1: #ゴール判定
         break
 
-    
+print(f'{distance_to_dest}m to Goal')
 
 #-Log-#
+print('Saving Log...')
+lat_log, lon_log = gps.location()
+phase_log.save_log('7', 'GPS Running Sequence to Goal: End', lat_log, lon_log)
 
+#-send-#
+print('Sending Data...')
 send.send_data('Run2 finished')
 time.sleep(10)
 
-print(f'{distance_to_dest}m to Goal')
-print('GPS Running Sequence to Goal: End')
+print('#####-----GPS Running Sequence to Goal: End-----#####')
 
 
 
@@ -196,12 +238,12 @@ print('GPS Running Sequence to Goal: End')
 
 
 
-#####=====Image Guide Sequence=====#####
-print('Image Guide Sequence: Start')
+#####===== 8 Image Guide Sequence=====#####
+print('#####-----Image Guide Sequence: Start-----#####')
 
 #-Log-#
-img_guide_start_lat, img_guide_start_lon = gps.location()
-phase_log.save_log('9', 'Image Guide Sequence', img_guide_start_lat, img_guide_start_lon)
+lat_log, lon_log = gps.location()
+phase_log.save_log('8', 'Image Guide Sequence', lat_log, lon_log)
 image_guide_log.save_log('Image Guide Sequence: Start')
 
 #-Image Guide Drive-#
@@ -212,9 +254,16 @@ while True:
         break
 
 #-Log-#
-image_guide_log.save_log('Image Guide Sequence: End')
+print('Saving Log...')
+lat_log, lon_log = gps.location()
+phase_log.save_log('8', 'Image Guide Sequence: End', lat_log, lon_log)
 
-print('Image Guide Sequence: End')
+#-send-#
+print('Sending Data...')
+send.send_data('Image Guide finished')
+time.sleep(10)
+
+print('#####-----Image Guide Sequence: End-----#####')
 
 
 

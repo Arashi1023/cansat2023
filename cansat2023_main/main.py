@@ -10,21 +10,24 @@ import cv2
 import pigpio
 import traceback
 from math import sqrt
+import numpy as np
 
 import libs.bme280 as bme280
 import libs.bmx055 as bmx055
 import libs.motor as motor
-import libs.save_photo as save_img
+import libs.save_photo as save_photo
 import libs.send as send
 import libs.gps as gps
+import libs.gps_navigate as gps_navigate
 import libs.stuck2 as stuck2
 import libs.other as other
 import libs.send_photo as send_photo
 import libs.take as take
 from libs.machine_learning import DetectPeople
 import libs.calibration as calibration
-import libs.test_PID as PID
+import libs.PID as PID
 import libs.log as log
+import libs.basics as basics
 
 from main_const import *
 import release
@@ -33,7 +36,7 @@ import melt
 import beta_gps_running as gps_running
 import human_detection
 import para_avoid
-import wgps_beta_photo_running as img_guide
+import wgps_beta_photo_running as imgguide
 
 #####=====clock setup=====#####
 t_start = time.time()
@@ -251,7 +254,7 @@ image_guide_log.save_log('Image Guide Sequence: Start')
 
 #-Image Guide Drive-#
 while True:
-    lat_now, lon_now, distance_to_goal, area_ratio, angle, isReach_goal = img_guide.img_guide_drive(lat_dest=LAT_GOAL, lon_dest=LON_GOAL, thd_distance_goal=THD_DISTANCE_GOAL, thd_red_area=THD_RED_RATIO)
+    lat_now, lon_now, distance_to_goal, area_ratio, angle, isReach_goal = imgguide.img_guide_drive(lat_dest=LAT_GOAL, lon_dest=LON_GOAL, thd_distance_goal=THD_DISTANCE_GOAL, thd_red_area=THD_RED_RATIO)
     image_guide_log.save_log(lat_now, lon_now, distance_to_goal, area_ratio, angle, isReach_goal)
     if isReach_goal == 1: #ゴール判定
         break

@@ -69,13 +69,19 @@ release_log.save_log('start')
 print('Land Detect Sequence: Start')
 
 #####===== 3 Melt Sequence=====#####
-print('Melt Sequence: Start')
-lat_melt, lon_melt = gps.location()
+print('#####-----Melt Sequence: Start-----#####')
 
+#-Log-#
+lat_log, lon_log = gps.location()
+phase_log.save_log('3', 'Melt Sequence: Start', lat_log, lon_log)
 
-
+#-Melt-#
 melt.main(meltPin=MELT_PIN, t_melt=MELT_TIME)
-print('Melt Sequence: End')
+
+
+
+
+print('#####-----Melt Sequence: End-----#####')
 
 time.sleep(15) #スタビライザーの復元待ち
 

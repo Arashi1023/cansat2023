@@ -19,9 +19,10 @@ import libs.send_photo as send_photo
 import libs.take as take
 from libs.machine_learning import DetectPeople
 import libs.calibration as calibration
-import libs.test_PID as test_PID
+import libs.test_PID as PID
 import libs.log as log
 import libs.basics as basics
+
 
 from main_const import *
 import release
@@ -66,7 +67,7 @@ def detect_para():
     
     return red_area, angle
 
-def para_avoid(check_count, thd_para_avoid=0, thd_para_count=4):
+def para_avoid_(check_count, thd_para_avoid=0, thd_para_count=4):
 
     #-----パラメータの設定-----#
     #-----周囲を確認する-----#
@@ -232,7 +233,7 @@ def wgps_para_avoid(small_thd_dist :int, large_thd_dist :int, check_count :int, 
     while para_dist <= small_thd_dist:
         print("Warning: Parachute is very close\nStarting Parachute Avoid Sequence")
         try:
-            para_avoid(check_count, thd_para_avoid, thd_para_count)
+            para_avoid_(check_count, thd_para_avoid, thd_para_count)
         except:
             print("Parachute Avoid Sequence Failed")
             print("Trying Again")
@@ -257,8 +258,8 @@ def wgps_para_avoid(small_thd_dist :int, large_thd_dist :int, check_count :int, 
 
         #-----PID制御による角度調整（パラシュートがある方向に向かせる）-----#
         theta_array = []
-        test_PID.make_theta_array(theta_array, 5)
-        test_PID.PID_adjust_direction(target_azimuth, magx_off, magy_off, theta_array)
+        PID.make_theta_array(theta_array, 5)
+        PID.PID_adjust_direction(target_azimuth, magx_off, magy_off, theta_array)
 
         rotate_count = 2
 
@@ -285,8 +286,8 @@ def wgps_para_avoid(small_thd_dist :int, large_thd_dist :int, check_count :int, 
             #-----機体の回転-----#
             basics.standarize_angle(azimuth_nxt)
             theta_array = []
-            test_PID.make_theta_array(theta_array, 5)
-            test_PID.PID_adjust_direction(azimuth_nxt, magx_off, magy_off, theta_array)
+            PID.make_theta_array(theta_array, 5)
+            PID.PID_adjust_direction(azimuth_nxt, magx_off, magy_off, theta_array)
         
     
         #-----パラシュートから離れる-----#
@@ -298,20 +299,108 @@ def wgps_para_avoid(small_thd_dist :int, large_thd_dist :int, check_count :int, 
 
         t_start_run = time.time()
         theta_array = []
-        test_PID.make_theta_array(theta_array, 5)
+        PID.make_theta_array(theta_array, 5)
 
         while time.time() - t_start_run <= T_FORWARD:
-            test_PID.PID_run(target_azimuth, magx_off, magy_off, theta_array, loop_num=25)
+            PID.PID_run(target_azimuth, magx_off, magy_off, theta_array, loop_num=25)
+
+def para_avoid_main(lat_land, lon_land, lat_dest, lon_dest, check_count :int):
+    '''
+    田口作成 2023/08/29
+    '''
+
+    isDistant_para = 0 #パラシュート回避用のフラグ
+
+    while True:
+        try:
+            para_info = calibration.calculate_direction(lat_land, lon_land)
+            para_dist = para_info['distance'] #パラシュートまでの距離を計算
+            para_azimuth = para_info['azimuth1'] #パラシュートの方位角を計算
+            print(f'{para_dist}m')
+            break
+        except:
+            print('GPS Error\nTry Again')
+    
+    lat_now, lon_now = gps.location()
+
+    if para_dist <= SHORT_THD_DIST:
+        print('Warning: Parachute is very close\nStarting Parachute Avoid Sequence')
+        red_area, angle = detect_para()
+        if red_area > PARA_THD_COVERED:
+            print('Parachute on top')
+            time.sleep(5)
+        elif red_area == 0:
+            print('Parachute Not Found\nChecking Around')
+            motor.move(PARA_PWR, -PARA_PWR, T_CHECK)
+        elif red_area == 0 and check_count > 0:
+            print("Move Forwward")
+            motor.move(PARA_PWR, PARA_PWR, T_FORWARD)
+            check_count += 1
+        else:
+            print('Parachute Found\nTurning Around')
+            motor.move(PARA_PWR, -PARA_PWR, T_ROTATE)
+            check_count += 1
+            motor.move(PARA_PWR, PARA_PWR, T_FORWARD)
+    
+    elif SHORT_THD_DIST < para_dist <= LONG_THD_DIST:
+        print('Starting Calibration')
+        magx_off, magy_off = calibration.cal(30, -30, 30) #キャリブレーション
+        para_direction = calibration.calculate_direction(lon_land, lat_land) #パラシュート位置の取得
+        para_azimuth = para_direction["azimuth1"]
+        target_azimuth = para_azimuth + 180
+        
+        ###-----パラシュートがある方向から180度の向きに走らせる-----###
+        theta_array = [0]*5
+        PID.PID_adjust_direction(target_azimuth=target_azimuth, magx_off=magx_off, magy_off=magy_off, theta_array=theta_array)
+        t_run_start = time.time()
+        while time.time() - t_run_start <= PARA_RUN_SHORT:
+            PID.PID_run(target_azimuth=target_azimuth, magx_off=magx_off, magy_off=magy_off, loop_num=20)
+        motor.deceleration(15, 15)
+        motor.motor_stop(1)
+
+    elif para_dist > LONG_THD_DIST:
+        goal_info = calibration.calculate_direction(lon_dest, lat_dest)
+        goal_azimuth = goal_info['azimuth1']
+
+        if abs(goal_azimuth - para_azimuth) < THD_AVOID_ANGLE:
+            print('Parachute is on the way')
+            target_azimuth = para_azimuth + 45
+            print("Heading " + str(target_azimuth) + " degrees")
+
+            magx_off, magy_off = calibration.cal(30, -30, 30) #キャリブレーション
+
+            t_run_start = time.time()
+            while time.time() - t_run_start <= PARA_RUN_LONG:
+                PID.PID_run(target_azimuth=target_azimuth, magx_off=magx_off, magy_off=magy_off, loop_num=20)
+            motor.deceleration(15, 15)
+            motor.motor_stop(1)
+        else:
+            isDistant_para = 1
+    
+    return lat_now, lon_now, para_dist, red_area, angle, isDistant_para, check_count
+
 
 if __name__ == '__main__':
     # パラメータ
-    PARA_THD_COVERED = 69120
-    PARA_CHECK_COUNT = 5
-    PARA_THD_AVOID = 0
+    # PARA_THD_COVERED = 69120
+    # PARA_CHECK_COUNT = 5
+    # PARA_THD_AVOID = 0
 
     #セットアップ
     motor.setup()
+    bme280.bme280_setup()
+    bmx055.bmx055_setup()
+    gps.open_gps()
 
     # red_area, angle = detect_para()
     # para_avoid(red_area, angle, check_count=5)
-    wgps_para_avoid(para_thd_covered=PARA_THD_COVERED, para_thd_avoid=PARA_THD_AVOID, check_count=PARA_CHECK_COUNT)
+    # wgps_para_avoid(para_thd_covered=PARA_THD_COVERED, para_thd_avoid=PARA_THD_AVOID, check_count=PARA_CHECK_COUNT)
+
+    check_count = 0
+    lat_land, lon_land = gps.location()
+    while True:
+        lat_now, lon_now, para_dist, red_area, angle, isDistant_para, check_count = para_avoid_main(lat_land, lon_land, LAT_HUMAN, LON_HUMAN, check_count)
+        print(lat_now, lon_now, para_dist, red_area, angle, isDistant_para, check_count)
+        if isDistant_para == 1:
+            break
+    print("Para Avoid End")

@@ -79,8 +79,12 @@ print('Melt Sequence: End')
 
 time.sleep(15) #スタビライザーの復元待ち
 
+
+
+
+
 #####===== 4 Parachute Avoid Sequence=====#####
-print('Parachute Avoid Sequence: Start')
+print('#####-----Parachute Avoid Sequence: Start-----#####')
 
 #-Log-#
 print('Saving Log...')
@@ -88,23 +92,28 @@ lat_log, lon_log = gps.location()
 phase_log.save_log('4', 'Parachute Avoid Sequence: Start', lat_log, lon_log)
 
 #-Parachute Avoid-#
+lat_land, lon_land = lat_log, lon_log #着地地点のGPS座標を取得
 stuck2.ue_jug()
 
+check_count = 0 #パラ回避用のカウンター
+while True:
+    lat_now, lon_now, para_dist, area_ratio, angle, isDistant_parachute, check_count = para_avoid.para_avoid_main(lat_land, lon_land, lat_dest=LAT_HUMAN, lon_dest=LON_HUMAN, check_count=check_count)
+    #-Log-#
+    para_avoid_log.save_log(lat_now, lon_now, para_dist, area_ratio, angle, isDistant_parachute)
+    if isDistant_parachute == 1:
+        break
 
+#-Log-#
+print('Saving Log...')
+lat_log, lon_log = gps.location()
+phase_log.save_log('4', 'Parachute Avoid Sequence: End', lat_log, lon_log)
 
+#-send-#
+print('Sending Data...')
+send.send_data('Parachute Avoid finished')
+time.sleep(10)
 
-print('Parachute Avoid Sequence: End')
-
-
-
-
-
-
-
-
-
-
-
+print('#####-----Parachute Avoid Sequence: End-----#####')
 
 
 
@@ -236,7 +245,7 @@ image_guide_log.save_log('Image Guide Sequence: Start')
 
 #-Image Guide Drive-#
 while True:
-    lat_now, lon_now, distance_to_goal, area_ratio, angle, isReach_goal = img_guide.img_guide_drive(lat_dest=LAT_GOAL, lon_dest=LON_GOAL, thd_distance_goal=THD_DISTANCE_GOAL, thd_red_area=THD_RED_AREA)
+    lat_now, lon_now, distance_to_goal, area_ratio, angle, isReach_goal = img_guide.img_guide_drive(lat_dest=LAT_GOAL, lon_dest=LON_GOAL, thd_distance_goal=THD_DISTANCE_GOAL, thd_red_area=THD_RED_RATIO)
     image_guide_log.save_log(lat_now, lon_now, distance_to_goal, area_ratio, angle, isReach_goal)
     if isReach_goal == 1: #ゴール判定
         break

@@ -311,7 +311,6 @@ def PID_run(target_azimuth, magx_off, magy_off, theta_array: list, loop_num: int
     theta_array.append(error_theta)
 
     #-----制御処理-----#
-    #while abs(theta_array[-1]) > 5:
     for _ in range(loop_num):
 
         if count < 15: #25から15に変更 by 田口 8/23
@@ -333,7 +332,7 @@ def PID_run(target_azimuth, magx_off, magy_off, theta_array: list, loop_num: int
 
         #-----モータの出力-----#
 
-        #直進補正分(m=0のとき直進するように設定するため) # 35
+        #直進補正分(m=0のとき直進するように設定するため) # 35から20に変更 by 田口 8/28
         s_r = 20
         s_l = 20
 
@@ -513,7 +512,7 @@ def PID_control2(theta, theta_array: list, Kp=0.1, Ki=0.04, Kd=2.5):
 
     return m
 
-def drive2(lon_dest :float, lat_dest: float, thd_distance: int, t_run: float, log_path, t_start=0, loop_num=20):
+def drive2(lon_dest :float, lat_dest: float, thd_distance: int, t_cal: float, log_path, t_start=0, loop_num=20):
     '''
     任意の地点までPID制御により走行する関数
     
@@ -525,7 +524,7 @@ def drive2(lon_dest :float, lat_dest: float, thd_distance: int, t_run: float, lo
         目標地点の緯度
     thd_distance : float
         目標地点に到達したと判定する距離（10mぐらいが望ましい？？短くしすぎるとうまく停止してくれない）
-    t_run : float
+    t_cal : float
         キャリブレーションを行う間隔
     log_path : 
         ログの保存先
@@ -561,7 +560,7 @@ def drive2(lon_dest :float, lat_dest: float, thd_distance: int, t_run: float, lo
     magdata = bmx055.mag_dataRead()
     mag_x = magdata[0]
     mag_y = magdata[1]
-    lat_old, lon_old = gps.location() #スタックチェック用の変数の更新
+    lat_old, lon_old = gps.location() #最初のスタックチェック用の変数の設定
     
     rover_azimuth = calibration.angle(mag_x, mag_y, magx_off, magy_off) #戻り値
 
@@ -573,17 +572,17 @@ def drive2(lon_dest :float, lat_dest: float, thd_distance: int, t_run: float, lo
     send.send_data(lon_str)
     time.sleep(9)
 
-    t_cal = time.time() #GPS走行開始前の時刻
+    t_run_start = time.time() #GPS走行開始前の時刻
 
-    while time.time() - t_cal <= t_run:
+    while time.time() - t_run_start <= t_cal:
         print("-------gps走行-------")
         lat_now, lon_now = gps.location()
+        direction = gps_navigate.vincenty_inverse(lat_now, lon_now, lat_dest, lon_dest)
+        distance_to_dest, target_azimuth = direction["distance"], direction["azimuth1"]
         print(lat_now, lon_now)
 
         #-----スタックチェック用の変数の更新-----#
         lat_new, lon_new = lat_now, lon_now
-        direction = gps_navigate.vincenty_inverse(lat_now, lon_now, lat_dest, lon_dest)
-        distance_to_dest, target_azimuth = direction["distance"], direction["azimuth1"]
 
         #-----スタックチェック-----#
         if stuck_count % 25 == 0:
@@ -598,18 +597,9 @@ def drive2(lon_dest :float, lat_dest: float, thd_distance: int, t_run: float, lo
         if distance_to_dest > thd_distance:
             PID_run(target_azimuth, magx_off, magy_off, theta_array, loop_num)
         else:
-            isReach_dest = 1
-        
-        magdata = bmx055.mag_dataRead()
-        mag_x = magdata[0]
-        mag_y = magdata[1]
-        rover_azimuth = calibration.angle(mag_x, mag_y, magx_off, magy_off)
+            isReach_dest = 1 #ゴール判定用のフラグ
 
-        stuck_count += 1
-        
-        lat_new, lon_new = gps.location()
-        other.log(log_path, datetime.datetime.now(), time.time() - t_start, lat_new, lon_new, rover_azimuth, direction['distance'])
-        print("whileの最下行")
+        stuck_count += 1 #25回に一回スタックチェックを行う
 
     motor.motor_stop(1)
 

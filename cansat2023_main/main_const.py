@@ -13,6 +13,10 @@ PARA_THD_AVOID = 0
 MELT_PIN = 4
 MELT_TIME = 4 #溶断回路に印加する時間
 
+#-----GPS走行-----#
+STUCK_JUDGE_THD_DISTANCE = 5
+LOOP_NUM = 20 #0.05秒ごとに9軸センサを取得するので、20回のとき1秒間隔でGPSを取得する
+
 #-----人検出-----#
 LAT_HUMAN = 35.9243068
 LON_HUMAN = 139.9124594

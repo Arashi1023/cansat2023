@@ -109,6 +109,19 @@ gps_running_goal_log.save_log('GPS Running Sequence to Goal: Start')
 
 #-GPS Running2-#
 
+while True:
+    direction = calibration.calculate_direction(lon_dest=LON_GOAL, lat_dest=LAT_GOAL)
+    distance_to_goal = direction["distance"]
+
+    lat_now, lon_now, distance_to_dest, rover_azimuth, isReach_dest = drive2()
+
+    #-Log-#
+    gps_running_goal_log.save_log(lat_now, lon_now, distance_to_dest, rover_azimuth, isReach_dest)    
+    if isReach_dest == 1: #ゴール判定
+        break
+
+    
+
 #-Log-#
 
 send.send_data('Run2 finished')

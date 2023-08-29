@@ -12,9 +12,7 @@ import other
 import send
 from collections import deque
 import basics
-
-
-
+from cansat2023_main.main_const import *
 
 #PID制御のテストコード
 
@@ -487,8 +485,6 @@ def PID_control2(theta, theta_array: list, Kp=0.1, Ki=0.04, Kd=2.5):
     '''
     作成 by 田口 8/28
     '''
-
-
     ###-----初期設定-----#
     ###-----角度情報の更新-----###
     del theta_array[0]
@@ -516,6 +512,110 @@ def PID_control2(theta, theta_array: list, Kp=0.1, Ki=0.04, Kd=2.5):
     m = mp + mi - md
 
     return m
+
+def drive2(lon_dest :float, lat_dest: float, thd_distance: int, t_run: float, log_path, t_start=0, loop_num=20):
+    '''
+    任意の地点までPID制御により走行する関数
+    
+    Parameters
+    ----------
+    lon_dest : float
+        目標地点の経度
+    lat : float
+        目標地点の緯度
+    thd_distance : float
+        目標地点に到達したと判定する距離（10mぐらいが望ましい？？短くしすぎるとうまく停止してくれない）
+    t_run : float
+        キャリブレーションを行う間隔
+    log_path : 
+        ログの保存先
+    t_start : float
+        開始時間
+    '''
+
+    #-----PID制御用のパラメータの設定-----#
+    # KP = 0.4
+    # KD = 3
+    # KI = 0.03
+
+    #-----初期設定-----#
+    stuck_count = 1
+    theta_array = [0]*5
+    isReach_dest = 0
+
+    #-----上向き判定-----#
+    stuck2.ue_jug()
+
+    #-----キャリブレーション-----#
+    time.sleep(1)
+    magx_off, magy_off = calibration.cal(30, -30, 40)
+
+    #-----目標地点への角度を取得-----#
+    direction = calibration.calculate_direction(lon_dest, lat_dest)
+    target_azimuth,  distance_to_dest = direction["azimuth1"], direction["distance"]
+
+    #-----PID制御による角度調整-----#
+    PID_adjust_direction(target_azimuth, magx_off, magy_off, theta_array)
+
+    #-----現在のローバーの情報取得-----#
+    magdata = bmx055.mag_dataRead()
+    mag_x = magdata[0]
+    mag_y = magdata[1]
+    lat_old, lon_old = gps.location() #スタックチェック用の変数の更新
+    
+    rover_azimuth = calibration.angle(mag_x, mag_y, magx_off, magy_off) #戻り値
+
+    #------無線通信による現在位置情報の送信-----#
+    lat_str = "{:.6f}".format(lat_old)  # 緯度を小数点以下8桁に整形
+    lon_str = "{:.6f}".format(lon_old)  # 経度を小数点以下8桁に整形
+    send.send_data(lat_str)
+    time.sleep(9)
+    send.send_data(lon_str)
+    time.sleep(9)
+
+    t_cal = time.time() #GPS走行開始前の時刻
+
+    while time.time() - t_cal <= t_run:
+        print("-------gps走行-------")
+        lat_now, lon_now = gps.location()
+        print(lat_now, lon_now)
+
+        #-----スタックチェック用の変数の更新-----#
+        lat_new, lon_new = lat_now, lon_now
+        direction = gps_navigate.vincenty_inverse(lat_now, lon_now, lat_dest, lon_dest)
+        distance_to_dest, target_azimuth = direction["distance"], direction["azimuth1"]
+
+        #-----スタックチェック-----#
+        if stuck_count % 25 == 0:
+            if stuck2.stuck_jug(lat_old, lon_old, lat_new, lon_new, thd=STUCK_JUDGE_THD_DISTANCE):
+                pass
+            else:
+                stuck2.stuck_avoid()
+                pass
+            lat_old, lon_old = gps.location()
+
+        #-----PID制御による走行-----#
+        if distance_to_dest > thd_distance:
+            PID_run(target_azimuth, magx_off, magy_off, theta_array, loop_num)
+        else:
+            isReach_dest = 1
+        
+        magdata = bmx055.mag_dataRead()
+        mag_x = magdata[0]
+        mag_y = magdata[1]
+        rover_azimuth = calibration.angle(mag_x, mag_y, magx_off, magy_off)
+
+        stuck_count += 1
+        
+        lat_new, lon_new = gps.location()
+        other.log(log_path, datetime.datetime.now(), time.time() - t_start, lat_new, lon_new, rover_azimuth, direction['distance'])
+        print("whileの最下行")
+
+    motor.motor_stop(1)
+
+    return lat_now, lon_now, distance_to_dest, rover_azimuth, isReach_dest
+
+
 
 if __name__ == "__main__":
 

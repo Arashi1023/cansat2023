@@ -108,19 +108,19 @@ print('Parachute Avoid Sequence: End')
 #####=====Image Guide Sequence=====#####
 print('Image Guide Sequence: Start')
 
-#-----Image Guide Log-----#
+#-Log-#
 img_guide_start_lat, img_guide_start_lon = gps.location()
 phase_log.save_log('9', 'Image Guide Sequence', img_guide_start_lat, img_guide_start_lon)
 image_guide_log.save_log('Image Guide Sequence: Start')
 
-#-----Image Guide Drive-----#
+#-Image Guide Drive-#
 while True:
     lat_now, lon_now, distance_to_goal, area_ratio, angle, isReach_goal = img_guide.img_guide_drive(lat_dest=LAT_GOAL, lon_dest=LON_GOAL, thd_distance_goal=THD_DISTANCE_GOAL, thd_red_area=THD_RED_AREA)
     image_guide_log.save_log(lat_now, lon_now, distance_to_goal, area_ratio, angle, isReach_goal)
     if isReach_goal == 1: #ゴール判定
         break
 
-#-----Image Guide Log-----#
+#-Log-#
 image_guide_log.save_log('Image Guide Sequence: End')
 
 print('Image Guide Sequence: End')
@@ -132,7 +132,7 @@ print('Mission Accomlished')
 send.send_data('Mission Accompished')
 time.sleep(10)
 
-#-----Mission End Log-----#
+#-Log-#
 last_lat, last_lon = gps.location()
 phase_log.save_log('10', 'All Phase Comleted', last_lat, last_lon)
 release_log.save_log('(PDT)', 'N', last_lat, 'W', last_lon)

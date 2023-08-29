@@ -91,11 +91,52 @@ time.sleep(15) #スタビライザーの復元待ち
 print('Parachute Avoid Sequence: End')
 
 #####=====GPS Running Sequence to Human=====#####
+print('GPS Running Sequence to Human: Start')
+
+while True:
+    direction = calibration.calculate_direction(lon_dest=LON_HUMAN, lat_dest=LAT_HUMAN)
+    distance_to_goal = direction["distance"]
+
+    #-T_CALごとに以下の情報を取得-#
+    lat_now, lon_now, distance_to_dest, rover_azimuth, isReach_dest = PID.drive2(lon_dest=LON_HUMAN, lat_dest=LAT_HUMAN, thd_distance=THD_DISTANCE_DEST, t_cal=T_CAL, loop_num=LOOP_NUM)
+
+    #-Log-#
+    gps_running_human_log.save_log(lat_now, lon_now, distance_to_dest, rover_azimuth, isReach_dest)    
+    
+    if isReach_dest == 1: #ゴール判定
+        break
+
+print(f'{distance_to_dest}m to Human')
+print('GPS Running Sequence to Human: End')
 
 
 
 
 #####=====Human Detection Sequence=====#####
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -129,7 +170,29 @@ while True:
 send.send_data('Run2 finished')
 time.sleep(10)
 
+print(f'{distance_to_dest}m to Goal')
 print('GPS Running Sequence to Goal: End')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

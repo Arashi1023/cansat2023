@@ -567,7 +567,7 @@ def drive2(lon_dest :float, lat_dest: float, thd_distance: int, t_cal: float, lo
 
     #-----目標地点への角度を取得-----#
     direction = calibration.calculate_direction(lon_dest, lat_dest)
-    target_azimuth,  distance_to_dest = direction["azimuth1"], direction["distance"]
+    target_azimuth, distance_to_dest = direction["azimuth1"], direction["distance"]
 
     #-----PID制御による角度調整-----#
     PID_adjust_direction(target_azimuth, magx_off, magy_off, theta_array)
@@ -630,11 +630,10 @@ if __name__ == "__main__":
     motor.setup()
     bmx055.bmx055_setup()
     #-----初期設定-----#
-    theta_array = []
     theta_differential_array = []
 
     #-----要素数5の空配列の作成-----#
-    theta_array = []*5
+    theta_array = [0]*5
 
     #-----オフセットの取得-----#
     #-----キャリブレーション-----#
@@ -643,9 +642,9 @@ if __name__ == "__main__":
 
     #-----PID制御-----#
 
-    while True:
-        input_azimuth = float(input('目標角度は？'))
-        PID_adjust_direction(input_azimuth, magx_off, magy_off, theta_array)
+    # while True:
+    #     input_azimuth = float(input('目標角度は？'))
+    #     PID_adjust_direction(input_azimuth, magx_off, magy_off, theta_array)
 
     # PID_adjust_direction(180, magx_off, magy_off, theta_array)
 
@@ -672,5 +671,4 @@ if __name__ == "__main__":
 
     # drive(lon_dest=lon_goal, lat_dest=lat_goal, thd_distance=5, t_run=60, log_path='/home/dendenmushi/cansat2023/sequence/log/gpsrunningLog.txt')
 
-    
-    
+    drive2(lon_dest=139.9120618, lat_dest=35.9242411, thd_distance=5, t_cal=60, loop_num=20)

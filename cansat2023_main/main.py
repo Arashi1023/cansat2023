@@ -113,6 +113,7 @@ while True:
     direction = calibration.calculate_direction(lon_dest=LON_GOAL, lat_dest=LAT_GOAL)
     distance_to_goal = direction["distance"]
 
+    #-T_CALごとに以下の情報を取得-#
     lat_now, lon_now, distance_to_dest, rover_azimuth, isReach_dest = PID.drive2(lon_dest=LON_GOAL, lat_dest=LAT_GOAL, thd_distance=THD_DISTANCE_DEST, t_cal=T_CAL, loop_num=LOOP_NUM)
 
     #-Log-#

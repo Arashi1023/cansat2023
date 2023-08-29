@@ -88,4 +88,3 @@ print('Parachute Avoid Sequence: End')
 #-----GPS Running Sequence to Goal-----#
 
 #-----Photo Running Sequence-----#
-

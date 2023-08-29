@@ -1,7 +1,6 @@
 '''
 制御に必要な基本的な処理まとめ
 '''
-
 import time
 import datetime
 import cv2

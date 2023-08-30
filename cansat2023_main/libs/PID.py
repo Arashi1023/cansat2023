@@ -359,8 +359,8 @@ def PID_run(target_azimuth: float, magx_off: float, magy_off: float, theta_array
         pwr_r = m + s_r
 
         # print(f"{error_theta=}")
-        print(f'{error_theta}=')
-        print('left', pwr_l, 'right', pwr_r)
+        # print(f'{error_theta}=')
+        # print('left', pwr_l, 'right', pwr_r)
 
         #-----モータの操作-----#
         motor.motor_move(pwr_l, pwr_r, 0.01)

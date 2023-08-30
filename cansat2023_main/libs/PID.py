@@ -12,7 +12,7 @@ import libs.other as other
 import libs.send as send
 from collections import deque
 import libs.basics as basics
-from cansat2023_main.main_const import *
+from libs.main_const import *
 
 #PID制御のテストコード
 

@@ -88,7 +88,7 @@ if __name__ == "__main__":
 
     t_start = time.time()
 
-    release_log = log.Logger(dir='../logs/test_logs/release_test', filename='Release_test', t_start=t_start)
+    release_log = log.Logger(dir='../logs/test_logs/release_test', filename='Release_test', t_start=t_start, columns=['latest_press', 'delta_press', 'press_release_count', 'isRelease'])
 
     #-Release Detect-#
     press_release_count = 0
@@ -99,7 +99,9 @@ if __name__ == "__main__":
             latest_press, delta_press, press_release_count, isRelease = release_main(press_release_count=press_release_count, press_array=press_array)
             #-Log-#
             release_log.save_log(latest_press, delta_press, press_release_count, isRelease)
+            print(isRelease)
             if isRelease == 1:
+                print("##--released--##")
                 break
         except:
             print('Error\nTrying again...')

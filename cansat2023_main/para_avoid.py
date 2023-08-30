@@ -400,7 +400,7 @@ if __name__ == '__main__':
     # PARA_THD_AVOID = 0
 
     #セットアップ
-    motor.setup()
+    # motor.setup()
     bme280.bme280_setup()
     bmx055.bmx055_setup()
     gps.open_gps()

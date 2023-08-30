@@ -105,7 +105,7 @@ if __name__ == "__main__":
             land_log.save_log(latest_press, delta_press, press_land_count, isLand)
             print(isLand)
             if isLand == 1:
-                print('##--landed--##')
+                print('Land Detected')
                 break
         except:
             print('Error\nTrying again...')

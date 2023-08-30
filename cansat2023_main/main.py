@@ -372,8 +372,9 @@ while True:
     try:
         lat_now, lon_now, distance_to_goal, area_ratio, angle, isReach_goal = imgguide.img_guide_drive(lat_dest=LAT_GOAL, lon_dest=LON_GOAL, thd_distance_goal=THD_DISTANCE_GOAL, thd_red_area=THD_RED_RATIO, magx_off=magx_off, magy_off=magy_off)
         image_guide_log.save_log(lat_now, lon_now, distance_to_goal, area_ratio, angle, isReach_goal)
-        
+        print('isReach_goal: ' + str(isReach_goal))
         if isReach_goal == 1: #ゴール判定
+            print('Goal')
             break
     except:
         print('Error\nTrying again...')

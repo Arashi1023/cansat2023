@@ -128,7 +128,7 @@ def gyr_dataRead():
 	return value
 
 def mag_dataRead():
-	print("mag_dataRead")
+	# print("mag_dataRead")
 	# --- Read Mag Data --- #
 	magData = [0, 0, 0, 0, 0, 0, 0, 0]
 	value = [0.0, 0.0, 0.0]

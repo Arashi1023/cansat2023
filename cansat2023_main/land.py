@@ -93,7 +93,7 @@ if __name__ == "__main__":
     #####-----test-----#####
     t_start = time.time()
 
-    land_log = log.Logger(dir='../logs/test_logs/land_test', filename='Land_test', t_start=t_start)
+    land_log = log.Logger(dir='../logs/test_logs/land_test', filename='Land_test', t_start=t_start, columns=['latest_press', 'delta_press', 'press_land_count', 'isLand'])
     #-Land Detect-#
     press_land_count = 0
     press_array = [0]*2

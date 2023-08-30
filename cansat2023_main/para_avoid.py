@@ -408,13 +408,14 @@ if __name__ == '__main__':
     t_start = time.time()
 
     #-Log Set up-#
-    para_avoid_test = log.logger(dir='../logs/test_logs/para_avoid_test', filename='para_avoid_test', t_start=t_start)
+    para_avoid_test = log.Logger(dir='../logs/test_logs/para_avoid_test', filename='para_avoid_test', t_start=t_start)
 
     check_count = 0 #パラ回避用のカウンター
     lat_land, lon_land = gps.location()
     while True:
         lat_now, lon_now, para_dist, red_area, angle, isDistant_para, check_count = para_avoid_main(lat_land, lon_land, lat_dest=LAT_HUMAN, lon_dest=LON_HUMAN, check_count=check_count)
         print(lat_now, lon_now, para_dist, red_area, angle, isDistant_para, check_count)
+        para_avoid_test.save_log(lat_now, lon_now, para_dist, red_area, angle, isDistant_para, check_count)
         if isDistant_para == 1:
             break
     print("Para Avoid End")

@@ -86,7 +86,9 @@ melt.main(meltPin=MELT_PIN, t_melt=MELT_TIME)
 
 print('#####-----Melt Sequence: End-----#####')
 
+print('Waiting for Stabilizer to be restored...')
 time.sleep(15) #スタビライザーの復元待ち
+
 
 
 
@@ -95,6 +97,13 @@ time.sleep(15) #スタビライザーの復元待ち
 #####===== 4 Parachute Avoid Sequence=====#####
 print('#####-----Parachute Avoid Sequence: Start-----#####')
 
+#-receive GPS-#
+while True:
+    lat_test, lon_test = gps.location()
+    if lat_test != 0 and lon_test != 0: #0だった場合はGPSが取得できていないので再取得
+        print('GPS received')
+        break
+
 #-Log-#
 print('Saving Log...')
 lat_log, lon_log = gps.location()
@@ -102,6 +111,7 @@ phase_log.save_log('4', 'Parachute Avoid Sequence: Start', lat_log, lon_log)
 
 #-Parachute Avoid-#
 lat_land, lon_land = lat_log, lon_log #着地地点のGPS座標を取得
+
 stuck2.ue_jug()
 
 check_count = 0 #パラ回避用のカウンター

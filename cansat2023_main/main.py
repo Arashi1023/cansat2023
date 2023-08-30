@@ -49,7 +49,7 @@ bme280.bme280_setup()
 bme280.bme280_calib_param() #これなに？？？
 
 #####=====log setup=====#####
-phase_log = log.Logger(dir='../logs/0_phase_log', filename='phase', t_start=t_start)
+phase_log = log.Logger(dir='../logs/0_phase_log', filename='phase', t_start=t_start, columns=['phase', 'condition', 'lat', 'lon'])
 report_log = log.Logger(dir='../logs/0_report_log', filename='report', t_start=t_start)
 release_log = log.Logger(dir='../logs/1_release_log', filename='release', t_start=t_start, columns=['latest_press', 'delta_press', 'press_release_count', 'isRelease'])
 land_log = log.Logger(dir='../logs/2_land_log', filename='land', t_start=t_start, columns=['latest_press', 'delta_press', 'press_land_count', 'isLand'])
@@ -65,6 +65,7 @@ image_guide_log = log.Logger(dir='../logs/8_image_guide_log', filename='image_gu
 
 #####===== 1 Release Detect Sequence=====#####
 print('#####-----Release Detect Sequence: Start-----#####')
+phase_log.save_log('1', 'Release Detect Sequence: Start', 0, 0) #GPS情報取得できるのか？？？
 release_log.save_log('Release Detect Start')
 
 
@@ -87,14 +88,13 @@ while True:
 
 #-Log-#
 print('Saving Log...')
-lat_log, lon_log = gps.location()
-phase_log.save_log('1', 'Release Detect Sequence: Start', lat_log, lon_log)
+phase_log.save_log('1', 'Release Detect Sequence: Start', 0, 0)
 release_log.save_log('Release Detected')
 
 #-send-#
-print('Sending Data...')
-send.send_data('Release finished')
-time.sleep(10)
+# print('Sending Data...')
+# send.send_data('Release finished')
+# time.sleep(10)
 
 print('#####-----Release Detect Sequence: End-----#####')
 
@@ -108,8 +108,7 @@ print('#####-----Land Detect Sequence: Start-----#####')
 
 #-Log-#
 print('Saving Log...')
-lat_log, lon_log = gps.location() #GPS情報取得できるのか？？
-phase_log.save_log('2', 'Land Detect Sequence: Start', lat_log, lon_log) #GPS情報取得できるのか？？
+phase_log.save_log('2', 'Land Detect Sequence: Start', 0, 0) #GPS情報取得できるのか？？
 
 #-Land Detect-#
 press_land_count = 0
@@ -127,8 +126,7 @@ while True:
 
 #-Log-#
 print('Saving Log...')
-lat_log, lon_log = gps.location()
-phase_log.save_log('2', 'Land Detect Sequence: End', lat_log, lon_log) #GPS情報取得できるのか？？
+phase_log.save_log('2', 'Land Detect Sequence: End', 0, 0)
 
 #-send-#
 print('Sending Data...')
@@ -153,8 +151,7 @@ melt.melt_down(meltPin=MELT_PIN, t_melt=MELT_TIME)
 
 #-Log-#
 print('Saving Log...')
-lat_log, lon_log = gps.location()
-phase_log.save_log('3', 'Melt Sequence: End', lat_log, lon_log) #GPS情報取得できるのか？？
+phase_log.save_log('3', 'Melt Sequence: End', 0, 0) #GPS情報取得できるのか？？
 melt_log.save_log('Melt Finished')
 
 #-send-#
@@ -174,10 +171,20 @@ time.sleep(15)
 #####-----GPSの取得チェック-----#####
 while True:
     lat_test, lon_test = gps.location()
-    print('Waiting for GPS...')
-    if lat_test != 0 and lon_test != 0: #0だった場合はGPSが取得できていないので再取得
+    if lat_test == 0 and lon_test == 0:
+        print('Waiting for GPS...')
+    elif lat_test != 0 and lon_test != 0: #0だった場合はGPSが取得できていないので再取得
         print('GPS received')
         break
+
+#-send-#
+print('Sending Data...')
+lat_str = "{:.6f}".format(lat_test)  # 緯度を小数点以下8桁に整形
+lon_str = "{:.6f}".format(lon_test)  # 経度を小数点以下8桁に整形
+send.send_data(lat_str)
+time.sleep(9)
+send.send_data(lon_str)
+time.sleep(9)
 #====================================================================================================#
 
 

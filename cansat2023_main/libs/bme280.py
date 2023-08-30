@@ -3,7 +3,7 @@
 
 from smbus import SMBus
 import time
-# import other
+import libs.other as other
 import datetime
 
 bus_number  = 1

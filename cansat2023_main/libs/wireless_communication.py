@@ -3,7 +3,8 @@ import time
 import pigpio
 import numpy as np
 import traceback
-import send
+
+import libs.send as send
 
 RX = 27
 pi = pigpio.pi()

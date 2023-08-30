@@ -1,6 +1,6 @@
 import base64
-import take
-import send
+import libs.take as take
+import libs.send as send
 
 if __name__ == '__main__':
     try:

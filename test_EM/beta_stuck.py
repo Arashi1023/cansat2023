@@ -1,11 +1,12 @@
 #走破性能試験用プログラム
-import bmx055
 import time
-import motor
-import gps_navigate
+import cansat2023_main.libs.bmx055 as bmx055
+import libs.motor as motor
+import libs.gps_navigate as gps_navigate
 import random
-import gps
-import bmx055
+import libs.gps as gps
+import libs.bmx055 as bmx055
+from cansat2023_main.libs import bmx055
 
 def upside_down(pwr=40, pwr_adj=20, t_forward=0.08):
     count = 0

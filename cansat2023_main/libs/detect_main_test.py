@@ -1,7 +1,7 @@
 import numpy as np
 import cv2
 import time
-import motor
+import libs.motor as motor
 
 #細かいノイズを除去するために画像を圧縮
 def mosaic(original_img, ratio=0.9):

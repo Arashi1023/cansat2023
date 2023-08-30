@@ -4,7 +4,7 @@ import time
 import traceback
 import logging
 import os
-#from PIL import Image
+from PIL import Image
 import cv2
 import time
 

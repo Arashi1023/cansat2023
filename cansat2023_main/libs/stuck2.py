@@ -1,8 +1,8 @@
 import time
 import datetime
 import random
-from libs.other import print_im920sl
 
+from libs.other import print_im920sl
 import libs.im920sl as im920sl
 import libs.im920sl2 as im920sl2
 import libs.motor as motor

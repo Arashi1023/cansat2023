@@ -105,5 +105,6 @@ if __name__ == "__main__":
             if isRelease == 1:
                 print("##--released--##")
                 break
-        except:
-            print('Error\nTrying again...')
+        except KeyboardInterrupt:
+            print('release_Interrupt')
+            exit()

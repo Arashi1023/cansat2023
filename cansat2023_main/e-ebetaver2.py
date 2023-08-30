@@ -442,7 +442,7 @@ if __name__=='__main__':
     threshold = 20 * 60
     # elapsed_time = time.time()-start_time
 
-    ML_people = DetectPeople(model_path="../model_mobile.tflite" )
+    ML_people = DetectPeople(model_path="model_mobile.tflite" )
 
     lat_n, lon_n, lat_e, lon_e, lat_s, lon_s, lat_w, lon_w = get_locations(lat_human, lon_human)
     

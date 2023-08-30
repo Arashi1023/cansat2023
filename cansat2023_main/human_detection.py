@@ -220,6 +220,8 @@ def human_detect_main():
     '''
     作成 by 田口 2023/8/30
     '''
+    
+
 
 
     pass                     

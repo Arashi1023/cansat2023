@@ -287,6 +287,12 @@ phase_log.save_log('6', 'Human Detection Sequence: Start', lat_log, lon_log)
 
 
 
+#-Load Model-#
+print('Loading Machine Learning Model...')
+ML_people = DetectPeople(model_path="model_mobile.tflite" )
+
+while True:
+
 
 
 

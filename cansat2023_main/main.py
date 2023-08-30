@@ -77,7 +77,10 @@ while True:
         latest_press, delta_press, press_release_count, isRelease = release.release_main(press_release_count=press_release_count, press_array=press_array)
         #-Log-#
         release_log.save_log(latest_press, delta_press, press_release_count, isRelease)
+        print('isLand: ' + str(isRelease))
         if isRelease == 1:
+            print()
+            print('Release Detected')
             break
     except:
         print('Error\nTrying again...')

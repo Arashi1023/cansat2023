@@ -6,7 +6,7 @@ import traceback
 import datetime
 import numpy as np
 
-import bmx055
+import libs.bmx055 as bmx055
 import other
 import gps
 import gps_navigate

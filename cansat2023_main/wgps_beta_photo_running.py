@@ -517,6 +517,7 @@ if __name__ == "__main__":
         area_ratio, angle, isReach_goal = TEST_img_guide_drive(magx_off=magx_off, magy_off=magy_off)
         print(isReach_goal)
         if isReach_goal == 1:
+            print('Goal')
             break
 
 

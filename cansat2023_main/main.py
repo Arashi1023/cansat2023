@@ -267,6 +267,15 @@ print('#####-----GPS Running Sequence to Human: End-----#####')
 
 
 #####===== 6 Human Detection Sequence=====#####
+print('#####-----Human Detection Sequence: Start-----#####')
+
+#-Log-#
+print('Saving Log...')
+lat_log, lon_log = gps.location()
+phase_log.save_log('6', 'Human Detection Sequence: Start', lat_log, lon_log)
+
+#-Human Detection-#
+
 
 
 

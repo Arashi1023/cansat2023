@@ -214,7 +214,10 @@ def move_to_bulearea(count, lat_human, lon_human):
         PID.drive(lon_w, lat_s, thd_distance=3, t_run=60, logpath=log_humandetect,t_start=t_start)
         print("第8エリアです")
     else:
-        print("青点エリア捜索終了")             
+        print("青点エリア捜索終了")
+
+def human_detect_main():
+    pass                     
     
 if __name__ == "__main__":
     t_start = time.time()

@@ -14,6 +14,7 @@ T_CHECK = 0.15
 T_ROTATE = 0.25 #パラシュートを見つけたときに回転する時間
 T_FORWARD = 3
 THD_AVOID_ANGLE = 15
+PARA_FORWARD_ANGLE = 45
 
 SHORT_THD_DIST = 5 #これ以上離れたときPID制御により走行する
 LONG_THD_DIST = 10 #これ以上離れたときPID制御により長く走行する

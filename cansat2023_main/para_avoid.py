@@ -339,7 +339,6 @@ def para_avoid_main(lat_land, lon_land, lat_dest, lon_dest, check_count :int):
             print('Parachute Found\nTurning Around')
             motor.move(PARA_PWR, -PARA_PWR, T_ROTATE)
             check_count += 1
-            motor.move(PARA_PWR, PARA_PWR, T_FORWARD)
     
     elif SHORT_THD_DIST < para_dist <= LONG_THD_DIST:
         print('Starting Calibration')
@@ -363,7 +362,7 @@ def para_avoid_main(lat_land, lon_land, lat_dest, lon_dest, check_count :int):
 
         if abs(goal_azimuth - para_azimuth) < THD_AVOID_ANGLE:
             print('Parachute is on the way')
-            target_azimuth = para_azimuth + 45
+            target_azimuth = para_azimuth + PARA_FORWARD_ANGLE #パラシュートの方向から45度の方向に走らせる
             print("Heading " + str(target_azimuth) + " degrees")
 
             magx_off, magy_off = calibration.cal(30, -30, 30) #キャリブレーション
@@ -395,10 +394,10 @@ if __name__ == '__main__':
     # para_avoid(red_area, angle, check_count=5)
     # wgps_para_avoid(para_thd_covered=PARA_THD_COVERED, para_thd_avoid=PARA_THD_AVOID, check_count=PARA_CHECK_COUNT)
 
-    check_count = 0
+    check_count = 0 #パラ回避用のカウンター
     lat_land, lon_land = gps.location()
     while True:
-        lat_now, lon_now, para_dist, red_area, angle, isDistant_para, check_count = para_avoid_main(lat_land, lon_land, LAT_HUMAN, LON_HUMAN, check_count)
+        lat_now, lon_now, para_dist, red_area, angle, isDistant_para, check_count = para_avoid_main(lat_land, lon_land, lat_dest=LAT_HUMAN, lon_dest=LON_HUMAN, check_count=check_count)
         print(lat_now, lon_now, para_dist, red_area, angle, isDistant_para, check_count)
         if isDistant_para == 1:
             break

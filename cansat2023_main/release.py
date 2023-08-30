@@ -2,7 +2,7 @@ import time
 import libs.bme280 as bme280
 import libs.send as send
 import libs.log as log
-from cansat2023_main.main_const import *
+from main_const import *
 #from other import print
 
 def pressdetect_release(thd_press_release, t_delta_release):

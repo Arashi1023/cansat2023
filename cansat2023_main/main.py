@@ -71,6 +71,16 @@ release_log.save_log('start')
 #####===== 2 Land Detect Sequence=====#####
 print('Land Detect Sequence: Start')
 
+
+
+
+
+
+
+
+
+
+
 #####===== 3 Melt Sequence=====#####
 print('#####-----Melt Sequence: Start-----#####')
 
@@ -79,12 +89,23 @@ lat_log, lon_log = gps.location()
 phase_log.save_log('3', 'Melt Sequence: Start', lat_log, lon_log)
 
 #-Melt-#
-melt.main(meltPin=MELT_PIN, t_melt=MELT_TIME)
+melt.melt_down(meltPin=MELT_PIN, t_melt=MELT_TIME)
 
+#-Log-#
+print('Saving Log...')
+lat_log, lon_log = gps.location()
+phase_log.save_log('3', 'Melt Sequence: End', lat_log, lon_log)
 
-
+#-send-#
+print('Sending Data...')
+send.send_data('Melt finished')
+time.sleep(10)
 
 print('#####-----Melt Sequence: End-----#####')
+
+
+
+
 
 print('Waiting for Stabilizer to be restored...')
 time.sleep(15) #スタビライザーの復元待ち

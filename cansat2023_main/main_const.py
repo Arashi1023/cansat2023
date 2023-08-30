@@ -5,6 +5,10 @@
 RELEASE_THD_PRESS = 0.1
 RELEASE_TIMEOUT = 60*5 #(秒)
 
+#-----溶断回路-----#
+MELT_PIN = 4
+MELT_TIME = 4 #溶断回路に印加する時間
+
 #-----パラシュート回避-----#
 # PARA_CHECK_COUNT = 5
 PARA_THD_RED_AREA = 0
@@ -22,10 +26,6 @@ LONG_THD_DIST = 10 #これ以上離れたときPID制御により長く走行す
 
 PARA_RUN_SHORT = 3
 PARA_RUN_LONG = 10
-
-#-----溶断回路-----#
-MELT_PIN = 4
-MELT_TIME = 4 #溶断回路に印加する時間
 
 #-----GPS走行-----#
 STUCK_JUDGE_THD_DISTANCE = 5

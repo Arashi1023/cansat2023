@@ -1,27 +1,9 @@
 import time
 import datetime
-import cv2
 
-
-
-
-import release
-import land
-import melt
-import parachute_avoid
-import paradetection
-import time
 import libs.bme280 as bme280
-
 import libs.send as send
-import traceback
 import libs.other as other
-import wgps_beta_photo_running as photo_running
-import libs.save_photo as save_img 
-import libs.take as take
-import libs.motor as motor
-import para_avoid
-import libs.stuck2 as stuck
 
 #variable for log
 log_phase=other.filename('/home/dendenmushi/cansat2023/sequence/log/phaselog','txt')

@@ -2,7 +2,6 @@ import tflite_runtime.interpreter as tflite
 import numpy as np
 from PIL import Image
 import cv2
-import time
 
 import libs.take as take
 

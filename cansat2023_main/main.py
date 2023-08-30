@@ -233,17 +233,20 @@ phase_log.save_log('5', 'GPS Running Sequence to Human: Start', lat_log, lon_log
 
 #-GPS Running1-#
 while True: #1ループおおよそT_CAL秒
-    direction = calibration.calculate_direction(lon_dest=LON_HUMAN, lat_dest=LAT_HUMAN)
-    distance_to_goal = direction["distance"]
+    try:
+        direction = calibration.calculate_direction(lon_dest=LON_HUMAN, lat_dest=LAT_HUMAN)
+        distance_to_goal = direction["distance"]
 
-    #-T_CALごとに以下の情報を取得-#
-    lat_now, lon_now, distance_to_dest, rover_azimuth, isReach_dest = PID.drive2(lon_dest=LON_HUMAN, lat_dest=LAT_HUMAN, thd_distance=THD_DISTANCE_DEST, t_cal=T_CAL, loop_num=LOOP_NUM)
+        #-T_CALごとに以下の情報を取得-#
+        lat_now, lon_now, distance_to_dest, rover_azimuth, isReach_dest = PID.drive2(lon_dest=LON_HUMAN, lat_dest=LAT_HUMAN, thd_distance=THD_DISTANCE_DEST, t_cal=T_CAL, loop_num=LOOP_NUM)
 
-    #-Log-#
-    gps_running_goal_log.save_log(lat_now, lon_now, distance_to_dest, rover_azimuth, isReach_dest)    
-    
-    if isReach_dest == 1: #ゴール判定
-        break
+        #-Log-#
+        gps_running_goal_log.save_log(lat_now, lon_now, distance_to_dest, rover_azimuth, isReach_dest)    
+        
+        if isReach_dest == 1: #ゴール判定
+            break
+    except:
+        print('Error\nTrying again...')
 
 print(f'{distance_to_dest}m to Goal')
 
@@ -309,17 +312,20 @@ phase_log.save_log('7', 'GPS Running Sequence to Goal: Start', lat_log, lon_log)
 
 #-GPS Running2-#
 while True: #1ループおおよそT_CAL秒
-    direction = calibration.calculate_direction(lon_dest=LON_GOAL, lat_dest=LAT_GOAL)
-    distance_to_goal = direction["distance"]
+    try:
+        direction = calibration.calculate_direction(lon_dest=LON_GOAL, lat_dest=LAT_GOAL)
+        distance_to_goal = direction["distance"]
 
-    #-T_CALごとに以下の情報を取得-#
-    lat_now, lon_now, distance_to_dest, rover_azimuth, isReach_dest = PID.drive2(lon_dest=LON_GOAL, lat_dest=LAT_GOAL, thd_distance=THD_DISTANCE_DEST, t_cal=T_CAL, loop_num=LOOP_NUM)
+        #-T_CALごとに以下の情報を取得-#
+        lat_now, lon_now, distance_to_dest, rover_azimuth, isReach_dest = PID.drive2(lon_dest=LON_GOAL, lat_dest=LAT_GOAL, thd_distance=THD_DISTANCE_DEST, t_cal=T_CAL, loop_num=LOOP_NUM)
 
-    #-Log-#
-    gps_running_goal_log.save_log(lat_now, lon_now, distance_to_dest, rover_azimuth, isReach_dest)    
-    
-    if isReach_dest == 1: #ゴール判定
-        break
+        #-Log-#
+        gps_running_goal_log.save_log(lat_now, lon_now, distance_to_dest, rover_azimuth, isReach_dest)    
+        
+        if isReach_dest == 1: #ゴール判定
+            break
+    except:
+        print('Error\nTrying again...')
 
 print(f'{distance_to_dest}m to Goal')
 
@@ -349,10 +355,13 @@ image_guide_log.save_log('Image Guide Sequence: Start')
 
 #-Image Guide Drive-#
 while True:
-    lat_now, lon_now, distance_to_goal, area_ratio, angle, isReach_goal = imgguide.img_guide_drive(lat_dest=LAT_GOAL, lon_dest=LON_GOAL, thd_distance_goal=THD_DISTANCE_GOAL, thd_red_area=THD_RED_RATIO)
-    image_guide_log.save_log(lat_now, lon_now, distance_to_goal, area_ratio, angle, isReach_goal)
-    if isReach_goal == 1: #ゴール判定
-        break
+    try:
+        lat_now, lon_now, distance_to_goal, area_ratio, angle, isReach_goal = imgguide.img_guide_drive(lat_dest=LAT_GOAL, lon_dest=LON_GOAL, thd_distance_goal=THD_DISTANCE_GOAL, thd_red_area=THD_RED_RATIO)
+        image_guide_log.save_log(lat_now, lon_now, distance_to_goal, area_ratio, angle, isReach_goal)
+        if isReach_goal == 1: #ゴール判定
+            break
+    except:
+        print('Error\nTrying again...')
 
 #-Log-#
 print('Saving Log...')

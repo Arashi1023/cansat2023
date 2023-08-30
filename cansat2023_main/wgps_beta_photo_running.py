@@ -211,7 +211,7 @@ def TEST_detect_goal():
     #ゴールを検出した場合に画像を保存
     if area_ratio != 0:
         area_ratio = int(area_ratio) #小数点以下を切り捨てる（画像ファイル名にピリオドを使えないため）
-        save_photo.save_img(path_detected_photo, 'detected', str(area_ratio), original_img)
+        save_photo.main(path_detected_photo, 'detected', str(area_ratio), original_img)
     
     return area_ratio, angle
 

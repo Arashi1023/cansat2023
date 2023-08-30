@@ -410,6 +410,7 @@ if __name__ == '__main__':
     #-Log Set up-#
     para_avoid_test = log.Logger(dir='../logs/test_logs/para_avoid_test', filename='para_avoid_test', t_start=t_start)
 
+    print('Para Avoid Start')
     check_count = 0 #パラ回避用のカウンター
     lat_land, lon_land = gps.location()
     while True:

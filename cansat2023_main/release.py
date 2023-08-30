@@ -1,6 +1,7 @@
 import time
 import libs.bme280 as bme280
 import libs.send as send
+from cansat2023_main.main_const import *
 #from other import print
 
 def pressdetect_release(thd_press_release, t_delta_release):
@@ -36,6 +37,30 @@ def pressdetect_release(thd_press_release, t_delta_release):
         press_judge_release = 2
     return press_count_release, press_judge_release
 
+def release_main(press_release_count: int, press_array: list):
+
+    isRelease = 0
+
+    press_data = bme280.bme280_read()
+    latest_press = press_data[1]
+    press_array.append(latest_press) #press_arrayの更新
+    press_array.pop(0) #press_arrayの更新
+    if press_array[0] != 0 and press_array[1] != 0:
+        delta_press = abs(press_array[1] - press_array[0])
+
+        if delta_press > RELEASE_THD_PRESS:
+            press_release_count += 1
+            if press_release_count >= RELEASE_JUDGE_COUNT:
+                isRelease = 1
+        else:
+            press_release_count = 0
+    
+    elif press_array[0] == 0 or press_array[1] == 0:
+        print('Reading Press Again')
+        delta_press = 0
+        press_release_count = 0
+
+    return latest_press, delta_press, press_release_count, isRelease
 
 if __name__ == "__main__":
     thd_press_release = 0.1

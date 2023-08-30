@@ -69,9 +69,18 @@ release_log.save_log('Release Detect Start')
 
 
 #-Release Detect-#
+press_release_count = 0
+press_array = [0]*2
 
-
-
+while True:
+    try:
+        latest_press, delta_press, press_release_count, isRelease = release.release_main(press_release_count=press_release_count, press_array=press_array)
+        #-Log-#
+        release_log.save_log(latest_press, delta_press, press_release_count, isRelease)
+        if isRelease == 1:
+            break
+    except:
+        print('Error\nTrying again...')
 
 #-Log-#
 print('Saving Log...')
@@ -106,12 +115,10 @@ press_array = [0]*2
 while True:
     try:
         latest_press, delta_press, press_land_count, isLand = land.land_main(press_land_count=press_land_count, press_array=press_array)
-        if isLand == 1:
-            break
-        
         #-Log-#
         land_log.save_log(latest_press, delta_press, press_land_count, isLand)
-
+        if isLand == 1:
+            break
     except:
         print('Error\nTrying again...')
 
@@ -126,6 +133,9 @@ send.send_data('Land finished')
 time.sleep(10)
 
 print('#####-----Land Detect Sequence: End-----#####')
+
+
+
 
 
 #####===== 3 Melt Sequence=====#####

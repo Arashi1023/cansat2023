@@ -3,10 +3,13 @@
 '''
 #-----放出判定-----#
 RELEASE_THD_PRESS = 0.1
+RELEASE_JUDGE_COUNT = 4
 RELEASE_TIMEOUT = 60*5 #(秒)
 
+
 #-----着地判定-----#
-THD_PRESS_LAND = 0.1
+LAND_THD_PRESS = 0.1
+LAND_JUDGE_COUNT = 4
 
 #-----溶断回路-----#
 MELT_PIN = 4

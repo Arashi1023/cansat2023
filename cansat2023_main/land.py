@@ -44,20 +44,21 @@ def land_main(press_land_count: int, press_array: list):
 
     press_data = bme280.bme280_read()
     latest_press = press_data[1]
-    press_array.append(latest_press)
-    press_array.pop(0)
+    press_array.append(latest_press) #press_arrayの更新
+    press_array.pop(0) #press_arrayの更新
     if press_array[0] != 0 and press_array[1] != 0:
         delta_press = abs(press_array[1] - press_array[0])
 
-        if delta_press < THD_PRESS_LAND:
+        if delta_press < LAND_THD_PRESS:
             press_land_count += 1
-            if press_land_count > 4:
+            if press_land_count >= LAND_JUDGE_COUNT:
                 isLand = 1
         else:
             press_land_count = 0 #カウンターの初期化
     
     elif press_array[0] == 0 or press_array[1] == 0:
         print('Reading Press Again')
+        delta_press = 0
         press_land_count = 0
     
     return latest_press, delta_press, press_land_count, isLand

@@ -11,4 +11,4 @@ def save_img(img_path, img_name_a, img_name_b, img):
     #画像の保存
     cv2.imwrite(final_img_path, img)
 
-    print("photo_saved")
+    # print("photo_saved")

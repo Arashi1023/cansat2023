@@ -73,7 +73,7 @@ def get_center(mask, original_img):
         # 重心の計算
         m = cv2.moments(max_contour)
         cx,cy= m['m10']/m['m00'] , m['m01']/m['m00']
-        print(f"Weight Center = ({cx}, {cy})")
+        # print(f"Weight Center = ({cx}, {cy})")
         # 座標を四捨五入
         cx, cy = round(cx), round(cy)
         # 重心位置に x印を書く
@@ -97,7 +97,7 @@ def get_area(max_contour, original_img):
         area_ratio = area / img_area * 100 #面積の割合を計算
         if area_ratio < 0.1:
             area_ratio = 0.0
-        print(f"Area ratio = {area_ratio:.1f}%")
+        # print(f"Area ratio = {area_ratio:.1f}%")
     except:
         area_ratio = 0
 
@@ -119,7 +119,7 @@ def get_para_area(max_contour, original_img):
         #     area_ratio = 0.0
         # print(f"Area ratio = {area_ratio:.1f}%")
 
-        print(f"Area = {area}")
+        # print(f"Area = {area}")
 
     except:
         # area_ratio = 0
@@ -141,7 +141,7 @@ def get_angle(cx, cy, original_img):
     elif x4 < cx < x5:
         angle = 3
     
-    print("angle = ", angle)
+    # print("angle = ", angle)
 
     return angle
 

@@ -65,9 +65,7 @@ def picture(path, width=320, height=240):
       
     
     try:
-        t_dir = time.time()
         make_dir(path)
-        print('dir', time.time()-t_dir)
         # picam2 =  Picamera2()
 
         with picamera.Picamera2() as camera:
@@ -76,22 +74,17 @@ def picture(path, width=320, height=240):
             filepath = filename(path, 'jpg') # カメラのファイル名作成
             camera_config = camera.create_still_configuration(main={"size": (width, height)}, lores={"size": (width, height)}, display="lores")
             camera.configure(camera_config)
-            t_cam_start = time.time()
             camera.start()
             #camera.rotation = 90 # カメラの画像回転
             # time.sleep(2)
             camera.capture_file(filepath) # 撮影した画像を保存
-            print(time.time()-t_cam_start)
             latest_picture_path=filepath
 
             #画像を読み込んで回転させる
-            t_start = time.time()
             image = cv2.imread(filepath)
-            print('read', time.time()-t_start)
             image = cv2.resize(image, (width, height))
             image = cv2.rotate(image, cv2.ROTATE_90_COUNTERCLOCKWISE)
             cv2.imwrite(filepath, image)
-            print("time", time.time()-t_start)
 
             # image = Image.open(filepath)
             # rotated_image = image.rotate(90, expand=True)

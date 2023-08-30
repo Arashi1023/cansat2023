@@ -1,6 +1,6 @@
 import os
 import linecache
-import im920sl
+# import im920sl
 
 
 def print_im920sl(word):

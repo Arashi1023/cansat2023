@@ -1,7 +1,7 @@
 import time
 import libs.bme280 as bme280
 import libs.send as send
-from cansat2023_main.main_const import *
+from main_const import *
 import libs.log as log
 
 

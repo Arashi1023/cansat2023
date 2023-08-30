@@ -24,7 +24,7 @@ def bmx055_setup():
 		time.sleep(0.1)
 	except:
 		time.sleep(0.1)
-		print("BMX055 Setup Error")
+		print("BMX055 Setup Error ACC")
 		i2c.write_byte_data(ACC_ADDRESS, 0x0F, 0x03)	#Acc Scale  datasheet p57
 		time.sleep(0.1)
 		i2c.write_byte_data(ACC_ADDRESS, 0x10, 0x0F)	#Acc PMU  datasheet p57
@@ -42,7 +42,7 @@ def bmx055_setup():
 		time.sleep(0.1)
 	except:
 		time.sleep(0.1)
-		print("BMX055 Setup Error")
+		print("BMX055 Setup Error GYR")
 		i2c.write_byte_data(GYR_ADDRESS, 0x0F, 0x00)	#Gyro Scale  datasheet p99
 		time.sleep(0.1)
 		i2c.write_byte_data(GYR_ADDRESS, 0x10, 0x07)	#Acc PMU  datasheet p100
@@ -68,7 +68,7 @@ def bmx055_setup():
 		time.sleep(0.1)
 	except:
 		time.sleep(0.1)
-		print("BMX055 Setup Error")
+		print("BMX055 Setup Error MAG")
 		data = i2c.read_byte_data(MAG_ADDRESS, 0x4B)	#datasheet p134
 		if(data == 0):
 			i2c.write_byte_data(MAG_ADDRESS, 0x4B, 0x83)
@@ -85,7 +85,7 @@ def bmx055_setup():
 		time.sleep(0.1)
 
 def acc_dataRead():
-	print("acc_dataRead")
+	# print("acc_dataRead")
 	# --- Read Acc Data --- #
 	accData = [0, 0, 0, 0, 0, 0]
 	value = [0.0, 0.0, 0.0]
@@ -109,7 +109,7 @@ def acc_dataRead():
 	return value
 
 def gyr_dataRead():
-	print("gyr_dataRead")
+	# print("gyr_dataRead")
 	# --- Read Gyro Data --- "
 	gyrData = [0, 0, 0, 0, 0, 0]
 	value = [0.0, 0.0, 0.0]

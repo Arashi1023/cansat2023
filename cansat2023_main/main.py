@@ -168,7 +168,7 @@ print('#####-----Melt Sequence: End-----#####')
 print('Waiting for Stabilizer to be restored...')
 time.sleep(15)
 
-#####-----GPSの取得チェック-----#####
+#####-----GPSの取得チェック-----##### いらないかも...
 while True:
     lat_test, lon_test = gps.location()
     if lat_test == 0 and lon_test == 0:

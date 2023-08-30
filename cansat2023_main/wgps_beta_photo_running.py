@@ -330,7 +330,7 @@ def image_guided_driving(area_ratio, angle, lat2, lon2, thd_full_red, thd_dist_g
     # except Exception as e:
     #     tb = sys.exc_info()[2]
 
-def img_guide_drive(lat_dest: float, lon_dest: float, thd_distance_goal: float, thd_red_area: float):
+def img_guide_drive(lat_dest: float, lon_dest: float, thd_distance_goal: float, thd_red_area: float, magx_off: float, magy_off: float):
     '''
     8月28日作成 by 田口
     おそらくこっちにする
@@ -346,9 +346,6 @@ def img_guide_drive(lat_dest: float, lon_dest: float, thd_distance_goal: float, 
     thd_red_area : float
         画面を占める赤色の割合の閾値 この割合を超えるとゴールしたと判定する
     '''
-
-    ###-----画像誘導のセットアップ キャリブレーションを行う-----###
-    magx_off, magy_off = calibration.cal(30, -30, 30)
 
     try:
         ###-----ゴールまでの距離を測定-----###

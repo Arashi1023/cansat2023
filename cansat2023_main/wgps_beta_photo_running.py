@@ -7,7 +7,7 @@ import pigpio
 from math import sqrt
 import numpy as np
 
-import libs.bme280 as bme280
+# import libs.bme280 as bme280
 import libs.bmx055 as bmx055
 import libs.motor as motor
 import libs.save_photo as save_photo
@@ -510,7 +510,7 @@ if __name__ == "__main__":
     # lon2 = 139.9120618
     # log_photorunning =other.filename( '/home/dendenmushi/cansat2023/sequence/log/photorunninglog/photorunninglog','txt')
     # #セットアップ系
-    motor.setup()
+    # motor.setup()
     gps.open_gps()
     bmx055.bmx055_setup()
 

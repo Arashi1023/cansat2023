@@ -211,15 +211,17 @@ if __name__=='__main__':
     landcount = 0
     pressdata = [0.0, 0.0, 0.0, 0.0]
 
-    
-    #人の確率
+    #mission
+
     judge_probability=0.50
-    #人の座標
-    #グランドの中央
+    count = 0
+    human_judge_count=0
+    break_outer_loop =False
+    threshold = 20 * 60
+
     lat_human = 35.9243068
     lon_human = 139.9124594
-    #ゴール座標
-    #グランドのゴール前
+
     lat_goal = 35.9242411
     lon_goal = 139.9120618
 ###-------release judge -------###
@@ -341,11 +343,11 @@ if __name__=='__main__':
     print("START:human detect")
     lat_log,lon_log=gps.location()
     other.log(log_phase,'7',"mission phase",datetime.datetime.now(),time.time()-t_start,str(lat_log),str(lon_log))
-    count = 0
-    human_judge_count=0
-    break_outer_loop =False
+    # count = 0
+    # human_judge_count=0
+    # break_outer_loop =False
     start_time = time.time()
-    threshold = 20 * 60
+    # threshold = 20 * 60
 
     ML_people = DetectPeople(model_path="../model_mobile.tflite" )
 

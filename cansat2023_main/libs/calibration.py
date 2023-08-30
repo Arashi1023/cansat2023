@@ -8,7 +8,6 @@ import numpy as np
 
 import bmx055
 import other
-from bmx055 import bmx055_setup
 import gps
 import gps_navigate
 from other import print_im920sl

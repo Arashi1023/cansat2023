@@ -1,6 +1,7 @@
 import time
 import libs.bme280 as bme280
 import libs.send as send
+import libs.log as log
 from cansat2023_main.main_const import *
 #from other import print
 
@@ -63,21 +64,42 @@ def release_main(press_release_count: int, press_array: list):
     return latest_press, delta_press, press_release_count, isRelease
 
 if __name__ == "__main__":
-    thd_press_release = 0.1
-    pressreleasecount = 0
-    pressreleasejudge = 0
-    t_delta_release = 10
+#     thd_press_release = 0.1
+#     pressreleasecount = 0
+#     pressreleasejudge = 0
+#     t_delta_release = 10
+#     bme280.bme280_setup()
+#     bme280.bme280_calib_param()
+#     press_d = 0
+
+#     while True:
+#         press_count_release, press_judge_release = pressdetect_release(thd_press_release, t_delta_release)
+#         print(f'count:{pressreleasecount}\tjudge{pressreleasejudge}')
+#         if press_count_release  > 3:
+#             print('Press')
+#             send.send_data("TXDU 0001.0001")
+#             break
+#         else:
+#             print('unfulfilled')
+# send.send_data("TXDU 0001.0002")
+
     bme280.bme280_setup()
     bme280.bme280_calib_param()
-    press_d = 0
+
+    t_start = time.time()
+
+    release_log = log.Logger(dir='../logs/test_logs/release_test', filename='Release_test', t_start=t_start)
+
+    #-Release Detect-#
+    press_release_count = 0
+    press_array = [0]*2
 
     while True:
-        press_count_release, press_judge_release = pressdetect_release(thd_press_release, t_delta_release)
-        print(f'count:{pressreleasecount}\tjudge{pressreleasejudge}')
-        if press_count_release  > 3:
-            print('Press')
-            send.send_data("TXDU 0001.0001")
-            break
-        else:
-            print('unfulfilled')
-send.send_data("TXDU 0001.0002")
+        try:
+            latest_press, delta_press, press_release_count, isRelease = release_main(press_release_count=press_release_count, press_array=press_array)
+            #-Log-#
+            release_log.save_log(latest_press, delta_press, press_release_count, isRelease)
+            if isRelease == 1:
+                break
+        except:
+            print('Error\nTrying again...')

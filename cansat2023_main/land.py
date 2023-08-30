@@ -2,6 +2,7 @@ import time
 import libs.bme280 as bme280
 import libs.send as send
 from cansat2023_main.main_const import *
+import libs.log as log
 
 
 def pressdetect_land(thd_press_land):
@@ -65,31 +66,44 @@ def land_main(press_land_count: int, press_array: list):
 
 
 if __name__ == "__main__":
-    print("Start")
-    send.send_data("TXDU 0001,0000")
+    # print("Start")
+    # send.send_data("TXDU 0001,0000")
 
     bme280.bme280_setup()
     bme280.bme280_calib_param()
 
-    landcount = 0
-    pressdata = [0.0, 0.0, 0.0, 0.0]
+    # landcount = 0
+    # pressdata = [0.0, 0.0, 0.0, 0.0]
 
-    while True:
-        presslandjudge = 0
-        landcount, presslandjudge = pressdetect_land(0.1)
-        print(f'count:{landcount}\tjudge:{presslandjudge}')
-        if presslandjudge == 1:
-            print('Press')
-            send.send_data("TXDU 0001,1000")
-            print('##--landed--##')
-            send.send_data("TXDU 0001,1111")
-            break
-        else:
-            print('Press unfulfilled')
-            send.send_data("TXDU 0001,0001")
+    # while True:
+    #     presslandjudge = 0
+    #     landcount, presslandjudge = pressdetect_land(0.1)
+    #     print(f'count:{landcount}\tjudge:{presslandjudge}')
+    #     if presslandjudge == 1:
+    #         print('Press')
+    #         send.send_data("TXDU 0001,1000")
+    #         print('##--landed--##')
+    #         send.send_data("TXDU 0001,1111")
+    #         break
+    #     else:
+    #         print('Press unfulfilled')
+    #         send.send_data("TXDU 0001,0001")
 
-    #-set up-#
+
+    #####-----test-----#####
+    t_start = time.time()
+
+    land_log = log.Logger(dir='../logs/test_logs/land_test', filename='Land_test', t_start=t_start)
+    #-Land Detect-#
     press_land_count = 0
     press_array = [0]*2
 
     while True:
+        try:
+            latest_press, delta_press, press_land_count, isLand = land_main(press_land_count=press_land_count, press_array=press_array)
+            #-Log-#
+            land_log.save_log(latest_press, delta_press, press_land_count, isLand)
+            if isLand == 1:
+                break
+        except:
+            print('Error\nTrying again...')

@@ -366,8 +366,6 @@ phase_log.save_log('8', 'Image Guide Sequence', lat_log, lon_log)
 image_guide_log.save_log('Image Guide Sequence: Start')
 
 #-Image Guide Drive-#
-
-#-calibration-#
 magx_off, magy_off = calibration.cal(30, -30, 30)
 
 while True:

@@ -459,10 +459,7 @@ def TEST_img_guide_drive(magx_off, magy_off, thd_distance_goal=10, thd_red_area=
 
         ###-----撮像した画像の中にゴールが映っていない場合の処理-----###
         elif area_ratio == 0:
-            print('Lost Goal')
-            '''
-            ここにコードを書く
-            '''
+            print('Goal Not Found')
             pwr_unfound = 25
             motor.motor_move(pwr_unfound, -pwr_unfound, 0.15)
             motor.motor_stop(0.2)

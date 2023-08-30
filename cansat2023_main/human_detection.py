@@ -217,6 +217,11 @@ def move_to_bulearea(count, lat_human, lon_human):
         print("青点エリア捜索終了")
 
 def human_detect_main():
+    '''
+    作成 by 田口 2023/8/30
+    '''
+
+
     pass                     
     
 if __name__ == "__main__":

@@ -600,13 +600,13 @@ if __name__=='__main__':
     #     other.log(log_humandetect, datetime.datetime.now(), time.time() -
     #                   t_start,"画像伝送開始",lat_log,lon_log)
     #     #file_path = latest_picture_path
-    #     file_name = "/home/dendenmushi/cansat2023/sequence/ML_imgs/jpg"  # 保存するファイル名を指定
+    #     file_name = "../imgs/human_detect/all/jpg"  # 保存するファイル名を指定
     #     photo_take = take.picture(file_name, 320, 240)
     #     print("撮影した写真のファイルパス：", photo_take)
         
     #     # 入力ファイルパスと出力ファイルパスを指定してリサイズ
     #     input_file = photo_take     # 入力ファイルのパスを適切に指定してください
-    #     photo_name = "/home/dendenmushi/cansat2023/sequence/ML_imgs/send_photo_resize.jpg"  # 出力ファイルのパスを適切に指定してください
+    #     photo_name = "../imgs/human_detect/all/send_photo_resize.jpg"  # 出力ファイルのパスを適切に指定してください
     #     new_width = 60            # リサイズ後の幅を指定します
     #     new_height = 80           # リサイズ後の高さを指定します
 

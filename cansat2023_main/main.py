@@ -64,21 +64,57 @@ image_guide_log = log.Logger(dir='../logs/8_image_guide_log', filename='image_gu
 
 
 #####===== 1 Release Detect Sequence=====#####
-print('Release Detect Sequence: Start')
-release_log.save_log('start')
+print('#####-----Release Detect Sequence: Start-----#####')
+release_log.save_log('Release Detect Start')
+
+
+
+
+
+
+#-Log-#
+print('Saving Log...')
+lat_log, lon_log = gps.location()
+phase_log.save_log('1', 'Release Detect Sequence: Start', lat_log, lon_log)
+release_log.save_log('Release Detected')
+
+#-send-#
+print('Sending Data...')
+send.send_data('Release finished')
+time.sleep(10)
+
+print('#####-----Release Detect Sequence: End-----#####')
+
+
+
+
 
 
 #####===== 2 Land Detect Sequence=====#####
-print('Land Detect Sequence: Start')
+print('#####-----Land Detect Sequence: Start-----#####')
+
+#-Log-#
+print('Saving Log...')
+lat_log, lon_log = gps.location() #GPS情報取得できるのか？？
+phase_log.save_log('2', 'Land Detect Sequence: Start', lat_log, lon_log) #GPS情報取得できるのか？？
+
+#-Land Detect-#
 
 
 
 
 
+#-Log-#
+print('Saving Log...')
+lat_log, lon_log = gps.location()
+phase_log.save_log('2', 'Land Detect Sequence: End', lat_log, lon_log) #GPS情報取得できるのか？？
 
+#-send-#
+print('Sending Data...')
+send.send_data('Land finished')
+time.sleep(10)
 
-
-
+print('#####-----Land Detect Sequence: End-----#####')
 
 
 #####===== 3 Melt Sequence=====#####
@@ -86,7 +122,8 @@ print('#####-----Melt Sequence: Start-----#####')
 
 #-Log-#
 lat_log, lon_log = gps.location()
-phase_log.save_log('3', 'Melt Sequence: Start', lat_log, lon_log)
+phase_log.save_log('3', 'Melt Sequence: Start', lat_log, lon_log) #GPS情報取得できるのか？？
+melt_log.save_log('Melt Start')
 
 #-Melt-#
 melt.melt_down(meltPin=MELT_PIN, t_melt=MELT_TIME)
@@ -94,7 +131,8 @@ melt.melt_down(meltPin=MELT_PIN, t_melt=MELT_TIME)
 #-Log-#
 print('Saving Log...')
 lat_log, lon_log = gps.location()
-phase_log.save_log('3', 'Melt Sequence: End', lat_log, lon_log)
+phase_log.save_log('3', 'Melt Sequence: End', lat_log, lon_log) #GPS情報取得できるのか？？
+melt_log.save_log('Melt Finished')
 
 #-send-#
 print('Sending Data...')
@@ -106,9 +144,17 @@ print('#####-----Melt Sequence: End-----#####')
 
 
 
-
+#####-----スタビライザーの復元-----#####
 print('Waiting for Stabilizer to be restored...')
-time.sleep(15) #スタビライザーの復元待ち
+time.sleep(15)
+
+#####-----GPSの取得チェック-----#####
+while True:
+    lat_test, lon_test = gps.location()
+    print('Waiting for GPS...')
+    if lat_test != 0 and lon_test != 0: #0だった場合はGPSが取得できていないので再取得
+        print('GPS received')
+        break
 
 
 
@@ -117,13 +163,6 @@ time.sleep(15) #スタビライザーの復元待ち
 
 #####===== 4 Parachute Avoid Sequence=====#####
 print('#####-----Parachute Avoid Sequence: Start-----#####')
-
-#-receive GPS-#
-while True:
-    lat_test, lon_test = gps.location()
-    if lat_test != 0 and lon_test != 0: #0だった場合はGPSが取得できていないので再取得
-        print('GPS received')
-        break
 
 #-Log-#
 print('Saving Log...')

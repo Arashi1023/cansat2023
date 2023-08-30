@@ -29,7 +29,6 @@ import land
 import melt
 import beta_gps_running as gps_running
 import human_detection
-import para_avoid
 import wgps_beta_photo_running as imgguide
 
 def detect_para():
@@ -66,7 +65,7 @@ def detect_para():
     #パラシュートが検出された場合に画像を保存
     if red_area != 0:
         red_area = int(red_area)
-        save_img(path_para_detect, 'para_detected_', str(red_area), para_img)
+        save_img.main(path_para_detect, 'para_detected_', str(red_area), para_img)
     
     return red_area, angle
 

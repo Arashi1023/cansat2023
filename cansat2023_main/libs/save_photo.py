@@ -2,7 +2,7 @@
 import datetime
 import cv2
 
-def save_img(img_path, img_name_a, img_name_b, img):
+def main(img_path, img_name_a, img_name_b, img):
     #日時の取得
     dt_now = datetime.datetime.now()
     dt_name = str(dt_now.strftime('%Y%m%d_%H%M%S'))

@@ -410,7 +410,7 @@ def img_guide_drive(lat_dest: float, lon_dest: float, thd_distance_goal: float, 
 
     return lat_now, lon_now, distance_to_goal, area_ratio, angle, isReach_goal
 
-def TEST_img_guide_drive(thd_distance_goal=10, thd_red_area=75):
+def TEST_img_guide_drive(magx_off, magy_off, thd_distance_goal=10, thd_red_area=75):
     '''
     8月28日作成 by 田口
     室内テスト用の関数 GPSなし
@@ -420,7 +420,7 @@ def TEST_img_guide_drive(thd_distance_goal=10, thd_red_area=75):
     isReach_goal = 0
 
     ###-----画像誘導のセットアップ キャリブレーションを行う-----###
-    magx_off, magy_off = calibration.cal(30, -30, 30)
+    # magx_off, magy_off = calibration.cal(30, -30, 30)
 
     # try:
         ###-----ゴールまでの距離を測定-----###
@@ -514,8 +514,10 @@ if __name__ == "__main__":
     gps.open_gps()
     bmx055.bmx055_setup()
 
+    magx_off, magy_off = calibration.cal(30, -30, 30)
+
     while True:
-        area_ratio, angle, isReach_goal = TEST_img_guide_drive()
+        area_ratio, angle, isReach_goal = TEST_img_guide_drive(magx_off=magx_off, magy_off=magy_off)
         print(isReach_goal)
         if isReach_goal == 1:
             break

@@ -99,11 +99,8 @@ if __name__ == "__main__":
     press_array = [0]*2
 
     while True:
-        try:
-            latest_press, delta_press, press_land_count, isLand = land_main(press_land_count=press_land_count, press_array=press_array)
-            #-Log-#
-            land_log.save_log(latest_press, delta_press, press_land_count, isLand)
-            if isLand == 1:
-                break
-        except:
-            print('Error\nTrying again...')
+        latest_press, delta_press, press_land_count, isLand = land_main(press_land_count=press_land_count, press_array=press_array)
+        #-Log-#
+        land_log.save_log(latest_press, delta_press, press_land_count, isLand)
+        if isLand == 1:
+            break

@@ -102,5 +102,6 @@ if __name__ == "__main__":
         latest_press, delta_press, press_land_count, isLand = land_main(press_land_count=press_land_count, press_array=press_array)
         #-Log-#
         land_log.save_log(latest_press, delta_press, press_land_count, isLand)
+        print(isLand)
         if isLand == 1:
             break

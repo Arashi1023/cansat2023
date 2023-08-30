@@ -306,6 +306,18 @@ def wgps_para_avoid(small_thd_dist :int, large_thd_dist :int, check_count :int, 
 def para_avoid_main(lat_land, lon_land, lat_dest, lon_dest, check_count :int):
     '''
     田口作成 2023/08/29
+    Parameters
+    ----------
+    lat_land : float
+        着地地点の緯度
+    lon_land : float
+        着地地点の経度
+    lat_dest : float
+        目的地の緯度
+    lon_dest : float
+        目的地の経度
+    check_count : int
+        パラシュート回避用のカウンター
     '''
 
     isDistant_para = 0 #パラシュート回避用のフラグ
@@ -377,7 +389,6 @@ def para_avoid_main(lat_land, lon_land, lat_dest, lon_dest, check_count :int):
     
     return lat_now, lon_now, para_dist, red_area, angle, isDistant_para, check_count
 
-
 if __name__ == '__main__':
     # パラメータ
     # PARA_THD_COVERED = 69120
@@ -393,6 +404,11 @@ if __name__ == '__main__':
     # red_area, angle = detect_para()
     # para_avoid(red_area, angle, check_count=5)
     # wgps_para_avoid(para_thd_covered=PARA_THD_COVERED, para_thd_avoid=PARA_THD_AVOID, check_count=PARA_CHECK_COUNT)
+
+    t_start = time.time()
+
+    #-Log Set up-#
+    para_avoid_test = log.logger(dir='../logs/test_logs/para_avoid_test', filename='para_avoid_test', t_start=t_start)
 
     check_count = 0 #パラ回避用のカウンター
     lat_land, lon_land = gps.location()

@@ -68,6 +68,7 @@ print('#####-----Release Detect Sequence: Start-----#####')
 release_log.save_log('Release Detect Start')
 
 
+#-Release Detect-#
 
 
 
@@ -99,10 +100,20 @@ lat_log, lon_log = gps.location() #GPS情報取得できるのか？？
 phase_log.save_log('2', 'Land Detect Sequence: Start', lat_log, lon_log) #GPS情報取得できるのか？？
 
 #-Land Detect-#
+press_land_count = 0
+press_array = [0]*2
 
+while True:
+    try:
+        latest_press, delta_press, press_land_count, isLand = land.land_main(press_land_count=press_land_count, press_array=press_array)
+        if isLand == 1:
+            break
+        
+        #-Log-#
+        land_log.save_log(latest_press, delta_press, press_land_count, isLand)
 
-
-
+    except:
+        print('Error\nTrying again...')
 
 #-Log-#
 print('Saving Log...')

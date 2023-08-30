@@ -1,6 +1,7 @@
 import time
 import libs.bme280 as bme280
 import libs.send as send
+from cansat2023_main.main_const import *
 
 
 def pressdetect_land(thd_press_land):
@@ -37,6 +38,30 @@ def pressdetect_land(thd_press_land):
         press_judge_land = 2
     return press_count_land, press_judge_land, delta_p, Prevpress, latestpress
 
+def land_main(press_land_count: int, press_array: list):
+
+    isLand = 0
+
+    press_data = bme280.bme280_read()
+    latest_press = press_data[1]
+    press_array.append(latest_press)
+    press_array.pop(0)
+    if press_array[0] != 0 and press_array[1] != 0:
+        delta_press = abs(press_array[1] - press_array[0])
+
+        if delta_press < THD_PRESS_LAND:
+            press_land_count += 1
+            if press_land_count > 4:
+                isLand = 1
+        else:
+            press_land_count = 0 #カウンターの初期化
+    
+    elif press_array[0] == 0 or press_array[1] == 0:
+        print('Reading Press Again')
+        press_land_count = 0
+    
+    return latest_press, delta_press, press_land_count, isLand
+
 
 if __name__ == "__main__":
     print("Start")
@@ -61,3 +86,9 @@ if __name__ == "__main__":
         else:
             print('Press unfulfilled')
             send.send_data("TXDU 0001,0001")
+
+    #-set up-#
+    press_land_count = 0
+    press_array = [0]*2
+
+    while True:

@@ -190,8 +190,8 @@ def detect_goal(lat2, lon2, thd_dist_goal=10, run_t=2):
 
 def TEST_detect_goal():
     #画像の撮影から「角度」と「占める割合」を求めるまでの一連の流れ
-    path_all_photo = '../../imgs/goal_detect/all/ImageGuide-'
-    path_detected_photo = '../../imgs/goal_detect/detected'
+    path_all_photo = '../imgs/goal_detect/all/ImageGuide-'
+    path_detected_photo = '../imgs/goal_detect/detected'
     photoname = take.picture(path_all_photo)
     original_img = cv2.imread(photoname)
 

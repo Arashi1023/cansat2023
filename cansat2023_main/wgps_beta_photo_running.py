@@ -516,6 +516,7 @@ if __name__ == "__main__":
 
     while True:
         area_ratio, angle, isReach_goal = TEST_img_guide_drive()
+        print(isReach_goal)
         if isReach_goal == 1:
             break
 

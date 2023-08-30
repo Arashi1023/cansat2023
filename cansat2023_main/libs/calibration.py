@@ -7,12 +7,12 @@ import datetime
 import numpy as np
 
 import libs.bmx055 as bmx055
-import other
-import gps
-import gps_navigate
-from other import print_im920sl
-import motor
-import stuck2
+import libs.other as other
+import libs.gps as gps
+import libs.gps_navigate as gps_navigate
+from libs.other import print_im920sl
+import libs.motor as motor
+import libs.stuck2 as stuck2
 
 
 path_log = '/home/dendenmushi/cansat2023/sequence/calibration.txt'

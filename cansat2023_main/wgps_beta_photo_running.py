@@ -360,7 +360,7 @@ def img_guide_drive(lat_dest: float, lon_dest: float, thd_distance_goal: float, 
         ###-----画像誘導モードの範囲内にいた場合の処理-----###
         if distance_to_goal <= thd_distance_goal:
             print('画像誘導モードの範囲内にいます\n画像誘導を行います')
-            area_ratio, angle = detect_goal()
+            area_ratio, angle = TEST_detect_goal()
             mag_data = bmx055.mag_dataRead()
             mag_x, mag_y = mag_data[0], mag_data[1]
             rover_azimuth = calibration.angle(mag_x, mag_y, magx_off, magy_off)
@@ -514,7 +514,32 @@ if __name__ == "__main__":
     gps.open_gps()
     bmx055.bmx055_setup()
 
+    # while True:
+    #     area_ratio, angle, isReach_goal = TEST_img_guide_drive()
+    #     if isReach_goal == 1:
+    #         break
+
+
+    #-log-#
+    t_start = time.time()
+
+    image_guide_log = log.Logger(dir='../logs/test_logs/image_guide_test', filename='Image_guide_test', t_start=t_start, columns=['lat', 'lon', 'distance_to_goal', 'area_ratio', 'angle', 'isReach_goal'])
+
+    #-Image Guide Drive-#
     while True:
-        area_ratio, angle, isReach_goal = TEST_img_guide_drive()
-        if isReach_goal == 1:
-            break
+        try:
+            lat_now, lon_now, distance_to_goal, area_ratio, angle, isReach_goal = imgguide.img_guide_drive(lat_dest=LAT_GOAL, lon_dest=LON_GOAL, thd_distance_goal=THD_DISTANCE_GOAL, thd_red_area=THD_RED_RATIO)
+            image_guide_log.save_log(lat_now, lon_now, distance_to_goal, area_ratio, angle, isReach_goal)
+            print('distance_to_goal = ', distance_to_goal)
+            print('area_ratio = ', area_ratio)
+            print('angle = ', angle)
+            print('isReach_goal = ', isReach_goal)
+                  
+            if isReach_goal == 1: #ゴール判定
+                print('Goal')
+                print('Finish Image Guide Drive')
+                break
+        
+        except KeyboardInterrupt:
+            print('Keyboard Interrupt')
+            exit()

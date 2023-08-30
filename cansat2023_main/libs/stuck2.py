@@ -9,7 +9,6 @@ import motor
 import gps_navigate
 import gps
 import bmx055
-import other
 
 
 def ue_jug():

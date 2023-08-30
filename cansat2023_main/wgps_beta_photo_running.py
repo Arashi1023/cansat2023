@@ -528,6 +528,7 @@ if __name__ == "__main__":
     #-Image Guide Drive-#
     while True:
         try:
+            print('Start Image Guide Drive')
             lat_now, lon_now, distance_to_goal, area_ratio, angle, isReach_goal = imgguide.img_guide_drive(lat_dest=LAT_GOAL, lon_dest=LON_GOAL, thd_distance_goal=THD_DISTANCE_GOAL, thd_red_area=THD_RED_RATIO)
             image_guide_log.save_log(lat_now, lon_now, distance_to_goal, area_ratio, angle, isReach_goal)
             print('distance_to_goal = ', distance_to_goal)

@@ -583,12 +583,12 @@ def drive2(lon_dest :float, lat_dest: float, thd_distance: int, t_cal: float, lo
 
     #------無線通信による現在位置情報の送信-----#
 
-    lat_str = "{:.6f}".format(lat_old)  # 緯度を小数点以下8桁に整形
-    lon_str = "{:.6f}".format(lon_old)  # 経度を小数点以下8桁に整形
-    send.send_data(lat_str)
-    time.sleep(9)
-    send.send_data(lon_str)
-    time.sleep(9)
+    # lat_str = "{:.6f}".format(lat_old)  # 緯度を小数点以下8桁に整形
+    # lon_str = "{:.6f}".format(lon_old)  # 経度を小数点以下8桁に整形
+    # send.send_data(lat_str)
+    # time.sleep(9)
+    # send.send_data(lon_str)
+    # time.sleep(9)
 
     t_run_start = time.time() #GPS走行開始前の時刻
 

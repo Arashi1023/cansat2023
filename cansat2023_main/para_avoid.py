@@ -357,9 +357,12 @@ def main(lat_land, lon_land, lat_dest, lon_dest, check_count :int):
             rover_azimuth = basics.standarize_angle(rover_azimuth)
             target_azimuth = rover_azimuth
 
+
             #-run forward-#
+            t_start_runf = time.time()
             theta_array = [0]*5
-            PID.PID_run(target_azimuth, magx_off, magy_off, theta_array=theta_array, loop_num=60)
+            while time.time() - t_start_runf <= 2: #2秒間前進
+                PID.PID_run(target_azimuth, magx_off=700, magy_off=1080, theta_array=theta_array, loop_num=20)
             motor.deceleration(15, 15)
             motor.motor_stop(0.2)
             # check_count += 1
@@ -378,6 +381,7 @@ def main(lat_land, lon_land, lat_dest, lon_dest, check_count :int):
         ###-----パラシュートがある方向から180度の向きに走らせる-----###
         theta_array = [0]*5
         PID.PID_adjust_direction(target_azimuth=target_azimuth, magx_off=magx_off, magy_off=magy_off, theta_array=theta_array)
+        theta_array = [0]*5
         t_run_start = time.time()
         while time.time() - t_run_start <= PARA_RUN_SHORT:
             PID.PID_run(target_azimuth=target_azimuth, magx_off=magx_off, magy_off=magy_off, loop_num=20)

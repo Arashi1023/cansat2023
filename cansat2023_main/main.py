@@ -241,21 +241,20 @@ lat_log, lon_log = gps.location()
 phase_log.save_log('5', 'GPS Running Sequence to Human: Start', lat_log, lon_log)
 
 #-GPS Running1-#
+direction = calibration.calculate_direction(lon2=LON_HUMAN, lat2=LAT_HUMAN)
+distance_to_goal = direction["distance"]
+print(f'{distance_to_goal}m to Human')
+
 while True: #1ループおおよそT_CAL秒
-    try:
-        direction = calibration.calculate_direction(lon2=LON_HUMAN, lat2=LAT_HUMAN)
-        distance_to_goal = direction["distance"]
 
-        #-T_CALごとに以下の情報を取得-#
-        lat_now, lon_now, distance_to_dest, rover_azimuth, isReach_dest = PID.drive2(lon_dest=LON_HUMAN, lat_dest=LAT_HUMAN, thd_distance=THD_DISTANCE_DEST, t_cal=T_CAL, loop_num=LOOP_NUM)
-
-        #-Log-#
-        gps_running_goal_log.save_log(lat_now, lon_now, distance_to_dest, rover_azimuth, isReach_dest)    
-        
-        if isReach_dest == 1: #ゴール判定
-            break
-    except:
-        print('Error\nTrying again...')
+    #-T_CALごとに以下の情報を取得-#
+    lat_now, lon_now, distance_to_dest, rover_azimuth, isReach_dest = PID.drive2(lon_dest=LON_HUMAN, lat_dest=LAT_HUMAN, thd_distance=THD_DISTANCE_DEST, t_cal=T_CAL, loop_num=LOOP_NUM)
+    print('disntance to dest=' + str(distance_to_dest) + 'm')
+    #-Log-#
+    gps_running_goal_log.save_log(lat_now, lon_now, distance_to_dest, rover_azimuth, isReach_dest)    
+    
+    if isReach_dest == 1: #ゴール判定
+        break
 
 print(f'{distance_to_dest}m to Goal')
 
@@ -339,16 +338,19 @@ phase_log.save_log('7', 'GPS Running Sequence to Goal: Start', lat_log, lon_log)
 
 direction = calibration.calculate_direction(lon2=LON_GOAL, lat2=LAT_GOAL)
 distance_to_goal = direction["distance"]
+print('distance to goal=' + str(distance_to_goal) + 'm')
 
 while True: #1ループおおよそT_CAL秒
 
     #-T_CALごとに以下の情報を取得-#
     lat_now, lon_now, distance_to_dest, rover_azimuth, isReach_dest = PID.drive2(lon_dest=LON_GOAL, lat_dest=LAT_GOAL, thd_distance=THD_DISTANCE_DEST, t_cal=T_CAL, loop_num=LOOP_NUM)
 
+    print('disntance to dest=' + str(distance_to_dest) + 'm')
     #-Log-#
     gps_running_goal_log.save_log(lat_now, lon_now, distance_to_dest, rover_azimuth, isReach_dest)    
     
     if isReach_dest == 1: #ゴール判定
+        print('Finishing GPS Running')
         break
 
 print(f'{distance_to_dest}m to Goal')

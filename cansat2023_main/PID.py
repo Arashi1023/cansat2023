@@ -677,7 +677,7 @@ if __name__ == "__main__":
 
     #-Log Set Up-#
 
-    pid_test_log = log.Logger(dir='', filename='pid_test', t_start=time.time(), columns=['lat', 'lon', 'distance', 'rover_azimuth', 'isReach_dest'])
+    # pid_test_log = log.Logger(dir='', filename='pid_test', t_start=time.time(), columns=['lat', 'lon', 'distance', 'rover_azimuth', 'isReach_dest'])
 
 
     direction = calibration.calculate_direction(lon2=LON_HUMAN, lat2=LAT_HUMAN)
@@ -689,7 +689,7 @@ if __name__ == "__main__":
             
         print('isReach_dest = ', isReach_dest)
 
-        pid_test_log.save_log(lat_now, lon_now, distance_to_dest, rover_azimuth, isReach_dest)
+        # pid_test_log.save_log(lat_now, lon_now, distance_to_dest, rover_azimuth, isReach_dest)
         #-Log-#
         # gps_running_goal_log.save_log(lat_now, lon_now, distance_to_dest, rover_azimuth, isReach_dest)    
             

@@ -336,7 +336,7 @@ def PID_run(target_azimuth: float, magx_off: float, magy_off: float, theta_array
     #-----制御処理-----#
     for _ in range(loop_num):
 
-        if count < 15: #25から15に変更 by 田口 8/23
+        if count < 10: #25から15に変更 by 田口 8/23 15から10に変更 by 田口 8/31
             Ki = 0
             Kd = Kd_
         else:

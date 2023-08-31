@@ -13,6 +13,7 @@ import send as send
 from collections import deque
 import basics as basics
 from main_const import *
+import log
 
 #PID制御のテストコード
 
@@ -566,7 +567,7 @@ def drive2(lon_dest :float, lat_dest: float, thd_distance: int, t_cal: float, lo
     magx_off, magy_off = calibration.cal(30, -30, 40)
 
     #-----目標地点への角度を取得-----#
-    direction = calibration.calculate_direction(lon_dest, lat_dest)
+    direction = calibration.calculate_direction(lon2=lon_dest, lat2=lat_dest)
     target_azimuth, distance_to_dest = direction["azimuth1"], direction["distance"]
 
     #-----PID制御による角度調整-----#
@@ -581,6 +582,7 @@ def drive2(lon_dest :float, lat_dest: float, thd_distance: int, t_cal: float, lo
     rover_azimuth = calibration.angle(mag_x, mag_y, magx_off, magy_off) #戻り値
 
     #------無線通信による現在位置情報の送信-----#
+    
     lat_str = "{:.6f}".format(lat_old)  # 緯度を小数点以下8桁に整形
     lon_str = "{:.6f}".format(lon_old)  # 経度を小数点以下8桁に整形
     send.send_data(lat_str)
@@ -673,15 +675,19 @@ if __name__ == "__main__":
 
     #-Log Set Up-#
 
-    while True: #1ループおおよそT_CAL秒
-        direction = calibration.calculate_direction(lon2=LON_HUMAN, lat2=LAT_HUMAN)
-        distance_to_goal = direction["distance"]
+    pid_test_log = log.Logger(dir='', filename='pid_test', t_start=time.time(), columns=['lat', 'lon', 'distance', 'rover_azimuth', 'isReach_dest'])
 
+
+    direction = calibration.calculate_direction(lon2=LON_HUMAN, lat2=LAT_HUMAN)
+    distance_to_goal = direction["distance"]
+
+    while True: #1ループおおよそT_CAL秒
         #-T_CALごとに以下の情報を取得-#
         lat_now, lon_now, distance_to_dest, rover_azimuth, isReach_dest = drive2(lon_dest=LON_HUMAN, lat_dest=LAT_HUMAN, thd_distance=THD_DISTANCE_DEST, t_cal=T_CAL, loop_num=LOOP_NUM)
             
         print('isReach_dest = ', isReach_dest)
 
+        pid_test_log.save_log(lat_now, lon_now, distance_to_dest, rover_azimuth, isReach_dest)
         #-Log-#
         # gps_running_goal_log.save_log(lat_now, lon_now, distance_to_dest, rover_azimuth, isReach_dest)    
             

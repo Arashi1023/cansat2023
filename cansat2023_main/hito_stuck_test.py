@@ -94,7 +94,8 @@ def take_and_rotation(human_judge_count, break_outer_loop,judge_probability,star
     #モーターの出力の初期化
     motor_l,motor_r = 25 , -25
 
-    magx_off, magy_off = calibration.cal(30, -30, 40) #整地、オフセット値
+    #-----整地-----#
+    magx_off, magy_off = calibration.cal(30, -30, 40) 
 
     for i in range(24):
         #-----経過時間の更新-----#
@@ -138,8 +139,11 @@ def take_and_rotation(human_judge_count, break_outer_loop,judge_probability,star
             img_path = take.picture('../imgs/human_detect/all/image-', 320, 240)
             # モデルの読み込み
             result = model.predict(image_path=img_path)
+
+            #-----log-----#
             # other.log(logpath, datetime.datetime.now(), time.time() -
             #           start_time,result,human_judge_count,break_outer_loop,elapsed_time)
+            
             # hitoの確率50%かどうか
             if result >= judge_probability:
                 human_judge_count += 1
@@ -148,8 +152,11 @@ def take_and_rotation(human_judge_count, break_outer_loop,judge_probability,star
                 for j in range(2):
                     additional_img_path = take.picture('../imgs/human_detect/additional/additional_image-', 320, 240)
                     additional_result = model.predict(image_path=additional_img_path)
+                    
+                    #-----log-----#
                     # other.log(logpath, datetime.datetime.now(), time.time() -
                     #   start_time,additional_result,human_judge_count,break_outer_loop,elapsed_time)
+                    
                     if additional_result >= judge_probability:
                         human_judge_count += 1
                         print(human_judge_count)
@@ -221,7 +228,8 @@ def detect_main_area(human_judge_count, break_outer_loop,judge_probability,start
     #モーターの出力の初期化
     motor_l,motor_r = 25 , -25
 
-    magx_off, magy_off = calibration.cal(30, -30, 40) #整地、オフセット値
+    #-----整地-----#
+    magx_off, magy_off = calibration.cal(30, -30, 40) 
 
     for k in range(24):
         #-----経過時間の更新-----#
@@ -266,8 +274,11 @@ def detect_main_area(human_judge_count, break_outer_loop,judge_probability,start
             
             #モデルの読み込み
             result = model.predict(image_path=img_path)
+
+            #-----log-----#
             # other.log(log_humandetect, datetime.datetime.now(), time.time() -
             #           start_time,result,human_judge_count,break_outer_loop,elapsed_time)
+
             #hitoの確率50%かどうか
             if result >= judge_probability:
                 human_judge_count += 1
@@ -276,8 +287,11 @@ def detect_main_area(human_judge_count, break_outer_loop,judge_probability,start
                 for h in range(2):
                     additional_img_path = take.picture('../imgs/human_detect/additional/additional_image', 320, 240)
                     additional_result = model.predict(image_path=additional_img_path)
+                    
+                    #-----log-----#
                     # other.log(logpath, datetime.datetime.now(), time.time() -
                     #   start_time,additional_result,human_judge_count,break_outer_loop,elapsed_time)
+                    
                     if additional_result >= judge_probability:
                         human_judge_count += 1
                         print(human_judge_count)

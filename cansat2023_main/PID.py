@@ -233,7 +233,13 @@ def PID_adjust_direction(target_azimuth, magx_off, magy_off, theta_array: list):
 
     #-----制御処理-----#
     #while abs(theta_array[-1]) > 5:
+
+    t_adj_start = time.time()
+
     while True:
+        if time.time() - t_adj_start >= 5:
+            break
+
         if count < 25:
             Ki = 0
             Kd = Kd_

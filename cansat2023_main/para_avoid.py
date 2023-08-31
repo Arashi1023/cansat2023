@@ -331,15 +331,11 @@ def main(lat_land, lon_land, lat_dest, lon_dest, check_count :int):
     isDistant_para = 0 #パラシュート回避用のフラグ
     red_area = 0
     angle = 0
-    while True:
-        try:
-            para_info = calibration.calculate_direction(lat_land, lon_land)
-            para_dist = para_info['distance'] #パラシュートまでの距離を計算
-            para_azimuth = para_info['azimuth1'] #パラシュートの方位角を計算
-            print(f'{para_dist}m')
-            break
-        except:
-            print('GPS Error\nTry Again')
+
+    para_info = calibration.calculate_direction(lon_land, lat_land)
+    para_dist = para_info['distance'] #パラシュートまでの距離を計算
+    para_azimuth = para_info['azimuth1'] #パラシュートの方位角を計算
+    print(f'{para_dist}m')
     
     lat_now, lon_now = gps.location()
 

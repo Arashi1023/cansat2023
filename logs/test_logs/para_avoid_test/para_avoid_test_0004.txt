@@ -1,0 +1,2 @@
+datetime,elapsed time,lat,lon,para_dist,red_area,angle,isDistant_para,check_count
+2023-08-30 18:25:34.575486,4.015004873275757,35.924481,139.912628,13538675.571634965,0,0,1,0

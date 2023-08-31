@@ -328,7 +328,8 @@ def main(lat_land, lon_land, lat_dest, lon_dest, check_count :int):
     '''
 
     isDistant_para = 0 #パラシュート回避用のフラグ
-
+    red_area = 0
+    angle = 0
     while True:
         try:
             para_info = calibration.calculate_direction(lat_land, lon_land)
@@ -411,7 +412,7 @@ if __name__ == '__main__':
     t_start = time.time()
 
     #-Log Set up-#
-    para_avoid_test = log.Logger(dir='../logs/test_logs/para_avoid_test', filename='para_avoid_test', t_start=t_start)
+    para_avoid_test = log.Logger(dir='../logs/test_logs/para_avoid_test', filename='para_avoid_test', t_start=t_start, columns=['lat', 'lon', 'para_dist', 'red_area', 'angle','isDistant_para', 'check_count'])
 
     print('Para Avoid Start')
     check_count = 0 #パラ回避用のカウンター

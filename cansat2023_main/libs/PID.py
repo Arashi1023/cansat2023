@@ -1,18 +1,18 @@
 #モジュールのインポート
 import datetime
 import time
-import libs.gps_navigate as gps_navigate
-import libs.gps as gps
-import libs.calibration as calibration
-import libs.bmx055 as bmx055
-import libs.stuck2 as stuck2
-import libs.motor as motor
+import gps_navigate as gps_navigate
+import gps as gps
+import calibration as calibration
+import bmx055 as bmx055
+import stuck2 as stuck2
+import motor as motor
 import time
-import libs.other as other
-import libs.send as send
+import other as other
+import send as send
 from collections import deque
-import libs.basics as basics
-from libs.main_const import *
+import basics as basics
+from main_const import *
 
 #PID制御のテストコード
 

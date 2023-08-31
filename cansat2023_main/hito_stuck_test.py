@@ -82,11 +82,57 @@ def get_locations(lat_human, lon_human):
         }
 
 def take_and_rotation(human_judge_count, break_outer_loop,judge_probability,start_time,logpath, model):
+    
+    # 初期化時の向きを保存する変数
+    initial_azimuth = None
+    # 各回転ごとのrover_azimuthを保存する変数
+    rover_azimuths = []
+    # 各回転ごとの差分を保存する変数
+    azimuth_diffs = []
+    # 一定の値を超えたときにモーター出力を上げるための閾値
+    threshold_diff_sum = 90.0
+    #モーターの出力の初期化
+    motor_l,motor_r = 25 , -25
+
+    magx_off, magy_off = calibration.cal(30, -30, 40) #整地、オフセット値
 
     for i in range(24):
+        #-----経過時間の更新-----#
         elapsed_time = time.time()-start_time
+        #-----スタック判定-----#
+        magdata= bmx055.mag_dataRead()
+        mag_x, mag_y = magdata[0], magdata[1]
+
+        rover_azimuth = calibration.angle(mag_x, mag_y, magx_off, magy_off)
+
+        # 初期向きが取得された後、毎回rover_azimuthを算出し、差分を計算
+        if initial_azimuth is not None:
+            if len(rover_azimuths) > 0:
+                prev_azimuth = rover_azimuths[-1]
+                azimuth_diff = abs(rover_azimuth - prev_azimuth)
+                azimuth_diffs.append(azimuth_diff)
+            
+            rover_azimuths.append(rover_azimuth)
+        else:
+            initial_azimuth = rover_azimuth
+        
+        # 6回分の差分が閾値を超えていない場合にモーター出力を上げて初期化
+        if len(azimuth_diffs) >= 6 and sum(azimuth_diffs) < threshold_diff_sum:
+            print("モーター出力を上げます")
+            # モーターの出力を上げるコードを追加
+            motor_l+=2
+            motor_r-=2
+            
+            # azimuth_diffsを初期化
+            azimuth_diffs = []
+
+        elif len(azimuth_diffs) >= 6:
+            # azimuth_diffsを初期化
+            azimuth_diffs = []
+        
+        #-----回転＋人検知-----#
         if break_outer_loop == False:
-            motor.move(25, -25, 0.15)
+            motor.move(motor_l, motor_r, 0.15)
             human_judge_count = 0
             # 撮影
             img_path = take.picture('../imgs/human_detect/all/image-', 320, 240)
@@ -140,36 +186,6 @@ def move_to_bulearea(count, lat_human, lon_human):
     lat_w = blue_loc['lat_w']
     lon_w = blue_loc['lon_w']
 
-
-    # print(count)
-    
-    # if count == 1:
-    #     PID.drive(lon_n, lat_n, thd_distance=3, t_run=60, logpath=log_humandetect,t_start=t_start)
-    #     print("第1エリアです")
-    # elif count == 2:
-    #     PID.drive(lon_e, lat_e, thd_distance=3, t_run=60, logpath=log_humandetect,t_start=t_start) 
-    #     print("第2エリアです")  
-    # elif count == 3:
-    #     PID.drive(lon_s, lat_s, thd_distance=3, t_run=60, logpath=log_humandetect,t_start=t_start)
-    #     print("第3エリアです")
-    # elif count == 4:
-    #     PID.drive(lon_w, lat_w, thd_distance=3, t_run=60, logpath=log_humandetect,t_start=t_start)
-    #     print("第4エリアです")
-    # elif count == 5:
-    #     PID.drive(lon_w, lat_n, thd_distance=3, t_run=60, logpath=log_humandetect,t_start=t_start)
-    #     print("第5エリアです")
-    # elif count == 6:
-    #     PID.drive(lon_e, lat_n, thd_distance=3, t_run=60, logpath=log_humandetect,t_start=t_start)
-    #     print("第6エリアです")
-    # elif count == 7:
-    #     PID.drive(lon_e, lat_s, thd_distance=3, t_run=60, logpath=log_humandetect,t_start=t_start)
-    #     print("第7エリアです")
-    # elif count == 8:
-    #     PID.drive(lon_w, lat_s, thd_distance=3, t_run=60, logpath=log_humandetect,t_start=t_start)
-    #     print("第8エリアです")
-    # else:
-    #     print("青点エリア捜索終了")
-    # エリア情報の辞書を作成
     area_info = {
         1: (lon_n, lat_n),
         2: (lon_e, lat_e),
@@ -206,6 +222,7 @@ def detect_main_area(human_judge_count, break_outer_loop,judge_probability,start
     motor_l,motor_r = 25 , -25
 
     magx_off, magy_off = calibration.cal(30, -30, 40) #整地、オフセット値
+
     for k in range(24):
         #-----経過時間の更新-----#
         elapsed_time = time.time()-start_time
@@ -214,8 +231,6 @@ def detect_main_area(human_judge_count, break_outer_loop,judge_probability,start
         mag_x, mag_y = magdata[0], magdata[1]
 
         rover_azimuth = calibration.angle(mag_x, mag_y, magx_off, magy_off)
-
-        
 
         # 初期向きが取得された後、毎回rover_azimuthを算出し、差分を計算
         if initial_azimuth is not None:
@@ -244,7 +259,7 @@ def detect_main_area(human_judge_count, break_outer_loop,judge_probability,start
         
         #-----回転＋人検知-----#
         if break_outer_loop == False:
-            motor.move(motor_r, motor_l, 0.15)
+            motor.move(motor_l, motor_r, 0.15)
             human_judge_count = 0
             #撮影
             img_path = take.picture('../imgs/human_detect/all/image-', 320, 240)

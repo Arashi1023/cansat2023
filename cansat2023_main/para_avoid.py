@@ -350,7 +350,18 @@ def main(lat_land, lon_land, lat_dest, lon_dest, check_count :int):
             motor.move(PARA_PWR, -PARA_PWR, T_CHECK)
         elif red_area == 0 and check_count > 0:
             print("Move Forwward")
-            motor.move(PARA_PWR, PARA_PWR, T_FORWARD)
+            # motor.move(PARA_PWR, PARA_PWR, T_FORWARD)
+            mag_data = bmx055.mag_dataRead()
+            mag_x, mag_y = mag_data[0], mag_data[1]
+            rover_azimuth = calibration.angle(mag_x, mag_y, magx_off, magy_off)
+            rover_azimuth = basics.standarize_angle(rover_azimuth)
+            target_azimuth = rover_azimuth
+
+            #-run forward-#
+            theta_array = [0]*5
+            PID.PID_run(target_azimuth, magx_off, magy_off, theta_array=theta_array, loop_num=60)
+            motor.deceleration(15, 15)
+            motor.motor_stop(0.2)
             # check_count += 1
         else:
             print('Parachute Found\nTurning Around')

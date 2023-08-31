@@ -204,6 +204,7 @@ def PID_control(theta, theta_array: list, Kp=0.1, Ki=0.04, Kd=2.5):
 def PID_adjust_direction(target_azimuth, magx_off, magy_off, theta_array: list):
     '''
     目標角度に合わせて方向調整を行う関数
+    最終version
 
     Parameters
     ----------
@@ -237,7 +238,7 @@ def PID_adjust_direction(target_azimuth, magx_off, magy_off, theta_array: list):
     t_adj_start = time.time()
 
     while True:
-        if time.time() - t_adj_start >= 5:
+        if time.time() - t_adj_start >= 5: #5秒経過したら強制的に終了する
             break
 
         if count < 25:

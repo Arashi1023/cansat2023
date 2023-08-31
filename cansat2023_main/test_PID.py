@@ -6,7 +6,7 @@ import motor
 
 magx_off, magy_off = 0, 0
 
-def main(magx_off=0, magy_off=0):
+def main(magx_off=700, magy_off=1080):
     mag_data = bmx055.mag_dataRead()
     mag_x, mag_y = mag_data[0], mag_data[1]
     rover_azimuth = calibration.angle(mag_x, mag_y, magx_off, magy_off)

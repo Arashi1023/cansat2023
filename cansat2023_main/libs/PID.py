@@ -685,7 +685,7 @@ if __name__ == "__main__":
             # gps_running_goal_log.save_log(lat_now, lon_now, distance_to_dest, rover_azimuth, isReach_dest)    
             
             if isReach_dest == 1: #ゴール判定
-
+                print('Goal')
                 break
         except:
             print('Error\nTrying again...')

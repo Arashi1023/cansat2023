@@ -336,7 +336,7 @@ def PID_run(target_azimuth: float, magx_off: float, magy_off: float, theta_array
     #-----制御処理-----#
     for _ in range(loop_num):
 
-        if count < 15: #25から15に変更 by 田口 8/23
+        if count < 10: #25から15に変更 by 田口 8/23 15から10に変更 by 田口 8/31
             Ki = 0
             Kd = Kd_
         else:
@@ -356,8 +356,8 @@ def PID_run(target_azimuth: float, magx_off: float, magy_off: float, theta_array
         #-----モータの出力-----#
 
         #直進補正分(m=0のとき直進するように設定するため) # 35から25に変更 by 田口 8/28
-        s_r = 35
-        s_l = 35
+        s_r = 20
+        s_l = 20
 
         # モータ出力の最大値と最小値を設定
         m = min(m, 15)

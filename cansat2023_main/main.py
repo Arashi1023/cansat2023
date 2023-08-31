@@ -54,7 +54,7 @@ report_log = log.Logger(dir='../logs/0_report_log', filename='report', t_start=t
 release_log = log.Logger(dir='../logs/1_release_log', filename='release', t_start=t_start, columns=['latest_press', 'delta_press', 'press_release_count', 'isRelease'])
 land_log = log.Logger(dir='../logs/2_land_log', filename='land', t_start=t_start, columns=['latest_press', 'delta_press', 'press_land_count', 'isLand'])
 melt_log = log.Logger(dir='../logs/3_melt_log', filename='melt', t_start=t_start, columns=['condition'])
-para_avoid_log = log.Logger(dir='../logs/4_para_avoid_log', filename='para_avoid', t_start=t_start)
+para_avoid_log = log.Logger(dir='../logs/4_para_avoid_log', filename='para_avoid', t_start=t_start, columns=['lat', 'lon', 'distance_to_parachute', 'red_area', 'angle', 'isDistant_parachute', 'check_count'])
 gps_running_human_log = log.Logger(dir='../logs/5_gps_running_human_log', filename='gps_running_human', t_start=t_start, columns=['lat', 'lon', 'distance_to_human', 'rover_azimuth', 'isReach_human'])
 human_detection_log = log.Logger(dir='../logs/6_human_detection_log', filename='human_detection', t_start=t_start, columns=[])
 gps_running_goal_log = log.Logger(dir='../logs/7_gps_running_goal_log', filename='gps_running_goal', t_start=t_start, columns=['lat', 'lon', 'distance_to_goal', 'rover_azimuth', 'isReach_goal'])
@@ -206,15 +206,12 @@ stuck2.ue_jug()
 
 check_count = 0 #パラ回避用のカウンター
 while True:
-    try:
-        lat_now, lon_now, para_dist, red_area, angle, isDistant_parachute, check_count = para_avoid.main(lat_land, lon_land, lat_dest=LAT_HUMAN, lon_dest=LON_HUMAN, check_count=check_count)
-        
-        #-Log-#
-        para_avoid_log.save_log(lat_now, lon_now, para_dist, red_area, angle, isDistant_parachute)
-        if isDistant_parachute == 1: #パラシュート回避用のフラグ
-            break
-    except:
-        print('Error\nTrying again...')
+    lat_now, lon_now, para_dist, red_area, angle, isDistant_parachute, check_count = para_avoid.main(lat_land, lon_land, lat_dest=LAT_HUMAN, lon_dest=LON_HUMAN, check_count=check_count)
+    
+    #-Log-#
+    para_avoid_log.save_log(lat_now, lon_now, para_dist, red_area, angle, isDistant_parachute, check_count=check_count)
+    if isDistant_parachute == 1: #パラシュート回避用のフラグ
+        break
 
 #-Log-#
 print('Saving Log...')
@@ -241,21 +238,28 @@ lat_log, lon_log = gps.location()
 phase_log.save_log('5', 'GPS Running Sequence to Human: Start', lat_log, lon_log)
 
 #-GPS Running1-#
+direction = calibration.calculate_direction(lon2=LON_HUMAN, lat2=LAT_HUMAN)
+distance_to_goal = direction["distance"]
+print(f'{distance_to_goal}m to Human')
+
 while True: #1ループおおよそT_CAL秒
-    try:
-        direction = calibration.calculate_direction(lon2=LON_HUMAN, lat2=LAT_HUMAN)
-        distance_to_goal = direction["distance"]
 
-        #-T_CALごとに以下の情報を取得-#
-        lat_now, lon_now, distance_to_dest, rover_azimuth, isReach_dest = PID.drive2(lon_dest=LON_HUMAN, lat_dest=LAT_HUMAN, thd_distance=THD_DISTANCE_DEST, t_cal=T_CAL, loop_num=LOOP_NUM)
+    #-T_CALごとに以下の情報を取得-#
+    lat_now, lon_now, distance_to_dest, rover_azimuth, isReach_dest = PID.drive2(lon_dest=LON_HUMAN, lat_dest=LAT_HUMAN, thd_distance=THD_DISTANCE_DEST, t_cal=T_CAL, loop_num=LOOP_NUM)
+    print('disntance to dest=' + str(distance_to_dest) + 'm')
+    #-Log-#
+    gps_running_goal_log.save_log(lat_now, lon_now, distance_to_dest, rover_azimuth, isReach_dest)    
+    
+    #-send-#
+    lat_str = "{:.6f}".format(lat_now)  # 緯度を小数点以下8桁に整形
+    lon_str = "{:.6f}".format(lon_now)  # 経度を小数点以下8桁に整形
+    send.send_data(lat_str)
+    time.sleep(9)
+    send.send_data(lon_str)
+    time.sleep(9)
 
-        #-Log-#
-        gps_running_goal_log.save_log(lat_now, lon_now, distance_to_dest, rover_azimuth, isReach_dest)    
-        
-        if isReach_dest == 1: #ゴール判定
-            break
-    except:
-        print('Error\nTrying again...')
+    if isReach_dest == 1: #ゴール判定
+        break
 
 print(f'{distance_to_dest}m to Goal')
 
@@ -339,16 +343,27 @@ phase_log.save_log('7', 'GPS Running Sequence to Goal: Start', lat_log, lon_log)
 
 direction = calibration.calculate_direction(lon2=LON_GOAL, lat2=LAT_GOAL)
 distance_to_goal = direction["distance"]
+print('distance to goal=' + str(distance_to_goal) + 'm')
 
 while True: #1ループおおよそT_CAL秒
 
     #-T_CALごとに以下の情報を取得-#
     lat_now, lon_now, distance_to_dest, rover_azimuth, isReach_dest = PID.drive2(lon_dest=LON_GOAL, lat_dest=LAT_GOAL, thd_distance=THD_DISTANCE_DEST, t_cal=T_CAL, loop_num=LOOP_NUM)
 
+    print('disntance to dest=' + str(distance_to_dest) + 'm')
     #-Log-#
-    gps_running_goal_log.save_log(lat_now, lon_now, distance_to_dest, rover_azimuth, isReach_dest)    
+    gps_running_goal_log.save_log(lat_now, lon_now, distance_to_dest, rover_azimuth, isReach_dest)
+
+    #-send-#
+    lat_str = "{:.6f}".format(lat_now)  # 緯度を小数点以下8桁に整形
+    lon_str = "{:.6f}".format(lon_now)  # 経度を小数点以下8桁に整形
+    send.send_data(lat_str)
+    time.sleep(9)
+    send.send_data(lon_str)
+    time.sleep(9)
     
     if isReach_dest == 1: #ゴール判定
+        print('Finishing GPS Running')
         break
 
 print(f'{distance_to_dest}m to Goal')
@@ -381,15 +396,12 @@ image_guide_log.save_log('Image Guide Sequence: Start')
 magx_off, magy_off = calibration.cal(30, -30, 30)
 
 while True:
-    try:
-        lat_now, lon_now, distance_to_goal, area_ratio, angle, isReach_goal = goal_detect.main(lat_dest=LAT_GOAL, lon_dest=LON_GOAL, thd_distance_goal=THD_DISTANCE_GOAL, thd_red_area=THD_RED_RATIO, magx_off=magx_off, magy_off=magy_off)
-        image_guide_log.save_log(lat_now, lon_now, distance_to_goal, area_ratio, angle, isReach_goal)
-        print('isReach_goal: ' + str(isReach_goal))
-        if isReach_goal == 1: #ゴール判定
-            print('Goal')
-            break
-    except:
-        print('Error\nTrying again...')
+    lat_now, lon_now, distance_to_goal, area_ratio, angle, isReach_goal = goal_detect.main(lat_dest=LAT_GOAL, lon_dest=LON_GOAL, thd_distance_goal=THD_DISTANCE_GOAL, thd_red_area=THD_RED_RATIO, magx_off=magx_off, magy_off=magy_off)
+    image_guide_log.save_log(lat_now, lon_now, distance_to_goal, area_ratio, angle, isReach_goal)
+    print('isReach_goal: ' + str(isReach_goal))
+    if isReach_goal == 1: #ゴール判定
+        print('Goal')
+        break
 
 #-Log-#
 print('Saving Log...')

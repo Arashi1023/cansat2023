@@ -340,6 +340,10 @@ def main(lat_dest: float, lon_dest: float, thd_distance_goal: float, thd_red_are
         画面を占める赤色の割合の閾値 この割合を超えるとゴールしたと判定する
     '''
 
+    area_ratio = 0
+    angle = 0
+    isReach_goal = 0
+
     try:
         ###-----ゴールまでの距離を測定-----###
         lat_now, lon_now = gps.location()

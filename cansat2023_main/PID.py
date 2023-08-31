@@ -592,6 +592,8 @@ def drive2(lon_dest :float, lat_dest: float, thd_distance: int, t_cal: float, lo
 
     t_run_start = time.time() #GPS走行開始前の時刻
 
+    theta_array = [0]*5
+
     while time.time() - t_run_start <= t_cal:
         print("-------gps走行-------")
         lat_now, lon_now = gps.location()

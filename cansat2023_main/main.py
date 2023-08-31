@@ -76,6 +76,7 @@ press_array = [0]*2
 while True:
     if time.time() - t_start > RELEASE_TIMEOUT: #タイムアウトの設定
         print('Release Sequence Timeout')
+        release_log.save_log('Release Sequence Timeout')
         break
 
     latest_press, delta_press, press_release_count, isRelease = release.release_main(press_release_count=press_release_count, press_array=press_array)
@@ -83,7 +84,6 @@ while True:
     release_log.save_log(latest_press, delta_press, press_release_count, isRelease)
     print('isRelease: ' + str(isRelease))
     if isRelease == 1:
-        print()
         print('Release Detected')
         break
 
@@ -118,6 +118,7 @@ press_array = [0]*2
 while True:
     if time.time() - t_start > LAND_TIMEOUT: #タイムアウトの設定
         print('Land Sequence Timeout')
+        land_log.save_log('Land Sequence Timeout')
         break
 
     latest_press, delta_press, press_land_count, isLand = land.land_main(press_land_count=press_land_count, press_array=press_array)

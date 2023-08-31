@@ -14,7 +14,7 @@ def main(magx_off=700, magy_off=1080):
     target_azimuth = rover_azimuth
 
     theta_array = [0]*5
-    PID.PID_run(target_azimuth, magx_off, magy_off, theta_array=theta_array, loop_num=20)
+    PID.PID_run(target_azimuth, magx_off, magy_off, theta_array=theta_array, loop_num=60)
     motor.deceleration(15, 15)
     motor.motor_stop(0.2)
 

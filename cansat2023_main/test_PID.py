@@ -19,4 +19,5 @@ def main(magx_off=700, magy_off=1080):
     motor.motor_stop(0.2)
 
 if __name__ == '__main__':
+    motor.setup()
     main()

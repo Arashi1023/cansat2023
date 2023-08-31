@@ -1,9 +1,9 @@
 import time
 import datetime
 
-import libs.bme280 as bme280
-import libs.send as send
-import libs.other as other
+import bme280
+import send
+import other
 
 #variable for log
 log_phase=other.filename('/home/dendenmushi/cansat2023/sequence/log/phaselog','txt')

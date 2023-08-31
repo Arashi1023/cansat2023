@@ -1,7 +1,7 @@
 import time
-import libs.bme280 as bme280
-import libs.send as send
-import libs.log as log
+import bme280
+import send
+import log
 from main_const import *
 #from other import print
 

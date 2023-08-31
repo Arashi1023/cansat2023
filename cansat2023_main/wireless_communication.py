@@ -4,7 +4,7 @@ import pigpio
 import numpy as np
 import traceback
 
-import libs.send as send
+import send
 
 RX = 27
 pi = pigpio.pi()

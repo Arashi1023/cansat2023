@@ -2,13 +2,13 @@ import time
 import datetime
 import random
 
-from libs.other import print_im920sl
-import libs.im920sl as im920sl
-import libs.im920sl2 as im920sl2
-import libs.motor as motor
-import libs.gps_navigate as gps_navigate
-import libs.gps as gps
-import libs.bmx055 as bmx055
+from other import print_im920sl
+import im920sl
+import im920sl2
+import motor
+import gps_navigate
+import gps
+import bmx055
 
 
 def ue_jug():

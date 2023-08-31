@@ -9,8 +9,8 @@ import numpy as np
 import traceback
 import cv2
 
-import libs.send as send
-from libs.take import picture
+import send
+from take import picture
 
 RX = 27
 pi = pigpio.pi()

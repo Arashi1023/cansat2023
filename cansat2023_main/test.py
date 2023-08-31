@@ -1,4 +1,4 @@
-import libs.gps as gps
+import gps
 
 while True:
     lat_test, lon_test = gps.location()

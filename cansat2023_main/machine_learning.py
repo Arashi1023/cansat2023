@@ -3,7 +3,7 @@ import numpy as np
 from PIL import Image
 import cv2
 
-import libs.take as take
+import take as take
 
 class DetectPeople():
     def __init__(self, model_path,):

@@ -459,9 +459,9 @@ def TEST_img_guide_drive(magx_off, magy_off, thd_distance_goal=10, thd_red_area=
     
     ###-----画像誘導モードの範囲外にいた場合の処理-----###
     else:
-        pass
-        # print('ゴールから遠すぎます\nGPS誘導を行います')
-        # PID.drive(lon_dest, lat_dest, thd_distance_goal, 2)
+        print('ゴールから遠すぎます\nGPS誘導を行います')
+
+        lat_now, lon_now, distance_to_dest, rover_azimuth, isReach_dest = PID.drive2(lon_dest=LON_GOAL, lat_dest=LAT_GOAL, thd_distance=THD_DISTANCE_DEST, t_cal=T_CAL, loop_num=LOOP_NUM)
 
     time.sleep(0.04) #9軸センサ読み取り用
 

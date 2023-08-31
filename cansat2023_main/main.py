@@ -207,7 +207,7 @@ stuck2.ue_jug()
 check_count = 0 #パラ回避用のカウンター
 while True:
     try:
-        lat_now, lon_now, para_dist, red_area, angle, isDistant_parachute, check_count = para_avoid.para_avoid_main(lat_land, lon_land, lat_dest=LAT_HUMAN, lon_dest=LON_HUMAN, check_count=check_count)
+        lat_now, lon_now, para_dist, red_area, angle, isDistant_parachute, check_count = para_avoid.main(lat_land, lon_land, lat_dest=LAT_HUMAN, lon_dest=LON_HUMAN, check_count=check_count)
         
         #-Log-#
         para_avoid_log.save_log(lat_now, lon_now, para_dist, red_area, angle, isDistant_parachute)

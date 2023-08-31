@@ -627,7 +627,7 @@ def drive2(lon_dest :float, lat_dest: float, thd_distance: int, t_cal: float, lo
 if __name__ == "__main__":
 
     #-----セットアップ-----#
-    # motor.setup()
+    motor.setup()
     bmx055.bmx055_setup()
     #-----初期設定-----#
     theta_differential_array = []
@@ -672,20 +672,17 @@ if __name__ == "__main__":
     # drive(lon_dest=lon_goal, lat_dest=lat_goal, thd_distance=5, t_run=60, log_path='/home/dendenmushi/cansat2023/sequence/log/gpsrunningLog.txt')
 
     while True: #1ループおおよそT_CAL秒
-        try:
-            direction = calibration.calculate_direction(lon_dest=LON_HUMAN, lat_dest=LAT_HUMAN)
-            distance_to_goal = direction["distance"]
+        direction = calibration.calculate_direction(lon_dest=LON_HUMAN, lat_dest=LAT_HUMAN)
+        distance_to_goal = direction["distance"]
 
             #-T_CALごとに以下の情報を取得-#
-            lat_now, lon_now, distance_to_dest, rover_azimuth, isReach_dest = drive2(lon_dest=LON_HUMAN, lat_dest=LAT_HUMAN, thd_distance=THD_DISTANCE_DEST, t_cal=T_CAL, loop_num=LOOP_NUM)
+        lat_now, lon_now, distance_to_dest, rover_azimuth, isReach_dest = drive2(lon_dest=LON_HUMAN, lat_dest=LAT_HUMAN, thd_distance=THD_DISTANCE_DEST, t_cal=T_CAL, loop_num=LOOP_NUM)
             
-            print('isReach_dest = ', isReach_dest)
+        print('isReach_dest = ', isReach_dest)
 
             #-Log-#
             # gps_running_goal_log.save_log(lat_now, lon_now, distance_to_dest, rover_azimuth, isReach_dest)    
             
-            if isReach_dest == 1: #ゴール判定
-                print('Goal')
-                break
-        except:
-            print('Error\nTrying again...')
+        if isReach_dest == 1: #ゴール判定
+            print('Goal')
+            break

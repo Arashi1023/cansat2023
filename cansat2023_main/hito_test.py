@@ -185,7 +185,9 @@ def move_to_bulearea(count, lat_human, lon_human):
 
     if count in area_info:
         lon, lat = area_info[count]
-        PID.drive(lon, lat, thd_distance=3, t_run=60, logpath=0, t_start=start_time)
+        # PID.drive(lon, lat, thd_distance=3, t_run=60, logpath=0, t_start=start_time)
+        lat_now, lon_now, distance_to_dest, rover_azimuth, isReach_dest = PID.drive2(lon_dest=lon, lat_dest=lat, thd_distance=5, t_cal=T_CAL, loop_num=LOOP_NUM)
+        print('distance to dest: ', distance_to_dest)
         print(f"第{count}エリアです")
     else:
         print("青点エリア捜索終了")

@@ -176,7 +176,7 @@ def move_to_bulearea(count, lat_human, lon_human):
 
     if count in area_info:
         lon, lat = area_info[count]
-        PID.drive(lon, lat, thd_distance=3, t_run=60, logpath=log_humandetect, t_start=t_start)
+        PID.drive(lon, lat, thd_distance=3, t_run=60, logpath=log_humandetect, t_start=start_time)
         print(f"第{count}エリアです")
     else:
         print("青点エリア捜索終了")

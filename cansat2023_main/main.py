@@ -172,13 +172,15 @@ print('Waiting for Stabilizer to be restored...')
 time.sleep(15)
 
 #####-----GPSの取得チェック-----##### いらないかも...
-while True:
-    lat_test, lon_test = gps.location()
-    if lat_test == 0 and lon_test == 0:
-        print('Waiting for GPS...')
-    elif lat_test != 0 and lon_test != 0: #0だった場合はGPSが取得できていないので再取得
-        print('GPS received')
-        break
+# while True:
+#     lat_test, lon_test = gps.location()
+#     if lat_test == 0 and lon_test == 0:
+#         print('Waiting for GPS...')
+#     elif lat_test != 0 and lon_test != 0: #0だった場合はGPSが取得できていないので再取得
+#         print('GPS received')
+#         break
+
+lat_test, lon_test = gps.location()
 
 #-send-#
 print('Sending Data...')

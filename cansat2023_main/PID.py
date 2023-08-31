@@ -662,7 +662,7 @@ if __name__ == "__main__":
 
     # PID_adjust_direction(270, magx_off, magy_off, theta_array)
 
-    time.sleep(4)
+    # time.sleep(4)
 
     #-----PID制御によるGPS走行-----#
     #-----目標地点の設定-----#

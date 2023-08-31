@@ -306,7 +306,7 @@ def wgps_para_avoid(small_thd_dist :int, large_thd_dist :int, check_count :int, 
         while time.time() - t_start_run <= T_FORWARD:
             PID.PID_run(target_azimuth, magx_off, magy_off, theta_array, loop_num=25)
 
-def para_avoid_main(lat_land, lon_land, lat_dest, lon_dest, check_count :int):
+def main(lat_land, lon_land, lat_dest, lon_dest, check_count :int):
     '''
     目的：パラシュートを回避する
 
@@ -417,7 +417,7 @@ if __name__ == '__main__':
     check_count = 0 #パラ回避用のカウンター
     lat_land, lon_land = gps.location()
     while True:
-        lat_now, lon_now, para_dist, red_area, angle, isDistant_para, check_count = para_avoid_main(lat_land, lon_land, lat_dest=LAT_HUMAN, lon_dest=LON_HUMAN, check_count=check_count)
+        lat_now, lon_now, para_dist, red_area, angle, isDistant_para, check_count = main(lat_land, lon_land, lat_dest=LAT_HUMAN, lon_dest=LON_HUMAN, check_count=check_count)
         print(lat_now, lon_now, para_dist, red_area, angle, isDistant_para, check_count)
         para_avoid_test.save_log(lat_now, lon_now, para_dist, red_area, angle, isDistant_para, check_count)
         if isDistant_para == 1:

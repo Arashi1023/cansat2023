@@ -83,8 +83,8 @@ def take_and_rotation(human_judge_count, break_outer_loop,judge_probability,star
             img_path = take.picture('../imgs/human_detect/all/image-', 320, 240)
             # モデルの読み込み
             result = model.predict(image_path=img_path)
-            other.log(logpath, datetime.datetime.now(), time.time() -
-                      t_start,result,additional_result,human_judge_count,break_outer_loop,elapsed_time)
+            # other.log(logpath, datetime.datetime.now(), time.time() -
+            #           t_start,result,additional_result,human_judge_count,break_outer_loop,elapsed_time)
             # hitoの確率50%かどうか
             if result >= judge_probability:
                 human_judge_count += 1
@@ -93,8 +93,8 @@ def take_and_rotation(human_judge_count, break_outer_loop,judge_probability,star
                 for j in range(2):
                     additional_img_path = take.picture('../imgs/human_detect/additional/additional_image-', 320, 240)
                     additional_result = model.predict(image_path=additional_img_path)
-                    other.log(logpath, datetime.datetime.now(), time.time() -
-                      t_start,result,additional_result,human_judge_count,break_outer_loop,elapsed_time)
+                    # other.log(logpath, datetime.datetime.now(), time.time() -
+                    #   t_start,result,additional_result,human_judge_count,break_outer_loop,elapsed_time)
                     if additional_result >= judge_probability:
                         human_judge_count += 1
                         print(human_judge_count)

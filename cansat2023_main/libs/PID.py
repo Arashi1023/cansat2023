@@ -445,7 +445,7 @@ def drive(lon_dest :float, lat_dest: float, thd_distance: int, t_run, log_path, 
         log_rover_azimuth = calibration.angle(mag_x, mag_y, magx_off, magy_off)
 
         #-----ログの保存-----#
-        other.log(log_path, datetime.datetime.now(), time.time() - t_start, lat_old, lon_old, log_rover_azimuth, distance_dest)
+        # other.log(log_path, datetime.datetime.now(), time.time() - t_start, lat_old, lon_old, log_rover_azimuth, distance_dest)
 
         #------無線通信による現在位置情報の送信-----#
         lat_str = "{:.6f}".format(lat_old)  # 緯度を小数点以下8桁に整形
@@ -489,7 +489,7 @@ def drive(lon_dest :float, lat_dest: float, thd_distance: int, t_run, log_path, 
 
             stuck_count += 1
             lat_new, lon_new = gps.location()
-            other.log(log_path, datetime.datetime.now(), time.time() - t_start, lat_new, lon_new, rover_azimuth, direction['distance'])
+            # other.log(log_path, datetime.datetime.now(), time.time() - t_start, lat_new, lon_new, rover_azimuth, direction['distance'])
             print("whileの最下行")
 
         direction = calibration.calculate_direction(lon_dest, lat_dest)
@@ -671,4 +671,21 @@ if __name__ == "__main__":
 
     # drive(lon_dest=lon_goal, lat_dest=lat_goal, thd_distance=5, t_run=60, log_path='/home/dendenmushi/cansat2023/sequence/log/gpsrunningLog.txt')
 
-    drive2(lon_dest=139.9120618, lat_dest=35.9242411, thd_distance=5, t_cal=60, loop_num=20)
+    while True: #1ループおおよそT_CAL秒
+        try:
+            direction = calibration.calculate_direction(lon_dest=LON_HUMAN, lat_dest=LAT_HUMAN)
+            distance_to_goal = direction["distance"]
+
+            #-T_CALごとに以下の情報を取得-#
+            lat_now, lon_now, distance_to_dest, rover_azimuth, isReach_dest = drive2(lon_dest=LON_HUMAN, lat_dest=LAT_HUMAN, thd_distance=THD_DISTANCE_DEST, t_cal=T_CAL, loop_num=LOOP_NUM)
+            
+            print('isReach_dest = ', isReach_dest)
+
+            #-Log-#
+            # gps_running_goal_log.save_log(lat_now, lon_now, distance_to_dest, rover_azimuth, isReach_dest)    
+            
+            if isReach_dest == 1: #ゴール判定
+
+                break
+        except:
+            print('Error\nTrying again...')

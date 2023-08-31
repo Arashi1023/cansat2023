@@ -627,7 +627,7 @@ def drive2(lon_dest :float, lat_dest: float, thd_distance: int, t_cal: float, lo
 if __name__ == "__main__":
 
     #-----セットアップ-----#
-    # motor.setup()a
+    # motor.setup()
     bmx055.bmx055_setup()
     #-----初期設定-----#
     theta_differential_array = []

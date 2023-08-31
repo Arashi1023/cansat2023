@@ -253,6 +253,14 @@ while True: #1ループおおよそT_CAL秒
     #-Log-#
     gps_running_goal_log.save_log(lat_now, lon_now, distance_to_dest, rover_azimuth, isReach_dest)    
     
+    #-send-#
+    lat_str = "{:.6f}".format(lat_now)  # 緯度を小数点以下8桁に整形
+    lon_str = "{:.6f}".format(lon_now)  # 経度を小数点以下8桁に整形
+    send.send_data(lat_str)
+    time.sleep(9)
+    send.send_data(lon_str)
+    time.sleep(9)
+
     if isReach_dest == 1: #ゴール判定
         break
 
@@ -347,7 +355,15 @@ while True: #1ループおおよそT_CAL秒
 
     print('disntance to dest=' + str(distance_to_dest) + 'm')
     #-Log-#
-    gps_running_goal_log.save_log(lat_now, lon_now, distance_to_dest, rover_azimuth, isReach_dest)    
+    gps_running_goal_log.save_log(lat_now, lon_now, distance_to_dest, rover_azimuth, isReach_dest)
+
+    #-send-#
+    lat_str = "{:.6f}".format(lat_now)  # 緯度を小数点以下8桁に整形
+    lon_str = "{:.6f}".format(lon_now)  # 経度を小数点以下8桁に整形
+    send.send_data(lat_str)
+    time.sleep(9)
+    send.send_data(lon_str)
+    time.sleep(9)
     
     if isReach_dest == 1: #ゴール判定
         print('Finishing GPS Running')

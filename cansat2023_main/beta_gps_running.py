@@ -6,20 +6,21 @@ import pigpio
 import traceback
 from math import sqrt
 
-import libs.bme280 as bme280
-import libs.bmx055 as bmx055
-import libs.motor as motor
-import libs.save_photo as save_img
-import libs.send as send
-import libs.gps as gps
-import libs.stuck2 as stuck2
-import libs.other as other
-import libs.send_photo as send_photo
-import libs.take as take
-from libs.machine_learning import DetectPeople
-import libs.calibration as calibration
-import libs.PID as PID
-import libs.log as log
+import bme280
+import bmx055
+import motor
+import save_photo as save_img
+import send
+import gps
+import gps_navigate
+import stuck2
+import other
+import send_photo
+import take
+from machine_learning import DetectPeople
+import calibration
+import PID
+import log
 
 from main_const import *
 import release

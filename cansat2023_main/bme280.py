@@ -5,7 +5,7 @@ from smbus import SMBus
 import time
 import datetime
 
-import libs.other as other
+import other as other
 
 bus_number  = 1
 i2c_address = 0x76	#16進数76番でi2c通信

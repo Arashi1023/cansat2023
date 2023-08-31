@@ -36,7 +36,7 @@ PARA_RUN_LONG = 10
 #-----GPS走行-----#
 STUCK_JUDGE_THD_DISTANCE = 5
 LOOP_NUM = 20 #0.05秒ごとに9軸センサを取得するので、20回のとき1秒間隔でGPSを取得する
-THD_DISTANCE_DEST = 10
+THD_DISTANCE_DEST = 5 #目的地に到達したと判定する距離
 T_CAL = 120 #キャリブレーションを行う間隔時間[sec]
 
 

@@ -348,9 +348,9 @@ def PID_run(target_azimuth: float, magx_off: float, magy_off: float, theta_array
 
         #-----モータの出力-----#
 
-        #直進補正分(m=0のとき直進するように設定するため) # 35から20に変更 by 田口 8/28
-        s_r = 25
-        s_l = 25
+        #直進補正分(m=0のとき直進するように設定するため) # 35から25に変更 by 田口 8/28
+        s_r = 35
+        s_l = 35
 
         # モータ出力の最大値と最小値を設定
         m = min(m, 15)
@@ -532,6 +532,7 @@ def PID_control2(theta, theta_array: list, Kp=0.1, Ki=0.04, Kd=2.5):
 def drive2(lon_dest :float, lat_dest: float, thd_distance: int, t_cal: float, loop_num=20):
     '''
     任意の地点までPID制御により走行する関数
+    最終version これを使う
     
     Parameters
     ----------

@@ -54,7 +54,7 @@ report_log = log.Logger(dir='../logs/0_report_log', filename='report', t_start=t
 release_log = log.Logger(dir='../logs/1_release_log', filename='release', t_start=t_start, columns=['latest_press', 'delta_press', 'press_release_count', 'isRelease'])
 land_log = log.Logger(dir='../logs/2_land_log', filename='land', t_start=t_start, columns=['latest_press', 'delta_press', 'press_land_count', 'isLand'])
 melt_log = log.Logger(dir='../logs/3_melt_log', filename='melt', t_start=t_start, columns=['condition'])
-para_avoid_log = log.Logger(dir='../logs/4_para_avoid_log', filename='para_avoid', t_start=t_start)
+para_avoid_log = log.Logger(dir='../logs/4_para_avoid_log', filename='para_avoid', t_start=t_start, columns=['lat', 'lon', 'distance_to_parachute', 'red_area', 'angle', 'isDistant_parachute', 'check_count'])
 gps_running_human_log = log.Logger(dir='../logs/5_gps_running_human_log', filename='gps_running_human', t_start=t_start, columns=['lat', 'lon', 'distance_to_human', 'rover_azimuth', 'isReach_human'])
 human_detection_log = log.Logger(dir='../logs/6_human_detection_log', filename='human_detection', t_start=t_start, columns=[])
 gps_running_goal_log = log.Logger(dir='../logs/7_gps_running_goal_log', filename='gps_running_goal', t_start=t_start, columns=['lat', 'lon', 'distance_to_goal', 'rover_azimuth', 'isReach_goal'])
@@ -206,15 +206,12 @@ stuck2.ue_jug()
 
 check_count = 0 #パラ回避用のカウンター
 while True:
-    try:
-        lat_now, lon_now, para_dist, red_area, angle, isDistant_parachute, check_count = para_avoid.main(lat_land, lon_land, lat_dest=LAT_HUMAN, lon_dest=LON_HUMAN, check_count=check_count)
-        
-        #-Log-#
-        para_avoid_log.save_log(lat_now, lon_now, para_dist, red_area, angle, isDistant_parachute)
-        if isDistant_parachute == 1: #パラシュート回避用のフラグ
-            break
-    except:
-        print('Error\nTrying again...')
+    lat_now, lon_now, para_dist, red_area, angle, isDistant_parachute, check_count = para_avoid.main(lat_land, lon_land, lat_dest=LAT_HUMAN, lon_dest=LON_HUMAN, check_count=check_count)
+    
+    #-Log-#
+    para_avoid_log.save_log(lat_now, lon_now, para_dist, red_area, angle, isDistant_parachute, check_count=check_count)
+    if isDistant_parachute == 1: #パラシュート回避用のフラグ
+        break
 
 #-Log-#
 print('Saving Log...')

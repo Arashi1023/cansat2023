@@ -238,7 +238,7 @@ def human_detect_main():
     pass                     
     
 if __name__ == "__main__":
-    motor.setup()
+    # motor.setup()
     gps.open_gps()
     bmx055.bmx055_setup()
 

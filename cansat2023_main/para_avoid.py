@@ -357,7 +357,6 @@ def main(lat_land, lon_land, lat_dest, lon_dest, check_count :int):
             rover_azimuth = basics.standarize_angle(rover_azimuth)
             target_azimuth = rover_azimuth
 
-
             #-run forward-#
             t_start_runf = time.time()
             theta_array = [0]*5

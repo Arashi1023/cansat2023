@@ -101,6 +101,7 @@ if __name__ == "__main__":
             latest_press, delta_press, press_release_count, isRelease = release_main(press_release_count=press_release_count, press_array=press_array)
             #-Log-#
             release_log.save_log(latest_press, delta_press, press_release_count, isRelease)
+            print('latest_press:', latest_press)
             print(isRelease)
             if isRelease == 1:
                 print("##--released--##")

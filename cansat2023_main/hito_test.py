@@ -27,10 +27,6 @@ import beta_gps_running as gps_running
 
 # log_humandetect=other.filename('/home/dendenmushi/cansat2023/sequence/log/humandetectlog/humandetectlog','txt')
 
-# motor.setup()
-gps.open_gps()
-bmx055.bmx055_setup()
-
 def get_locations(lat_human, lon_human):
 #最後の位置情報をもとに周囲の4つの点の座標を求める
 
@@ -242,7 +238,9 @@ def human_detect_main():
     pass                     
     
 if __name__ == "__main__":
-
+    motor.setup()
+    gps.open_gps()
+    bmx055.bmx055_setup()
 
 
 

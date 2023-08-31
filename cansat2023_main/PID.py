@@ -349,8 +349,8 @@ def PID_run(target_azimuth: float, magx_off: float, magy_off: float, theta_array
         #-----モータの出力-----#
 
         #直進補正分(m=0のとき直進するように設定するため) # 35から20に変更 by 田口 8/28
-        s_r = 20
-        s_l = 20
+        s_r = 25
+        s_l = 25
 
         # モータ出力の最大値と最小値を設定
         m = min(m, 15)
@@ -582,7 +582,7 @@ def drive2(lon_dest :float, lat_dest: float, thd_distance: int, t_cal: float, lo
     rover_azimuth = calibration.angle(mag_x, mag_y, magx_off, magy_off) #戻り値
 
     #------無線通信による現在位置情報の送信-----#
-    
+
     lat_str = "{:.6f}".format(lat_old)  # 緯度を小数点以下8桁に整形
     lon_str = "{:.6f}".format(lon_old)  # 経度を小数点以下8桁に整形
     send.send_data(lat_str)

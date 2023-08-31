@@ -17,3 +17,6 @@ def main(magx_off=0, magy_off=0):
     PID.PID_run(target_azimuth, magx_off, magy_off, theta_array=theta_array, loop_num=20)
     motor.deceleration(15, 15)
     motor.motor_stop(0.2)
+
+if __name__ == '__main__':
+    main()

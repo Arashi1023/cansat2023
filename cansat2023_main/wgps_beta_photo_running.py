@@ -25,14 +25,6 @@ import libs.log as log
 import libs.basics as basics
 
 from main_const import *
-# import release
-# import land
-# import melt
-# import beta_gps_running as gps_running
-# import human_detection
-# import para_avoid
-import wgps_beta_photo_running as imgguide
-
 import gps_running1
 
 #細かいノイズを除去するために画像を圧縮
@@ -332,6 +324,7 @@ def image_guided_driving(area_ratio, angle, lat2, lon2, thd_full_red, thd_dist_g
 
 def img_guide_drive(lat_dest: float, lon_dest: float, thd_distance_goal: float, thd_red_area: float, magx_off: float, magy_off: float):
     '''
+    目的：画像誘導によりゴールに到達する
     8月28日作成 by 田口
     おそらくこっちにする
     
@@ -508,37 +501,43 @@ if __name__ == "__main__":
     gps.open_gps()
     bmx055.bmx055_setup()
 
-    magx_off, magy_off = calibration.cal(30, -30, 30)
-
-    while True:
-        area_ratio, angle, isReach_goal = TEST_img_guide_drive(magx_off=magx_off, magy_off=magy_off)
-        print(isReach_goal)
-        if isReach_goal == 1:
-            print('Goal')
-            break
-
-
-    # #-log-#
     # t_start = time.time()
+    # image_guide_log = log.Logger(dir='../logs/test_logs/para_avoid_test', filename='para_avoid', t_start=t_start)
+    # magx_off, magy_off = calibration.cal(30, -30, 30)
 
-    # image_guide_log = log.Logger(dir='../logs/test_logs/image_guide_test', filename='Image_guide_test', t_start=t_start, columns=['lat', 'lon', 'distance_to_goal', 'area_ratio', 'angle', 'isReach_goal'])
-
-    # #-Image Guide Drive-#
     # while True:
-    #     try:
-    #         print('Start Image Guide Drive')
-    #         lat_now, lon_now, distance_to_goal, area_ratio, angle, isReach_goal = imgguide.img_guide_drive(lat_dest=LAT_GOAL, lon_dest=LON_GOAL, thd_distance_goal=THD_DISTANCE_GOAL, thd_red_area=THD_RED_RATIO, magx_off=magx_off, magy_off=magy_off)
-    #         image_guide_log.save_log(lat_now, lon_now, distance_to_goal, area_ratio, angle, isReach_goal)
-    #         print('distance_to_goal = ', distance_to_goal)
-    #         print('area_ratio = ', area_ratio)
-    #         print('angle = ', angle)
-    #         print('isReach_goal = ', isReach_goal)
+    #     area_ratio, angle, isReach_goal = TEST_img_guide_drive(magx_off=magx_off, magy_off=magy_off)
+    #     image_guide_log.save_log(area_ratio, angle, isReach_goal)
+    #     print(isReach_goal)
+    #     if isReach_goal == 1:
+    #         print('Goal')
+    #         break
+
+
+
+
+    #-log-#
+    t_start = time.time()
+
+    image_guide_log = log.Logger(dir='../logs/test_logs/image_guide_test', filename='Image_guide_test', t_start=t_start, columns=['lat', 'lon', 'distance_to_goal', 'area_ratio', 'angle', 'isReach_goal'])
+
+    #-Image Guide Drive-#
+    magx_off, magy_off = calibration.cal(30, -30, 30) #キャリブレーション
+    while True:
+        try:
+            print('Start Image Guide Drive')
+            lat_now, lon_now, distance_to_goal, area_ratio, angle, isReach_goal = imgguide.img_guide_drive(lat_dest=LAT_GOAL, lon_dest=LON_GOAL, thd_distance_goal=THD_DISTANCE_GOAL, thd_red_area=THD_RED_RATIO, magx_off=magx_off, magy_off=magy_off)
+            image_guide_log.save_log(lat_now, lon_now, distance_to_goal, area_ratio, angle, isReach_goal)
+            print('distance_to_goal = ', distance_to_goal)
+            print('area_ratio = ', area_ratio)
+            print('angle = ', angle, '%')
+            print('isReach_goal = ', isReach_goal)
                   
-    #         if isReach_goal == 1: #ゴール判定
-    #             print('Goal')
-    #             print('Finish Image Guide Drive')
-    #             break
+            if isReach_goal == 1: #ゴール判定
+                print('Goal')
+                print('Finish Image Guide Drive')
+                break
         
-    #     except KeyboardInterrupt:
-    #         print('Keyboard Interrupt')
-    #         exit()
+        except KeyboardInterrupt:
+            print('Keyboard Interrupt')
+            exit()

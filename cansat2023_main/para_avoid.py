@@ -308,6 +308,10 @@ def wgps_para_avoid(small_thd_dist :int, large_thd_dist :int, check_count :int, 
 
 def para_avoid_main(lat_land, lon_land, lat_dest, lon_dest, check_count :int):
     '''
+    目的：パラシュートを回避する
+
+    
+
     田口作成 2023/08/29
     Parameters
     ----------
@@ -404,26 +408,18 @@ if __name__ == '__main__':
     bmx055.bmx055_setup()
     gps.open_gps()
 
-    # red_area, angle = detect_para()
-    # para_avoid(red_area, angle, check_count=5)
-    # wgps_para_avoid(para_thd_covered=PARA_THD_COVERED, para_thd_avoid=PARA_THD_AVOID, check_count=PARA_CHECK_COUNT)
+    t_start = time.time()
 
-    # t_start = time.time()
+    #-Log Set up-#
+    para_avoid_test = log.Logger(dir='../logs/test_logs/para_avoid_test', filename='para_avoid_test', t_start=t_start)
 
-    # #-Log Set up-#
-    # para_avoid_test = log.Logger(dir='../logs/test_logs/para_avoid_test', filename='para_avoid_test', t_start=t_start)
-
-    # print('Para Avoid Start')
-    # check_count = 0 #パラ回避用のカウンター
-    # lat_land, lon_land = gps.location()
-    # while True:
-    #     lat_now, lon_now, para_dist, red_area, angle, isDistant_para, check_count = para_avoid_main(lat_land, lon_land, lat_dest=LAT_HUMAN, lon_dest=LON_HUMAN, check_count=check_count)
-    #     print(lat_now, lon_now, para_dist, red_area, angle, isDistant_para, check_count)
-    #     para_avoid_test.save_log(lat_now, lon_now, para_dist, red_area, angle, isDistant_para, check_count)
-    #     if isDistant_para == 1:
-    #         break
-    # print("Para Avoid End")
-
+    print('Para Avoid Start')
+    check_count = 0 #パラ回避用のカウンター
+    lat_land, lon_land = gps.location()
     while True:
-        red_area, angle = detect_para()
-        print(red_area, angle)
+        lat_now, lon_now, para_dist, red_area, angle, isDistant_para, check_count = para_avoid_main(lat_land, lon_land, lat_dest=LAT_HUMAN, lon_dest=LON_HUMAN, check_count=check_count)
+        print(lat_now, lon_now, para_dist, red_area, angle, isDistant_para, check_count)
+        para_avoid_test.save_log(lat_now, lon_now, para_dist, red_area, angle, isDistant_para, check_count)
+        if isDistant_para == 1:
+            break
+    print("Para Avoid End")

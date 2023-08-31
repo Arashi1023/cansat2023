@@ -28,11 +28,10 @@ import melt
 import beta_gps_running as gps_running
 import human_detection
 import para_avoid
-import wgps_beta_photo_running as imgguide
 
 # log_humandetect=other.filename('/home/dendenmushi/cansat2023/sequence/log/humandetectlog/humandetectlog','txt')
 
-motor.setup()
+# motor.setup()
 gps.open_gps()
 bmx055.bmx055_setup()
 
@@ -247,6 +246,10 @@ def human_detect_main():
     pass                     
     
 if __name__ == "__main__":
+
+
+
+
     t_start = time.time()
     count = 0
     human_judge_count = 0

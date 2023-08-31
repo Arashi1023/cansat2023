@@ -332,7 +332,7 @@ def main(lat_land, lon_land, lat_dest, lon_dest, check_count :int):
     red_area = 0
     angle = 0
 
-    para_info = calibration.calculate_direction(lon_land, lat_land)
+    para_info = calibration.calculate_direction(lon2=lon_land, lat2=lat_land)
     para_dist = para_info['distance'] #パラシュートまでの距離を計算
     para_azimuth = para_info['azimuth1'] #パラシュートの方位角を計算
     print(f'{para_dist}m')
@@ -345,13 +345,13 @@ def main(lat_land, lon_land, lat_dest, lon_dest, check_count :int):
         if red_area > PARA_THD_COVERED:
             print('Parachute on top')
             time.sleep(5)
-        elif red_area == 0:
+        elif red_area == 0 and check_count == 0:
             print('Parachute Not Found\nChecking Around')
             motor.move(PARA_PWR, -PARA_PWR, T_CHECK)
         elif red_area == 0 and check_count > 0:
             print("Move Forwward")
             motor.move(PARA_PWR, PARA_PWR, T_FORWARD)
-            check_count += 1
+            # check_count += 1
         else:
             print('Parachute Found\nTurning Around')
             motor.move(PARA_PWR, -PARA_PWR, T_ROTATE)

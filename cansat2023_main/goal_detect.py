@@ -322,7 +322,7 @@ def image_guided_driving(area_ratio, angle, lat2, lon2, thd_full_red, thd_dist_g
     # except Exception as e:
     #     tb = sys.exc_info()[2]
 
-def img_guide_drive(lat_dest: float, lon_dest: float, thd_distance_goal: float, thd_red_area: float, magx_off: float, magy_off: float):
+def main(lat_dest: float, lon_dest: float, thd_distance_goal: float, thd_red_area: float, magx_off: float, magy_off: float):
     '''
     目的：画像誘導によりゴールに到達する
     8月28日作成 by 田口
@@ -526,7 +526,7 @@ if __name__ == "__main__":
     while True:
         try:
             print('Start Image Guide Drive')
-            lat_now, lon_now, distance_to_goal, area_ratio, angle, isReach_goal = imgguide.img_guide_drive(lat_dest=LAT_GOAL, lon_dest=LON_GOAL, thd_distance_goal=THD_DISTANCE_GOAL, thd_red_area=THD_RED_RATIO, magx_off=magx_off, magy_off=magy_off)
+            lat_now, lon_now, distance_to_goal, area_ratio, angle, isReach_goal = main(lat_dest=LAT_GOAL, lon_dest=LON_GOAL, thd_distance_goal=THD_DISTANCE_GOAL, thd_red_area=THD_RED_RATIO, magx_off=magx_off, magy_off=magy_off)
             image_guide_log.save_log(lat_now, lon_now, distance_to_goal, area_ratio, angle, isReach_goal)
             print('distance_to_goal = ', distance_to_goal)
             print('area_ratio = ', area_ratio)

@@ -29,7 +29,7 @@ import land
 import melt
 import beta_gps_running as gps_running
 import human_detection
-import wgps_beta_photo_running as imgguide
+import goal_detect
 
 def detect_para():
     '''
@@ -45,19 +45,19 @@ def detect_para():
     angle = 0
 
     #画像を圧縮
-    small_img = imgguide.mosaic(para_img, ratio=0.8)
+    small_img = goal_detect.mosaic(para_img, ratio=0.8)
 
     #赤色であると認識させる範囲の設定
-    mask, masked_img = imgguide.detect_red(small_img)
+    mask, masked_img = goal_detect.detect_red(small_img)
 
     #圧縮した画像から重心と輪郭を求めて、画像に反映
-    para_img, max_contour, cx, cy = imgguide.get_center(mask, small_img)
+    para_img, max_contour, cx, cy = goal_detect.get_center(mask, small_img)
 
     #赤色が占める割合を求める
-    red_area = imgguide.get_para_area(max_contour, para_img)
+    red_area = goal_detect.get_para_area(max_contour, para_img)
 
     #重心の位置から現在位置とパラシュートと相対角度を大まかに計算
-    angle = imgguide.get_angle(cx, cy, para_img)
+    angle = goal_detect.get_angle(cx, cy, para_img)
 
     if red_area == 0:
         angle = 0
@@ -310,7 +310,7 @@ def para_avoid_main(lat_land, lon_land, lat_dest, lon_dest, check_count :int):
     '''
     目的：パラシュートを回避する
 
-    
+
 
     田口作成 2023/08/29
     Parameters

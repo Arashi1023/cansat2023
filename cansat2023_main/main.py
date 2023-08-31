@@ -36,7 +36,7 @@ import melt
 import beta_gps_running as gps_running
 import human_detection
 import para_avoid
-import wgps_beta_photo_running as imgguide
+import goal_detect
 
 #####=====clock setup=====#####
 t_start = time.time()
@@ -291,7 +291,8 @@ phase_log.save_log('6', 'Human Detection Sequence: Start', lat_log, lon_log)
 print('Loading Machine Learning Model...')
 ML_people = DetectPeople(model_path="model_mobile.tflite" )
 
-while True:
+# while True:
+
 
 
 
@@ -382,7 +383,7 @@ magx_off, magy_off = calibration.cal(30, -30, 30)
 
 while True:
     try:
-        lat_now, lon_now, distance_to_goal, area_ratio, angle, isReach_goal = imgguide.img_guide_drive(lat_dest=LAT_GOAL, lon_dest=LON_GOAL, thd_distance_goal=THD_DISTANCE_GOAL, thd_red_area=THD_RED_RATIO, magx_off=magx_off, magy_off=magy_off)
+        lat_now, lon_now, distance_to_goal, area_ratio, angle, isReach_goal = goal_detect.main(lat_dest=LAT_GOAL, lon_dest=LON_GOAL, thd_distance_goal=THD_DISTANCE_GOAL, thd_red_area=THD_RED_RATIO, magx_off=magx_off, magy_off=magy_off)
         image_guide_log.save_log(lat_now, lon_now, distance_to_goal, area_ratio, angle, isReach_goal)
         print('isReach_goal: ' + str(isReach_goal))
         if isReach_goal == 1: #ゴール判定

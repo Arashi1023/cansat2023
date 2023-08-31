@@ -47,7 +47,7 @@ def release_main(press_release_count: int, press_array: list):
     press_array.append(latest_press) #press_arrayの更新
     press_array.pop(0) #press_arrayの更新
     if press_array[0] != 0 and press_array[1] != 0:
-        delta_press = abs(press_array[1] - press_array[0])
+        delta_press = press_array[1] - press_array[0]
 
         if delta_press > RELEASE_THD_PRESS:
             press_release_count += 1
@@ -61,7 +61,7 @@ def release_main(press_release_count: int, press_array: list):
         delta_press = 0
         press_release_count = 0
     
-    time.sleep(1)
+    time.sleep(5)
 
     return latest_press, delta_press, press_release_count, isRelease
 
@@ -101,6 +101,7 @@ if __name__ == "__main__":
             latest_press, delta_press, press_release_count, isRelease = release_main(press_release_count=press_release_count, press_array=press_array)
             #-Log-#
             release_log.save_log(latest_press, delta_press, press_release_count, isRelease)
+            print('latest_press:', latest_press)
             print(isRelease)
             if isRelease == 1:
                 print("##--released--##")

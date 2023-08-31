@@ -2,14 +2,15 @@
 定数定義
 '''
 #-----放出判定-----#
-RELEASE_THD_PRESS = 0.1
+RELEASE_THD_PRESS = 1
 RELEASE_JUDGE_COUNT = 4
-RELEASE_TIMEOUT = 60*5 #(秒)
+RELEASE_TIMEOUT = 60*1 #(秒) プログラム開始時間からの経過時間
 
 
 #-----着地判定-----#
 LAND_THD_PRESS = 0.1
 LAND_JUDGE_COUNT = 4
+LAND_TIMEOUT = 60*2 #(秒) プログラム開始時間からの経過時間
 
 #-----溶断回路-----#
 MELT_PIN = 4

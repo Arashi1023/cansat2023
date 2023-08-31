@@ -74,17 +74,18 @@ press_release_count = 0
 press_array = [0]*2
 
 while True:
-    try:
-        latest_press, delta_press, press_release_count, isRelease = release.release_main(press_release_count=press_release_count, press_array=press_array)
-        #-Log-#
-        release_log.save_log(latest_press, delta_press, press_release_count, isRelease)
-        print('isLand: ' + str(isRelease))
-        if isRelease == 1:
-            print()
-            print('Release Detected')
-            break
-    except:
-        print('Error\nTrying again...')
+    if time.time() - t_start > RELEASE_TIMEOUT: #タイムアウトの設定
+        print('Release Sequence Timeout')
+        break
+
+    latest_press, delta_press, press_release_count, isRelease = release.release_main(press_release_count=press_release_count, press_array=press_array)
+    #-Log-#
+    release_log.save_log(latest_press, delta_press, press_release_count, isRelease)
+    print('isLand: ' + str(isRelease))
+    if isRelease == 1:
+        print()
+        print('Release Detected')
+        break
 
 #-Log-#
 print('Saving Log...')
@@ -115,23 +116,24 @@ press_land_count = 0
 press_array = [0]*2
 
 while True:
-    try:
-        latest_press, delta_press, press_land_count, isLand = land.land_main(press_land_count=press_land_count, press_array=press_array)
-        #-Log-#
-        land_log.save_log(latest_press, delta_press, press_land_count, isLand)
-        if isLand == 1:
-            break
-    except:
-        print('Error\nTrying again...')
+    if time.time() - t_start > LAND_TIMEOUT: #タイムアウトの設定
+        print('Land Sequence Timeout')
+        break
+
+    latest_press, delta_press, press_land_count, isLand = land.land_main(press_land_count=press_land_count, press_array=press_array)
+    #-Log-#
+    land_log.save_log(latest_press, delta_press, press_land_count, isLand)
+    if isLand == 1:
+        break
 
 #-Log-#
 print('Saving Log...')
 phase_log.save_log('2', 'Land Detect Sequence: End', 0, 0)
 
 #-send-#
-print('Sending Data...')
-send.send_data('Land finished')
-time.sleep(10)
+# print('Sending Data...')
+# send.send_data('Land finished')
+# time.sleep(10)
 
 print('#####-----Land Detect Sequence: End-----#####')
 
@@ -155,9 +157,9 @@ phase_log.save_log('3', 'Melt Sequence: End', 0, 0) #GPS情報取得できるの
 melt_log.save_log('Melt Finished')
 
 #-send-#
-print('Sending Data...')
-send.send_data('Melt finished')
-time.sleep(10)
+# print('Sending Data...')
+# # send.send_data('Melt finished')
+# # time.sleep(10)
 
 print('#####-----Melt Sequence: End-----#####')
 
@@ -179,12 +181,12 @@ while True:
 
 #-send-#
 print('Sending Data...')
-lat_str = "{:.6f}".format(lat_test)  # 緯度を小数点以下8桁に整形
-lon_str = "{:.6f}".format(lon_test)  # 経度を小数点以下8桁に整形
-send.send_data(lat_str)
-time.sleep(9)
-send.send_data(lon_str)
-time.sleep(9)
+# lat_str = "{:.6f}".format(lat_test)  # 緯度を小数点以下8桁に整形
+# lon_str = "{:.6f}".format(lon_test)  # 経度を小数点以下8桁に整形
+# send.send_data(lat_str)
+# time.sleep(9)
+# send.send_data(lon_str)
+# time.sleep(9)
 #====================================================================================================#
 
 
@@ -220,8 +222,8 @@ phase_log.save_log('4', 'Parachute Avoid Sequence: End', lat_log, lon_log)
 
 #-send-#
 print('Sending Data...')
-send.send_data('Parachute Avoid finished')
-time.sleep(10)
+# send.send_data('Parachute Avoid finished')
+# time.sleep(10)
 
 print('#####-----Parachute Avoid Sequence: End-----#####')
 
@@ -398,7 +400,7 @@ magx_off, magy_off = calibration.cal(30, -30, 30)
 while True:
     lat_now, lon_now, distance_to_goal, area_ratio, angle, isReach_goal = goal_detect.main(lat_dest=LAT_GOAL, lon_dest=LON_GOAL, thd_distance_goal=THD_DISTANCE_GOAL, thd_red_area=THD_RED_RATIO, magx_off=magx_off, magy_off=magy_off)
     image_guide_log.save_log(lat_now, lon_now, distance_to_goal, area_ratio, angle, isReach_goal)
-    print('isReach_goal: ' + str(isReach_goal))
+    print(f'{distance_to_goal}m to Goal')
     if isReach_goal == 1: #ゴール判定
         print('Goal')
         break

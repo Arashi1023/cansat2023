@@ -61,7 +61,7 @@ def release_main(press_release_count: int, press_array: list):
         delta_press = 0
         press_release_count = 0
     
-    time.sleep(5)
+    time.sleep(RELEASE_JUDGE_TIME)
 
     return latest_press, delta_press, press_release_count, isRelease
 

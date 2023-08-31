@@ -193,7 +193,7 @@ def detect_main_area(human_judge_count, break_outer_loop,judge_probability,start
             #モデルの読み込み
             result = model.predict(image_path=img_path)
             other.log(log_humandetect, datetime.datetime.now(), time.time() -
-                      t_start,result,0,human_judge_count,break_outer_loop,elapsed_time)
+                      start_time,result,0,human_judge_count,break_outer_loop,elapsed_time)
             #hitoの確率50%かどうか
             if result >= judge_probability:
                 human_judge_count += 1
@@ -203,7 +203,7 @@ def detect_main_area(human_judge_count, break_outer_loop,judge_probability,start
                     additional_img_path = take.picture('../imgs/human_detect/additional/additional_image', 320, 240)
                     additional_result = model.predict(image_path=additional_img_path)
                     other.log(logpath, datetime.datetime.now(), time.time() -
-                      t_start,result,additional_result,human_judge_count,break_outer_loop,elapsed_time)
+                      start_time,result,additional_result,human_judge_count,break_outer_loop,elapsed_time)
                     if additional_result >= judge_probability:
                         human_judge_count += 1
                         print(human_judge_count)
@@ -244,7 +244,7 @@ if __name__ == "__main__":
 
 
 
-    t_start = time.time()
+    # t_start = time.time()
     count = 0
     human_judge_count = 0
     break_outer_loop = False
@@ -258,6 +258,8 @@ if __name__ == "__main__":
 
     ML_people = DetectPeople(model_path="model_mobile.tflite" )
     log_humandetect=other.filename('../logs/ver2_logs/humandetectlog/humandetectlog','txt')
+
+    hito_log = log.Logger(dir='../Logs/test_logs/hito_test', filename='hito_test', t_start=start_time, columns=[])
     #まずはメインエリアを捜索
 
     '''

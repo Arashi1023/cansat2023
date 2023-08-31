@@ -181,6 +181,7 @@ time.sleep(15)
 #         break
 
 lat_test, lon_test = gps.location()
+print('GPS received')
 
 #-send-#
 print('Sending Data...')

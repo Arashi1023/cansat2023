@@ -46,6 +46,13 @@ T_CAL = 120 #キャリブレーションを行う間隔時間[sec]
 LAT_HUMAN = 35.9243068
 LON_HUMAN = 139.9124594
 
+JUDGE_PROBABILITY = 0.5 #人である確率がこれ以上のとき人がいると判定する
+ADDITIONAL_JUDGE_COUNT = 3 #人がいると判定したとき、追加の確認を行う回数
+ROTATE_COUNT = 24 # 1つの場所で回転する回数
+
+HD_ROT_PWR = 25
+HD_ROT_TIME = 0.15
+
 #-----ゴール地点-----#
 LAT_GOAL = 35.9242411 #グランドのゴール前
 LON_GOAL = 139.9120618 #グランドのゴール前

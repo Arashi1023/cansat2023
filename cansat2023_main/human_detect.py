@@ -10,6 +10,8 @@ import PID
 from machine_learning import DetectPeople
 import take
 import motor
+import bmx055
+import calibration
 from main_const import *
 
 
@@ -69,9 +71,7 @@ def get_locations(lat_human, lon_human):
 
     return area_info
 
-
-
-def main(lat_human, lon_human, model, judge_count, area_count, rotate_count):
+def main(lat_human, lon_human, model, judge_count, area_count, rotate_count, stuck_check: list, magx_off, magy_off):
     '''
     人の位置情報をもとに周囲を捜索するプログラム
     Parameters
@@ -90,6 +90,14 @@ def main(lat_human, lon_human, model, judge_count, area_count, rotate_count):
     area_info = get_locations(lat_human, lon_human)
     lat_search, lon_serch = area_info[area_count]
 
+    ###---スタックチェック---###
+    # magdata = bmx055.mag_dataRead()
+    # magx, magy = magdata[0], magdata[1]
+    # rover_aziimuth = calibration.angle(magx, magy)
+    # stuck_check_array.pop(0)
+    # stuck_check_array.append(rover_aziimuth)
+    # if 
+
     ###---撮影した画像に人がいる確率を求める---###
     img_path = take.picture('../imgs/human_detect/image', 320, 240)
     result = model.predict(image_path=img_path)
@@ -106,7 +114,7 @@ def main(lat_human, lon_human, model, judge_count, area_count, rotate_count):
         print(('Rotate'))
         rotate_count += 1
         motor.move(strength_l=HD_ROT_PWR, strength_r=-HD_ROT_PWR, t_moving=HD_ROT_TIME)
-    
+
     if rotate_count > ROTATE_COUNT  and judge_count ==0: #24回に1回次の場所に向かう
         rotate_count = 0
         area_count += 1
@@ -114,8 +122,9 @@ def main(lat_human, lon_human, model, judge_count, area_count, rotate_count):
             print('Move to next area')
             lat_search, lon_serch = area_info[area_count]
             PID.drive2(lat_search, lon_serch, thd_distance=5, t_cal=60, loop_num=20)
+            magx_off, magy_off = calibration.cal(30, -30, 30)
 
-    return result, judge_count, area_count, rotate_count, isHuman
+    return result, judge_count, area_count, rotate_count, isHuman, magx_off, magy_off
 
 if __name__ == '__main__':
 
@@ -127,9 +136,22 @@ if __name__ == '__main__':
     rotate_count = 0
     isHuman = 0
     judge_count = 0
+    azimuth_array = [0]*2
+    stuck_check_array = [0]*6 #スタックチェック用の配列
+
+    magx_off, magy_off = calibration.cal(30, -30, 30)
 
     while True:
-        result, judge_count, area_count, rotate_count, isHuman = main(lat_human=LAT_HUMAN, lon_human=LON_HUMAN, model=ML_people, judge_count=judge_count, area_count=area_count, rotate_count=rotate_count)
+        ###---stuck check---###
+        magdata = bmx055.mag_dataRead()
+        magx, magy = magdata[0], magdata[1]
+        rover_aziimuth = calibration.angle(magx, magy)
+        azimuth_array.pop(0)
+        azimuth_array.append(rover_aziimuth)
+        if abs(azimuth_array[0] - azimuth_array[1]) < 5:
+
+
+        result, judge_count, area_count, rotate_count, isHuman = main(lat_human=LAT_HUMAN, lon_human=LON_HUMAN, model=ML_people, judge_count=judge_count, area_count=area_count, rotate_count=rotate_count, stuck_check=stuck_check_array)
         print('result:', result)
         if isHuman == 1:
             print('Found a Missing Person')

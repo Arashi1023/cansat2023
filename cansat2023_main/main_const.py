@@ -2,7 +2,7 @@
 定数定義
 '''
 #-----放出判定-----#
-RELEASE_THD_PRESS = 0.5
+RELEASE_THD_PRESS = 1
 RELEASE_JUDGE_COUNT = 4
 RELEASE_TIMEOUT = 60*1 #(秒) プログラム開始時間からの経過時間
 

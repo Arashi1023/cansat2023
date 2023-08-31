@@ -29,7 +29,7 @@ import melt
 import beta_gps_running as gps_running
 import human_detection
 import para_avoid
-import wgps_beta_photo_running as imgguide
+import goal_detect
 
 #variable for log
 log_phase=other.filename('/home/dendenmushi/cansat2023/sequence/log/phaselog','txt')

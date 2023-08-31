@@ -22,13 +22,6 @@ import libs.PID as PID
 import libs.log as log
 
 from main_const import *
-import release
-import land
-import melt
-import beta_gps_running as gps_running
-import human_detection
-import para_avoid
-import wgps_beta_photo_running as imgguide
 
 
 def angle_goal(magx_off, magy_off, lon2, lat2):

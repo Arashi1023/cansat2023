@@ -405,7 +405,7 @@ def TEST_img_guide_drive(magx_off, magy_off, thd_distance_goal=10, thd_red_area=
     8月28日作成 by 田口
     室内テスト用の関数 GPSなし
     '''
-
+    area_ratio = 0
     distance_to_goal = 5
     isReach_goal = 0
 

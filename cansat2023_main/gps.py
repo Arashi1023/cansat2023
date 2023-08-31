@@ -277,6 +277,7 @@ def location():
             if utc != -1.0 and lat != -1.0:
                 break
             time.sleep(1)
+            print('Waiting for gps data')
         return lat, lon
     except KeyboardInterrupt:
         close_gps()

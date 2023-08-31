@@ -81,7 +81,7 @@ while True:
     latest_press, delta_press, press_release_count, isRelease = release.release_main(press_release_count=press_release_count, press_array=press_array)
     #-Log-#
     release_log.save_log(latest_press, delta_press, press_release_count, isRelease)
-    print('isLand: ' + str(isRelease))
+    print('isRelease: ' + str(isRelease))
     if isRelease == 1:
         print()
         print('Release Detected')
@@ -121,6 +121,7 @@ while True:
         break
 
     latest_press, delta_press, press_land_count, isLand = land.land_main(press_land_count=press_land_count, press_array=press_array)
+    print('isLand: ' + str(isLand))
     #-Log-#
     land_log.save_log(latest_press, delta_press, press_land_count, isLand)
     if isLand == 1:

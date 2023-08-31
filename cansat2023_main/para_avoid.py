@@ -386,7 +386,8 @@ def main(lat_land, lon_land, lat_dest, lon_dest, check_count :int):
 
             t_run_start = time.time()
             while time.time() - t_run_start <= PARA_RUN_LONG:
-                PID.PID_run(target_azimuth=target_azimuth, magx_off=magx_off, magy_off=magy_off, loop_num=20)
+                theta_array = [0]*5
+                PID.PID_run(target_azimuth=target_azimuth, magx_off=magx_off, magy_off=magy_off, theta_array=theta_array,loop_num=20)
             motor.deceleration(15, 15)
             motor.motor_stop(1)
         else:

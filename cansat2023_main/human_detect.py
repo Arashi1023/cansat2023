@@ -126,6 +126,7 @@ if __name__ == '__main__':
     ###---人検知用のモデルの読み込み---###
     ML_people = DetectPeople('model_mobile.tflite')
 
+    ###---変数定義---###
     result = 0
     area_count = 0
     rotate_count = 0
@@ -136,7 +137,7 @@ if __name__ == '__main__':
     stuck_check_array = deque([0]*6, maxlen=6)
     add_count = 0
 
-    magx_off, magy_off = calibration.cal(30, -30, 30)
+    # magx_off, magy_off = calibration.cal(30, -30, 30)
 
     while True:
         ###---回転場所の整地---###

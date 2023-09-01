@@ -430,6 +430,15 @@ if __name__ == '__main__':
     check_count = 0 #パラ回避用のカウンター
     lat_land, lon_land = gps.location()
     while True:
+        if time.time() - t_start >= 600: #10分たっても
+            red_area = detect_para()
+            if red_area == 0:
+                motor.move(60, -60, 2)
+                break
+            else:
+                print('Parachute is near')
+                print('Wait 10s')
+                time.sleep(10)
 
         lat_now, lon_now, para_dist, red_area, angle, isDistant_para, check_count = main(lat_land, lon_land, lat_dest=LAT_HUMAN, lon_dest=LON_HUMAN, check_count=check_count)
         print(lat_now, lon_now, para_dist, red_area, angle, isDistant_para, check_count)

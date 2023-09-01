@@ -12,6 +12,7 @@ import take
 import motor
 import bmx055
 import calibration
+from collections import deque
 from main_const import *
 
 
@@ -71,7 +72,7 @@ def get_locations(lat_human, lon_human):
 
     return area_info
 
-def main(lat_human, lon_human, model, judge_count, area_count, rotate_count, stuck_check: list, magx_off, magy_off):
+def main(lat_human, lon_human, model, judge_count, area_count, rotate_count, add_pwr):
     '''
     人の位置情報をもとに周囲を捜索するプログラム
     Parameters
@@ -90,14 +91,6 @@ def main(lat_human, lon_human, model, judge_count, area_count, rotate_count, stu
     area_info = get_locations(lat_human, lon_human)
     lat_search, lon_serch = area_info[area_count]
 
-    ###---スタックチェック---###
-    # magdata = bmx055.mag_dataRead()
-    # magx, magy = magdata[0], magdata[1]
-    # rover_aziimuth = calibration.angle(magx, magy)
-    # stuck_check_array.pop(0)
-    # stuck_check_array.append(rover_aziimuth)
-    # if 
-
     ###---撮影した画像に人がいる確率を求める---###
     img_path = take.picture('../imgs/human_detect/image', 320, 240)
     result = model.predict(image_path=img_path)
@@ -113,10 +106,10 @@ def main(lat_human, lon_human, model, judge_count, area_count, rotate_count, stu
         judge_count = 0
         print(('Rotate'))
         rotate_count += 1
-        motor.move(strength_l=HD_ROT_PWR, strength_r=-HD_ROT_PWR, t_moving=HD_ROT_TIME)
+        motor.move(strength_l=HD_ROT_PWR+add_pwr, strength_r=-(HD_ROT_PWR+add_pwr), t_moving=HD_ROT_TIME)
 
     if rotate_count > ROTATE_COUNT  and judge_count ==0: #24回に1回次の場所に向かう
-        rotate_count = 0
+        rotate_count = 0 #回転回数の初期化
         area_count += 1
         if area_count <= 8:
             print('Move to next area')
@@ -130,28 +123,59 @@ if __name__ == '__main__':
 
     gps.open_gps()
 
+    ###---人検知用のモデルの読み込み---###
     ML_people = DetectPeople('model_mobile.tflite')
 
+    result = 0
     area_count = 0
     rotate_count = 0
     isHuman = 0
     judge_count = 0
+    add_pwr = 0
     azimuth_array = [0]*2
-    stuck_check_array = [0]*6 #スタックチェック用の配列
+    stuck_check_array = deque([0]*6, maxlen=6)
+    add_count = 0
 
     magx_off, magy_off = calibration.cal(30, -30, 30)
 
     while True:
-        ###---stuck check---###
+        ###---回転場所の整地---###
+        if rotate_count == 0: #ある地点で1枚目の写真を撮影するとき
+            magx_off_stuck, magy_off_stuck = calibration.cal(30, -30, 30)
+            stuck_check_array = deque([0]*6, maxlen=6) #スタックチェック用の配列の初期化
+            add_pwr = 0 #捜索地点を変えたら追加のパワーをリセット
+
+        ###---現在のローバーの方位角を求める---###
         magdata = bmx055.mag_dataRead()
         magx, magy = magdata[0], magdata[1]
-        rover_aziimuth = calibration.angle(magx, magy)
-        azimuth_array.pop(0)
-        azimuth_array.append(rover_aziimuth)
-        if abs(azimuth_array[0] - azimuth_array[1]) < 5:
+        rover_aziimuth = calibration.angle(magx=magx, magy=magy, magxoff=magx_off_stuck, magyoff=magy_off_stuck)
+        stuck_check_array.append(rover_aziimuth)
 
+        if add_pwr != 0 and stuck_check_array[3] != 0: #追加のパワーがあるとき
+            for i in range(3):
+                expect_azimuth_add = stuck_check_array[i] + 30
+                if expect_azimuth_add >= 360:
+                    expect_azimuth_add = expect_azimuth_add % 360
+                if stuck_check_array[i+1] - expect_azimuth_add > 30: #add_pwrを追加していて回りすぎているとき
+                    add_count += 1
+                else:
+                    add_count = 0
+            if add_count == 3:
+                add_pwr = 0
+                add_count = 0
 
-        result, judge_count, area_count, rotate_count, isHuman = main(lat_human=LAT_HUMAN, lon_human=LON_HUMAN, model=ML_people, judge_count=judge_count, area_count=area_count, rotate_count=rotate_count, stuck_check=stuck_check_array)
+        if stuck_check_array[5] != 0: #スタックチェックを判定できるデータがそろったとき
+            expect_azimuth = stuck_check_array[0] + 90
+
+            if expect_azimuth >= 360:
+                expect_azimuth = expect_azimuth % 360
+
+            if stuck_check_array[5] - expect_azimuth < 0: #本来回っているはずの角度を下回っているとき
+                print('Rotation Stuck Detected')
+                add_pwr = 5
+                stuck_check_array = deque([0]*6, maxlen=6) #スタックチェック用の配列の初期化
+
+        result, judge_count, area_count, rotate_count, isHuman = main(lat_human=LAT_HUMAN, lon_human=LON_HUMAN, model=ML_people, judge_count=judge_count, area_count=area_count, rotate_count=rotate_count, add_pwr=add_pwr)
         print('result:', result)
         if isHuman == 1:
             print('Found a Missing Person')

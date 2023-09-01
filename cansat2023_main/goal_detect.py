@@ -522,7 +522,7 @@ if __name__ == "__main__":
     #-log-#
     t_start_goal = time.time()
 
-    image_guide_log = log.Logger(dir='../logs/test_logs/image_guide_test', filename='Image_guide_test', t_start=t_start, columns=['lat', 'lon', 'distance_to_goal', 'area_ratio', 'angle', 'isReach_goal'])
+    image_guide_log = log.Logger(dir='../logs/test_logs/image_guide_test', filename='Image_guide_test', t_start=t_start_goal, columns=['lat', 'lon', 'distance_to_goal', 'area_ratio', 'angle', 'isReach_goal'])
 
     #-Image Guide Drive-#
     magx_off, magy_off = calibration.cal(30, -30, 30) #キャリブレーション

@@ -3,6 +3,7 @@
 田口作成 by 2023/8/31
 
 '''
+import time
 from math import sqrt
 import gps
 import gps_navigate
@@ -14,6 +15,7 @@ import bmx055
 import calibration
 from collections import deque
 from main_const import *
+import log
 
 
 def get_locations(lat_human, lon_human):
@@ -123,6 +125,11 @@ if __name__ == '__main__':
 
     gps.open_gps()
 
+    t_start_detect = time.time()
+
+    ###---log setup---###
+    human_detect_log = log.Logger(dir='../logs/test_logs/human_detect', filename='Human_detect_test', t_start=t_start_detect, columns=['result', 'judge_count', 'area_count', 'rotate_count', 'isHuman'])
+
     ###---人検知用のモデルの読み込み---###
     ML_people = DetectPeople('model_mobile.tflite')
 
@@ -176,6 +183,7 @@ if __name__ == '__main__':
                 stuck_check_array = deque([0]*6, maxlen=6) #スタックチェック用の配列の初期化
 
         result, judge_count, area_count, rotate_count, isHuman = main(lat_human=LAT_HUMAN, lon_human=LON_HUMAN, model=ML_people, judge_count=judge_count, area_count=area_count, rotate_count=rotate_count, add_pwr=add_pwr)
+        human_detect_log.save_log(result, judge_count, area_count, rotate_count, isHuman)
         print('result:', result)
         if isHuman == 1:
             print('Found a Missing Person')

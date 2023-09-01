@@ -430,6 +430,7 @@ if __name__ == '__main__':
     check_count = 0 #パラ回避用のカウンター
     lat_land, lon_land = gps.location()
     while True:
+
         lat_now, lon_now, para_dist, red_area, angle, isDistant_para, check_count = main(lat_land, lon_land, lat_dest=LAT_HUMAN, lon_dest=LON_HUMAN, check_count=check_count)
         print(lat_now, lon_now, para_dist, red_area, angle, isDistant_para, check_count)
         para_avoid_test.save_log(lat_now, lon_now, para_dist, red_area, angle, isDistant_para, check_count)

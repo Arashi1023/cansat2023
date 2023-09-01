@@ -238,8 +238,11 @@ def PID_adjust_direction(target_azimuth, magx_off, magy_off, theta_array: list):
     t_adj_start = time.time()
 
     while True:
-        if time.time() - t_adj_start >= 5: #5秒経過したら強制的に終了する
+        if time.time() - t_adj_start > 5 and error_theta <= 75: #5秒経過したら強制的に終了する
             break
+        elif time.time() - t_adj_start > 5 and error_theta > 75: #スタック回避を行う
+            print('Stuck Avoid')
+            motor.motor_move(60, -60, 2)
 
         if count < 25:
             Ki = 0

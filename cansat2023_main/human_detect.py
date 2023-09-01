@@ -148,7 +148,7 @@ if __name__ == '__main__':
         ###---現在のローバーの方位角を求める---###
         magdata = bmx055.mag_dataRead()
         magx, magy = magdata[0], magdata[1]
-        rover_aziimuth = calibration.angle(magx=magx, magy=magy, magxoff=magx_off_stuck, magyoff=magy_off_stuck)
+        rover_aziimuth = calibration.angle(magx=magx, magy=magy, magx_off=magx_off_stuck, magy_off=magy_off_stuck)
         stuck_check_array.append(rover_aziimuth)
 
         if add_pwr != 0 and stuck_check_array[3] != 0: #追加のパワーがあるとき

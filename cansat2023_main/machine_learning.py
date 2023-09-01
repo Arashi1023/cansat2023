@@ -46,7 +46,7 @@ class DetectPeople():
         return pro_people
     
 if __name__ == "__main__":
-    ML_people = DetectPeople(model_path="../model_mobile.tflite" )
+    ML_people = DetectPeople(model_path="model_mobile.tflite" )
     # image_path = 'imgs/hiroyuki.jpg'
     # image_path = 'imgs/saru.jpg'
     # ML_people.predict(image_path)

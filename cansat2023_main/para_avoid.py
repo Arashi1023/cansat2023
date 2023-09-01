@@ -379,6 +379,8 @@ def main(lat_land, lon_land, lat_dest, lon_dest, check_count :int, add_pwr: int)
         para_direction = calibration.calculate_direction(lon2=lon_land, lat2=lat_land) #パラシュート位置の取得
         para_azimuth = para_direction["azimuth1"]
         target_azimuth = para_azimuth + 180
+        if target_azimuth >= 360:
+            target_azimuth = target_azimuth % 360
         
         ###-----パラシュートがある方向から180度の向きに走らせる-----###
         theta_array = [0]*5
@@ -410,7 +412,30 @@ def main(lat_land, lon_land, lat_dest, lon_dest, check_count :int, add_pwr: int)
         else:
             isDistant_para = 1
     
-    return lat_now, lon_now, para_dist, red_area, angle, isDistant_para, check_count, zone
+    return lat_now, lon_now, para_dist, red_area, angle, isDistant_para, check_count
+
+def main2(zone: int, zone_count: int, magx_off: float, magy_off: float):
+
+    if zone == 1:
+        print('パラシュートが近くにあります')
+        red_area, angle = detect_para()
+        if red_area > PARA_THD_COVERED:
+            print('パラシュートが頭上にあります')
+            time.sleep(5)
+        elif red_area == 0 and check_count == 0:
+        
+        else:
+            print('パラシュートを発見しました')
+            print('回転します')
+
+
+    elif zone == 2:
+        print('パラシュートから5m以上離れています')
+
+        
+    elif zone == 3:
+        print('パラシュートから10m以上離れています')
+
 
 if __name__ == '__main__':
     # パラメータ
@@ -420,6 +445,7 @@ if __name__ == '__main__':
 
     #セットアップ
     # motor.setup()
+    #####################################################################
     bme280.bme280_setup()
     bmx055.bmx055_setup()
     gps.open_gps()
@@ -484,3 +510,6 @@ if __name__ == '__main__':
         if isDistant_para == 1:
             break
     print("Para Avoid End")
+
+    #####################################################################
+

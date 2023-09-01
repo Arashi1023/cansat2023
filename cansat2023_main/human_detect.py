@@ -128,7 +128,7 @@ if __name__ == '__main__':
     t_start_detect = time.time()
 
     ###---log setup---###
-    human_detect_log = log.Logger(dir='../logs/test_logs/human_detect', filename='Human_detect_test', t_start=t_start_detect, columns=['result', 'judge_count', 'area_count', 'rotate_count', 'isHuman'])
+    human_detect_log = log.Logger(dir='../logs/test_logs/human_detect', filename='Human_detect_test', t_start=t_start_detect, columns=['lat', 'lon', 'result', 'judge_count', 'area_count', 'rotate_count', 'isHuman'])
 
     ###---人検知用のモデルの読み込み---###
     ML_people = DetectPeople('model_mobile.tflite')
@@ -151,6 +151,7 @@ if __name__ == '__main__':
             magx_off_stuck, magy_off_stuck = calibration.cal(30, -30, 30)
             stuck_check_array = deque([0]*6, maxlen=6) #スタックチェック用の配列の初期化
             add_pwr = 0 #捜索地点を変えたら追加のパワーをリセット
+            lat_now, lon_now = gps_navigate.get_gps()
 
         ###---現在のローバーの方位角を求める---###
         magdata = bmx055.mag_dataRead()
@@ -183,7 +184,7 @@ if __name__ == '__main__':
                 stuck_check_array = deque([0]*6, maxlen=6) #スタックチェック用の配列の初期化
 
         result, judge_count, area_count, rotate_count, isHuman = main(lat_human=LAT_HUMAN, lon_human=LON_HUMAN, model=ML_people, judge_count=judge_count, area_count=area_count, rotate_count=rotate_count, add_pwr=add_pwr)
-        human_detect_log.save_log(result, judge_count, area_count, rotate_count, isHuman)
+        human_detect_log.save_log(lat_now, lon_now, result, judge_count, area_count, rotate_count, isHuman)
         print('result:', result)
         if isHuman == 1:
             print('Found a Missing Person')

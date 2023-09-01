@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 import time
 import bme280
 import send
@@ -111,4 +109,3 @@ if __name__ == "__main__":
         except KeyboardInterrupt:
             print('release_Interrupt')
             exit()
->>>>>>> be875dd52eecdb26f17a0434a36cb6243d047b88

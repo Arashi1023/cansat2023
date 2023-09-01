@@ -499,8 +499,8 @@ if __name__ == "__main__":
     # log_photorunning =other.filename( '/home/dendenmushi/cansat2023/sequence/log/photorunninglog/photorunninglog','txt')
     # #セットアップ系
     # motor.setup()
-    gps.open_gps()
-    bmx055.bmx055_setup()
+    # gps.open_gps()
+    # bmx055.bmx055_setup()
 
     # t_start = time.time()
     # image_guide_log = log.Logger(dir='../logs/test_logs/para_avoid_test', filename='para_avoid', t_start=t_start)

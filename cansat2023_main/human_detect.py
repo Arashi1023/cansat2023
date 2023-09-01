@@ -119,11 +119,13 @@ def main(lat_human, lon_human, model, judge_count, area_count, rotate_count, add
             PID.drive2(lat_search, lon_serch, thd_distance=5, t_cal=60, loop_num=20)
             magx_off, magy_off = calibration.cal(30, -30, 30)
 
-    return result, judge_count, area_count, rotate_count, isHuman, magx_off, magy_off
+    return result, judge_count, area_count, rotate_count, isHuman
 
 if __name__ == '__main__':
 
     gps.open_gps()
+    bmx055.bmx055_setup()
+    motor.setup()
 
     t_start_detect = time.time()
 
@@ -142,8 +144,10 @@ if __name__ == '__main__':
     stuck_check_array = deque([0]*6, maxlen=6)
     add_pwr = 0
     add_count = 0
+    magx_off = 0
+    magy_off = 0
 
-    # magx_off, magy_off = calibration.cal(30, -30, 30)
+    magx_off, magy_off = calibration.cal(30, -30, 30)
 
     while True:
         ###---回転場所の整地---###
@@ -151,12 +155,12 @@ if __name__ == '__main__':
             magx_off_stuck, magy_off_stuck = calibration.cal(30, -30, 30)
             stuck_check_array = deque([0]*6, maxlen=6) #スタックチェック用の配列の初期化
             add_pwr = 0 #捜索地点を変えたら追加のパワーをリセット
-            lat_now, lon_now = gps_navigate.get_gps()
+            lat_now, lon_now = gps.location()
 
         ###---現在のローバーの方位角を求める---###
         magdata = bmx055.mag_dataRead()
         magx, magy = magdata[0], magdata[1]
-        rover_aziimuth = calibration.angle(magx=magx, magy=magy, magx_off=magx_off_stuck, magy_off=magy_off_stuck)
+        rover_aziimuth = calibration.angle(magx=magx, magy=magy, magx_off=magx_off, magy_off=magy_off)
         stuck_check_array.append(rover_aziimuth)
 
         if add_pwr != 0 and stuck_check_array[3] != 0: #追加のパワーがあるとき

@@ -528,7 +528,7 @@ if __name__ == "__main__":
     magx_off, magy_off = calibration.cal(30, -30, 30) #キャリブレーション
     print('Start Image Guide Drive')
     while True:
-        if t_start_goal - time.time() > 600: #ゴール検知をはじめて10分を超えたら
+        if time.time()-t_start_goal > 60: #ゴール検知をはじめて10分を超えたら
             print('Start Random Move')
             stuck2.stuck_avoid()
             t_start_goal = time.time() #タイマーのリセット

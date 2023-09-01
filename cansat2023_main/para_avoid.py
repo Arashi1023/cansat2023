@@ -476,7 +476,7 @@ if __name__ == '__main__':
                 add_pwr = 5
                 stuck_check_array = deque([0]*6, maxlen=6) #スタックチェック用の配列の初期化
 
-        lat_now, lon_now, para_dist, red_area, angle, isDistant_para, check_count = main(lat_land, lon_land, lat_dest=LAT_HUMAN, lon_dest=LON_HUMAN, check_count=check_count)
+        lat_now, lon_now, para_dist, red_area, angle, isDistant_para, check_count = main(lat_land, lon_land, lat_dest=LAT_HUMAN, lon_dest=LON_HUMAN, check_count=check_count, add_pwr=add_pwr)
         print(lat_now, lon_now, para_dist, red_area, angle, isDistant_para, check_count)
         para_avoid_test.save_log(lat_now, lon_now, para_dist, red_area, angle, isDistant_para, check_count)
         if isDistant_para == 1:

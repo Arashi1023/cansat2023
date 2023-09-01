@@ -1,17 +1,17 @@
 #モジュールのインポート
 import datetime
 import time
-import gps_navigate as gps_navigate
+import gps_navigate
 import gps as gps
-import calibration as calibration
-import bmx055 as bmx055
-import stuck2 as stuck2
-import motor as motor
+import calibration
+import bmx055
+import stuck2
+import motor
 import time
-import other as other
-import send as send
+import other
+import send
 from collections import deque
-import basics as basics
+import basics
 from main_const import *
 import log
 
@@ -238,11 +238,11 @@ def PID_adjust_direction(target_azimuth, magx_off, magy_off, theta_array: list):
     t_adj_start = time.time()
 
     while True:
-        if time.time() - t_adj_start > 5 and error_theta <= 75: #5秒経過したら強制的に終了する
+        if time.time() - t_adj_start > 1 and error_theta <= 75: #5秒経過したら強制的に終了する
             break
-        elif time.time() - t_adj_start > 5 and error_theta > 75: #スタック回避を行う
+        elif time.time() - t_adj_start > 1 and error_theta > 75: #スタック回避を行う
             print('Stuck Avoid')
-            motor.motor_move(60, -60, 2)
+            stuck2.stuck_avoid()
 
         if count < 25:
             Ki = 0

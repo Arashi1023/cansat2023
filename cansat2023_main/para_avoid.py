@@ -428,6 +428,8 @@ if __name__ == '__main__':
     stuck_check_array = deque([0]*6, maxlen=6)
     add_pwr = 0
     add_count = 0
+    magx_off = -830
+    magy_off = -980
 
     #-Log Set up-#
     para_avoid_test = log.Logger(dir='../logs/test_logs/para_avoid_test', filename='para_avoid_test', t_start=t_start, columns=['lat', 'lon', 'para_dist', 'red_area', 'angle','isDistant_para', 'check_count'])
@@ -449,7 +451,7 @@ if __name__ == '__main__':
         ###---現在のローバーの方位角を求める---###
         magdata = bmx055.mag_dataRead()
         magx, magy = magdata[0], magdata[1]
-        rover_aziimuth = calibration.angle(magx=magx, magy=magy, magx_off=800, magy_off=1000)
+        rover_aziimuth = calibration.angle(magx=magx, magy=magy, magx_off=magx_off, magy_off=magy_off)
         stuck_check_array.append(rover_aziimuth)
 
         if add_pwr != 0 and stuck_check_array[3] != 0: #追加のパワーがあるとき

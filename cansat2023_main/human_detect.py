@@ -144,8 +144,8 @@ if __name__ == '__main__':
     stuck_check_array = deque([0]*6, maxlen=6)
     add_pwr = 0
     add_count = 0
-    magx_off = 0
-    magy_off = 0
+    # magx_off = 0
+    # magy_off = 0
 
     magx_off, magy_off = calibration.cal(30, -30, 30)
 

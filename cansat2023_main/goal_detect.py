@@ -18,7 +18,7 @@ from collections import deque
 # # import libs.stuck2 as stuck2
 # import other
 # # import libs.send_photo as send_photo
-# import take
+import take
 # # from libs.machine_learning import DetectPeople
 # import calibration
 # import PID

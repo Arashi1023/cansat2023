@@ -445,11 +445,11 @@ if __name__ == '__main__':
                 print('Parachute is near')
                 print('Wait 10s')
                 time.sleep(10)
-                
+
         ###---現在のローバーの方位角を求める---###
         magdata = bmx055.mag_dataRead()
         magx, magy = magdata[0], magdata[1]
-        rover_aziimuth = calibration.angle(magx=magx, magy=magy, magx_off=magx_off, magy_off=magy_off)
+        rover_aziimuth = calibration.angle(magx=magx, magy=magy, magx_off=800, magy_off=1000)
         stuck_check_array.append(rover_aziimuth)
 
         if add_pwr != 0 and stuck_check_array[3] != 0: #追加のパワーがあるとき

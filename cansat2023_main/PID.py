@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 #モジュールのインポート
 import datetime
 import time
@@ -709,4 +707,3 @@ if __name__ == "__main__":
         if isReach_dest == 1: #ゴール判定
             print('Goal')
             break
->>>>>>> be875dd52eecdb26f17a0434a36cb6243d047b88

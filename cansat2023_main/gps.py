@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 import math
 import time
 import pigpio
@@ -309,4 +307,3 @@ if __name__ == '__main__':
     except:
         close_gps()
         print(traceback.format_exc())
->>>>>>> be875dd52eecdb26f17a0434a36cb6243d047b88

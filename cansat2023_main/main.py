@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 '''
 田口作成 2023/8/29
 '''
@@ -456,4 +454,3 @@ phase_log.save_log('10', 'All Phase Comleted', last_lat, last_lon)
 release_log.save_log('(PDT)', 'N', last_lat, 'W', last_lon)
 
 print("Log saved\nEnding Program")
->>>>>>> be875dd52eecdb26f17a0434a36cb6243d047b88

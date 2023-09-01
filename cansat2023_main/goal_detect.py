@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 import datetime
 import time
 import sys
@@ -579,4 +577,3 @@ if __name__ == "__main__":
     
     print('Finish Image Guide Drive')
         
->>>>>>> be875dd52eecdb26f17a0434a36cb6243d047b88

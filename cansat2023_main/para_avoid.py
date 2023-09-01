@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 import datetime
 import time
 import sys
@@ -484,4 +482,3 @@ if __name__ == '__main__':
         if isDistant_para == 1:
             break
     print("Para Avoid End")
->>>>>>> be875dd52eecdb26f17a0434a36cb6243d047b88

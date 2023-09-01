@@ -410,7 +410,7 @@ def main(lat_land, lon_land, lat_dest, lon_dest, check_count :int, add_pwr: int)
         else:
             isDistant_para = 1
     
-    return lat_now, lon_now, para_dist, red_area, angle, isDistant_para, check_count
+    return lat_now, lon_now, para_dist, red_area, angle, isDistant_para, check_count, zone
 
 if __name__ == '__main__':
     # パラメータ

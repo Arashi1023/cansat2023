@@ -9,25 +9,25 @@ import numpy as np
 from collections import deque
 
 # import libs.bme280 as bme280
-import bmx055
-import motor
-import save_photo
-# import libs.send as send
-import gps
-import gps_navigate
-# import libs.stuck2 as stuck2
-import other
-# import libs.send_photo as send_photo
-import take
-# from libs.machine_learning import DetectPeople
-import calibration
-import PID
-import log
-import basics
-import stuck2
+# import bmx055
+# import motor
+# import save_photo
+# # import libs.send as send
+# import gps
+# import gps_navigate
+# # import libs.stuck2 as stuck2
+# import other
+# # import libs.send_photo as send_photo
+# import take
+# # from libs.machine_learning import DetectPeople
+# import calibration
+# import PID
+# import log
+# import basics
+# import stuck2
 
 from main_const import *
-import gps_running1
+# import gps_running1
 
 #細かいノイズを除去するために画像を圧縮
 def mosaic(original_img, ratio):

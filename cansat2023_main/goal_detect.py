@@ -459,7 +459,7 @@ def main(lat_dest: float, lon_dest: float, thd_distance_goal: float, thd_red_are
         elif area_ratio == 0:
             print('Lost Goal')
             pwr_unfound = 25 + add_pwr
-            motor.motor_move(-pwr_unfound, pwr_unfound, 0.15)
+            motor.motor_move(pwr_unfound, -pwr_unfound, 0.15)
             motor.motor_stop(0.5)
     
     ###-----画像誘導モードの範囲外にいた場合の処理-----###

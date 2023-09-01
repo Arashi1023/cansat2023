@@ -132,9 +132,8 @@ if __name__ == '__main__':
     rotate_count = 0
     isHuman = 0
     judge_count = 0
-    add_pwr = 0
-    azimuth_array = [0]*2
     stuck_check_array = deque([0]*6, maxlen=6)
+    add_pwr = 0
     add_count = 0
 
     # magx_off, magy_off = calibration.cal(30, -30, 30)

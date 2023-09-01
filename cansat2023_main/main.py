@@ -11,6 +11,7 @@ import pigpio
 import traceback
 from math import sqrt
 import numpy as np
+from collections import deque
 
 import bme280
 import bmx055
@@ -302,7 +303,15 @@ phase_log.save_log('6', 'Human Detection Sequence: Start', lat_log, lon_log)
 print('Loading Machine Learning Model...')
 ML_people = DetectPeople(model_path="model_mobile.tflite" )
 
-# while True:
+#-変数定義-#
+result = 0
+area_count = 0
+rotate_count = 0
+isHuman = 0
+judge_count = 0
+stuck_check_array = deque([0]*6, maxlen=6)
+add_pwr = 0
+add_count = 0
 
 
 
@@ -330,12 +339,17 @@ ML_people = DetectPeople(model_path="model_mobile.tflite" )
 
 
 
+#-Log-#
+print('Saving Log...')
+lat_log, lon_log = gps.location()
+phase_log.save_log('6', 'Human Detection Sequence: End', lat_log, lon_log)
 
+#-send-#
+print('Sending Data...')
+send.send_data('Human Detection finished')
+time.sleep(10)
 
-
-
-
-
+print('#####-----Human Detection Sequence: End-----#####')
 
 
 #####===== 7 GPS Running Sequence to Goal=====#####

@@ -7,3 +7,5 @@ sequence/photo_storage
 
 imgs/human_detect/all
 imgs/parachute_avoid/all
+imgs
+logs

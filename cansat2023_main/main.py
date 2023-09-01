@@ -11,6 +11,7 @@ import pigpio
 import traceback
 from math import sqrt
 import numpy as np
+from collections import deque
 
 import bme280
 import bmx055
@@ -237,6 +238,7 @@ print('#####-----Parachute Avoid Sequence: End-----#####')
 
 
 #####===== 5 GPS Running Sequence to Human =====#####
+#編集ログ -> sendはコメントアウトした それ以外はOK
 print('#####-----GPS Running Sequence to Human: Start-----#####')
 
 #-Log-#
@@ -258,12 +260,12 @@ while True: #1ループおおよそT_CAL秒
     gps_running_goal_log.save_log(lat_now, lon_now, distance_to_dest, rover_azimuth, isReach_dest)    
     
     #-send-#
-    lat_str = "{:.6f}".format(lat_now)  # 緯度を小数点以下8桁に整形
-    lon_str = "{:.6f}".format(lon_now)  # 経度を小数点以下8桁に整形
-    send.send_data(lat_str)
-    time.sleep(9)
-    send.send_data(lon_str)
-    time.sleep(9)
+    # lat_str = "{:.6f}".format(lat_now)  # 緯度を小数点以下8桁に整形
+    # lon_str = "{:.6f}".format(lon_now)  # 経度を小数点以下8桁に整形
+    # send.send_data(lat_str)
+    # time.sleep(9)
+    # send.send_data(lon_str)
+    # time.sleep(9)
 
     if isReach_dest == 1: #ゴール判定
         break
@@ -276,9 +278,9 @@ lat_log, lon_log = gps.location()
 phase_log.save_log('5', 'GPS Running Sequence to Human: End', lat_log, lon_log)
 
 #-send-#
-print('Sending Data...')
-send.send_data('Run1 finished')
-time.sleep(10)
+# print('Sending Data...')
+# send.send_data('Run1 finished')
+# time.sleep(10)
 
 print('#####-----GPS Running Sequence to Human: End-----#####')
 
@@ -302,7 +304,15 @@ phase_log.save_log('6', 'Human Detection Sequence: Start', lat_log, lon_log)
 print('Loading Machine Learning Model...')
 ML_people = DetectPeople(model_path="model_mobile.tflite" )
 
-# while True:
+#-変数定義-#
+result = 0
+area_count = 0
+rotate_count = 0
+isHuman = 0
+judge_count = 0
+stuck_check_array = deque([0]*6, maxlen=6)
+add_pwr = 0
+add_count = 0
 
 
 
@@ -330,15 +340,21 @@ ML_people = DetectPeople(model_path="model_mobile.tflite" )
 
 
 
+#-Log-#
+print('Saving Log...')
+lat_log, lon_log = gps.location()
+phase_log.save_log('6', 'Human Detection Sequence: End', lat_log, lon_log)
 
+#-send-#
+print('Sending Data...')
+send.send_data('Human Detection finished')
+time.sleep(10)
 
-
-
-
-
+print('#####-----Human Detection Sequence: End-----#####')
 
 
 #####===== 7 GPS Running Sequence to Goal=====#####
+#編集ログ
 print('#####-----GPS Running Sequence to Goal: Start-----#####')
 
 #-Log-#
@@ -362,12 +378,12 @@ while True: #1ループおおよそT_CAL秒
     gps_running_goal_log.save_log(lat_now, lon_now, distance_to_dest, rover_azimuth, isReach_dest)
 
     #-send-#
-    lat_str = "{:.6f}".format(lat_now)  # 緯度を小数点以下8桁に整形
-    lon_str = "{:.6f}".format(lon_now)  # 経度を小数点以下8桁に整形
-    send.send_data(lat_str)
-    time.sleep(9)
-    send.send_data(lon_str)
-    time.sleep(9)
+    # lat_str = "{:.6f}".format(lat_now)  # 緯度を小数点以下8桁に整形
+    # lon_str = "{:.6f}".format(lon_now)  # 経度を小数点以下8桁に整形
+    # send.send_data(lat_str)
+    # time.sleep(9)
+    # send.send_data(lon_str)
+    # time.sleep(9)
     
     if isReach_dest == 1: #ゴール判定
         print('Finishing GPS Running')
@@ -380,10 +396,10 @@ print('Saving Log...')
 lat_log, lon_log = gps.location()
 phase_log.save_log('7', 'GPS Running Sequence to Goal: End', lat_log, lon_log)
 
-#-send-#
-print('Sending Data...')
-send.send_data('Run2 finished')
-time.sleep(10)
+# #-send-#
+# print('Sending Data...')
+# send.send_data('Run2 finished')
+# time.sleep(10)
 
 print('#####-----GPS Running Sequence to Goal: End-----#####')
 

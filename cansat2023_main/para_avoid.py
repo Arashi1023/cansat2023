@@ -5,6 +5,7 @@ import cv2
 import pigpio
 import traceback
 from math import sqrt
+from collections import deque
 
 import bme280
 import bmx055
@@ -307,7 +308,7 @@ def wgps_para_avoid(small_thd_dist :int, large_thd_dist :int, check_count :int, 
         while time.time() - t_start_run <= T_FORWARD:
             PID.PID_run(target_azimuth, magx_off, magy_off, theta_array, loop_num=25)
 
-def main(lat_land, lon_land, lat_dest, lon_dest, check_count :int):
+def main(lat_land, lon_land, lat_dest, lon_dest, check_count :int, add_pwr: int):
     '''
     目的：パラシュートを回避する
 
@@ -347,7 +348,8 @@ def main(lat_land, lon_land, lat_dest, lon_dest, check_count :int):
             time.sleep(5)
         elif red_area == 0 and check_count == 0:
             print('Parachute Not Found\nChecking Around')
-            motor.move(PARA_PWR, -PARA_PWR, T_CHECK)
+            para_pwr = PARA_PWR + add_pwr
+            motor.move(para_pwr, -para_pwr, T_CHECK)
         elif red_area == 0 and check_count > 0:
             print("Move Forwward")
             # motor.move(PARA_PWR, PARA_PWR, T_FORWARD)
@@ -367,7 +369,8 @@ def main(lat_land, lon_land, lat_dest, lon_dest, check_count :int):
             # check_count += 1
         else:
             print('Parachute Found\nTurning Around')
-            motor.move(PARA_PWR, -PARA_PWR, T_ROTATE)
+            para_pwr = PARA_PWR + add_pwr
+            motor.move(para_pwr, -para_pwr, T_ROTATE)
             check_count += 1
     
     elif SHORT_THD_DIST < para_dist <= LONG_THD_DIST:
@@ -387,7 +390,7 @@ def main(lat_land, lon_land, lat_dest, lon_dest, check_count :int):
         motor.deceleration(15, 15)
         motor.motor_stop(1)
 
-    elif para_dist > LONG_THD_DIST:
+    elif para_dist > LONG_THD_DIST: #これどうする？？
         goal_info = calibration.calculate_direction(lon2=lon_dest, lat2=lat_dest)
         goal_azimuth = goal_info['azimuth1']
 
@@ -422,6 +425,9 @@ if __name__ == '__main__':
     gps.open_gps()
 
     t_start = time.time()
+    stuck_check_array = deque([0]*6, maxlen=6)
+    add_pwr = 0
+    add_count = 0
 
     #-Log Set up-#
     para_avoid_test = log.Logger(dir='../logs/test_logs/para_avoid_test', filename='para_avoid_test', t_start=t_start, columns=['lat', 'lon', 'para_dist', 'red_area', 'angle','isDistant_para', 'check_count'])
@@ -430,6 +436,46 @@ if __name__ == '__main__':
     check_count = 0 #パラ回避用のカウンター
     lat_land, lon_land = gps.location()
     while True:
+        if time.time() - t_start >= 600: #10分たっても
+            red_area = detect_para()
+            if red_area == 0:
+                motor.move(60, -60, 2)
+                break
+            else:
+                print('Parachute is near')
+                print('Wait 10s')
+                time.sleep(10)
+
+        ###---現在のローバーの方位角を求める---###
+        magdata = bmx055.mag_dataRead()
+        magx, magy = magdata[0], magdata[1]
+        rover_aziimuth = calibration.angle(magx=magx, magy=magy, magx_off=800, magy_off=1000)
+        stuck_check_array.append(rover_aziimuth)
+
+        if add_pwr != 0 and stuck_check_array[3] != 0: #追加のパワーがあるとき
+            for i in range(3):
+                expect_azimuth_add = stuck_check_array[i] + 30
+                if expect_azimuth_add >= 360:
+                    expect_azimuth_add = expect_azimuth_add % 360
+                if stuck_check_array[i+1] - expect_azimuth_add > 30: #add_pwrを追加していて回りすぎているとき
+                    add_count += 1
+                else:
+                    add_count = 0
+            if add_count == 3:
+                add_pwr = 0
+                add_count = 0
+
+        if stuck_check_array[5] != 0: #スタックチェックを判定できるデータがそろったとき
+            expect_azimuth = stuck_check_array[0] + 90
+
+            if expect_azimuth >= 360:
+                expect_azimuth = expect_azimuth % 360
+
+            if stuck_check_array[5] - expect_azimuth < 0: #本来回っているはずの角度を下回っているとき
+                print('Rotation Stuck Detected')
+                add_pwr = 5
+                stuck_check_array = deque([0]*6, maxlen=6) #スタックチェック用の配列の初期化
+
         lat_now, lon_now, para_dist, red_area, angle, isDistant_para, check_count = main(lat_land, lon_land, lat_dest=LAT_HUMAN, lon_dest=LON_HUMAN, check_count=check_count)
         print(lat_now, lon_now, para_dist, red_area, angle, isDistant_para, check_count)
         para_avoid_test.save_log(lat_now, lon_now, para_dist, red_area, angle, isDistant_para, check_count)

@@ -238,8 +238,11 @@ def PID_adjust_direction(target_azimuth, magx_off, magy_off, theta_array: list):
     t_adj_start = time.time()
 
     while True:
-        if time.time() - t_adj_start >= 5: #5秒経過したら強制的に終了する
+        if time.time() - t_adj_start > 5 and error_theta <= 75: #5秒経過したら強制的に終了する
             break
+        elif time.time() - t_adj_start > 5 and error_theta > 75: #スタック回避を行う
+            print('Stuck Avoid')
+            motor.motor_move(60, -60, 2)
 
         if count < 25:
             Ki = 0
@@ -356,8 +359,8 @@ def PID_run(target_azimuth: float, magx_off: float, magy_off: float, theta_array
         #-----モータの出力-----#
 
         #直進補正分(m=0のとき直進するように設定するため) # 35から25に変更 by 田口 8/28
-        s_r = 20
-        s_l = 20
+        s_r = 35
+        s_l = 35
 
         # モータ出力の最大値と最小値を設定
         m = min(m, 15)
@@ -694,7 +697,7 @@ if __name__ == "__main__":
     while True: #1ループおおよそT_CAL秒
         #-T_CALごとに以下の情報を取得-#
         lat_now, lon_now, distance_to_dest, rover_azimuth, isReach_dest = drive2(lon_dest=LON_HUMAN, lat_dest=LAT_HUMAN, thd_distance=THD_DISTANCE_DEST, t_cal=T_CAL, loop_num=LOOP_NUM)
-            
+        
         print('isReach_dest = ', isReach_dest)
 
         # pid_test_log.save_log(lat_now, lon_now, distance_to_dest, rover_azimuth, isReach_dest)

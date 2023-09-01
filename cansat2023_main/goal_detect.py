@@ -11,13 +11,13 @@ from collections import deque
 # import libs.bme280 as bme280
 # import bmx055
 # import motor
-# import save_photo
+import save_photo
 # # import libs.send as send
 # import gps
 # import gps_navigate
 # # import libs.stuck2 as stuck2
 # import other
-# # import libs.send_photo as send_photo
+# import libs.send_photo as send_photo
 import take
 # # from libs.machine_learning import DetectPeople
 # import calibration

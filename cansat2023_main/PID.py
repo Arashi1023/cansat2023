@@ -652,7 +652,7 @@ if __name__ == "__main__":
 
     #-----オフセットの取得-----#
     #-----キャリブレーション-----#
-    print('Start Calibration')
+    # print('Start Calibration')
     # magx_off, magy_off = calibration.cal(30, -30, 40)　<-これがあるせいでおそらく2回キャリブレーションをしていた。
 
     #-----PID制御-----#

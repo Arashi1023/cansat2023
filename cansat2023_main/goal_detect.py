@@ -514,66 +514,69 @@ if __name__ == "__main__":
     #         print('Goal')
     #         break
 
+    ##################################################
+    # stuck_check_array = deque([0]*6, maxlen=6)
+    # add_pwr = 0
+    # add_count = 0
 
-    stuck_check_array = deque([0]*6, maxlen=6)
-    add_pwr = 0
-    add_count = 0
+    # #-log-#
+    # t_start_goal = time.time()
 
-    #-log-#
-    t_start_goal = time.time()
+    # image_guide_log = log.Logger(dir='../logs/test_logs/image_guide_test', filename='Image_guide_test', t_start=t_start_goal, columns=['lat', 'lon', 'distance_to_goal', 'area_ratio', 'angle', 'isReach_goal'])
 
-    image_guide_log = log.Logger(dir='../logs/test_logs/image_guide_test', filename='Image_guide_test', t_start=t_start_goal, columns=['lat', 'lon', 'distance_to_goal', 'area_ratio', 'angle', 'isReach_goal'])
+    # #-Image Guide Drive-#
+    # magx_off, magy_off = calibration.cal(30, -30, 30) #キャリブレーション
+    # print('Start Image Guide Drive')
+    # while True:
+    #     if time.time()-t_start_goal > 60: #ゴール検知をはじめて10分を超えたら
+    #         print('Start Random Move')
+    #         stuck2.stuck_avoid()
+    #         t_start_goal = time.time() #タイマーのリセット
+    #         print('Finish Random Move')
 
-    #-Image Guide Drive-#
-    magx_off, magy_off = calibration.cal(30, -30, 30) #キャリブレーション
-    print('Start Image Guide Drive')
-    while True:
-        if time.time()-t_start_goal > 60: #ゴール検知をはじめて10分を超えたら
-            print('Start Random Move')
-            stuck2.stuck_avoid()
-            t_start_goal = time.time() #タイマーのリセット
-            print('Finish Random Move')
+    #     ###---現在のローバーの方位角を求める---###
+    #     magdata = bmx055.mag_dataRead()
+    #     magx, magy = magdata[0], magdata[1]
+    #     rover_aziimuth = calibration.angle(magx=magx, magy=magy, magx_off=magx_off, magy_off=magy_off)
+    #     stuck_check_array.append(rover_aziimuth)
 
-        ###---現在のローバーの方位角を求める---###
-        magdata = bmx055.mag_dataRead()
-        magx, magy = magdata[0], magdata[1]
-        rover_aziimuth = calibration.angle(magx=magx, magy=magy, magx_off=magx_off, magy_off=magy_off)
-        stuck_check_array.append(rover_aziimuth)
+    #     if add_pwr != 0 and stuck_check_array[3] != 0: #追加のパワーがあるとき
+    #         for i in range(3):
+    #             expect_azimuth_add = stuck_check_array[i] + 30
+    #             if expect_azimuth_add >= 360:
+    #                 expect_azimuth_add = expect_azimuth_add % 360
+    #             if stuck_check_array[i+1] - expect_azimuth_add > 30: #add_pwrを追加していて回りすぎているとき
+    #                 add_count += 1
+    #             else:
+    #                 add_count = 0
+    #         if add_count == 3:
+    #             add_pwr = 0
+    #             add_count = 0
 
-        if add_pwr != 0 and stuck_check_array[3] != 0: #追加のパワーがあるとき
-            for i in range(3):
-                expect_azimuth_add = stuck_check_array[i] + 30
-                if expect_azimuth_add >= 360:
-                    expect_azimuth_add = expect_azimuth_add % 360
-                if stuck_check_array[i+1] - expect_azimuth_add > 30: #add_pwrを追加していて回りすぎているとき
-                    add_count += 1
-                else:
-                    add_count = 0
-            if add_count == 3:
-                add_pwr = 0
-                add_count = 0
+    #     if stuck_check_array[5] != 0: #スタックチェックを判定できるデータがそろったとき
+    #         expect_azimuth = stuck_check_array[0] + 90
 
-        if stuck_check_array[5] != 0: #スタックチェックを判定できるデータがそろったとき
-            expect_azimuth = stuck_check_array[0] + 90
+    #         if expect_azimuth >= 360:
+    #             expect_azimuth = expect_azimuth % 360
 
-            if expect_azimuth >= 360:
-                expect_azimuth = expect_azimuth % 360
+    #         if stuck_check_array[5] - expect_azimuth < 0: #本来回っているはずの角度を下回っているとき
+    #             print('Rotation Stuck Detected')
+    #             add_pwr = 5
+    #             stuck_check_array = deque([0]*6, maxlen=6) #スタックチェック用の配列の初期化
 
-            if stuck_check_array[5] - expect_azimuth < 0: #本来回っているはずの角度を下回っているとき
-                print('Rotation Stuck Detected')
-                add_pwr = 5
-                stuck_check_array = deque([0]*6, maxlen=6) #スタックチェック用の配列の初期化
-
-        lat_now, lon_now, distance_to_goal, area_ratio, angle, isReach_goal = main(lat_dest=LAT_GOAL, lon_dest=LON_GOAL, thd_distance_goal=THD_DISTANCE_GOAL, thd_red_area=THD_RED_RATIO, magx_off=magx_off, magy_off=magy_off, add_pwr=add_pwr)
-        image_guide_log.save_log(lat_now, lon_now, distance_to_goal, area_ratio, angle, isReach_goal)
-        print('distance_to_goal = ', distance_to_goal)
-        print('area_ratio = ', area_ratio)
-        print('angle = ', angle, '%')
-        print('isReach_goal = ', isReach_goal)
+    #     lat_now, lon_now, distance_to_goal, area_ratio, angle, isReach_goal = main(lat_dest=LAT_GOAL, lon_dest=LON_GOAL, thd_distance_goal=THD_DISTANCE_GOAL, thd_red_area=THD_RED_RATIO, magx_off=magx_off, magy_off=magy_off, add_pwr=add_pwr)
+    #     image_guide_log.save_log(lat_now, lon_now, distance_to_goal, area_ratio, angle, isReach_goal)
+    #     print('distance_to_goal = ', distance_to_goal)
+    #     print('area_ratio = ', area_ratio)
+    #     print('angle = ', angle, '%')
+    #     print('isReach_goal = ', isReach_goal)
                 
-        if isReach_goal == 1: #ゴール判定
-            print('Goal')
-            break
+    #     if isReach_goal == 1: #ゴール判定
+    #         print('Goal')
+    #         break
     
-    print('Finish Image Guide Drive')
-        
+    # print('Finish Image Guide Drive')
+    while True:    
+        area, angle = TEST_detect_goal()
+        print('area = ', area)
+        print('angle = ', angle)

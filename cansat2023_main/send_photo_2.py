@@ -24,7 +24,7 @@ count_v = 0
 count_error = 0
 id_counter = 1
 
-file_name = "/home/dendenmushi/cansat2023/cansat2023_main/imags/wirelss_test/sendtest_photo.jpg"  # 保存するファイル名を指定
+file_name = "/home/dendenmushi/cansat2023/imgs/wirelss_test/sendtest_photo.jpg"  # 保存するファイル名を指定
 
 ELLIPSOID_GRS80 = 1  # GRS80
 ELLIPSOID_WGS84 = 2  # WGS84

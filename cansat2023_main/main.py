@@ -59,7 +59,7 @@ para_avoid_log = log.Logger(dir='../logs/4_para_avoid_log', filename='para_avoid
 gps_running_human_log = log.Logger(dir='../logs/5_gps_running_human_log', filename='gps_running_human', t_start=t_start, columns=['lat', 'lon', 'distance_to_human', 'rover_azimuth', 'isReach_human'])
 human_detection_log = log.Logger(dir='../logs/6_human_detection_log', filename='human_detection', t_start=t_start, columns=[])
 gps_running_goal_log = log.Logger(dir='../logs/7_gps_running_goal_log', filename='gps_running_goal', t_start=t_start, columns=['lat', 'lon', 'distance_to_goal', 'rover_azimuth', 'isReach_goal'])
-image_guide_log = log.Logger(dir='../logs/8_image_guide_log', filename='image_guide', t_start=t_start, columns=['lat', 'lon', 'distance_to_goal', 'area_ratio', 'angle', 'isReach_goal'])
+image_guide_log = log.Logger(dir='../logs/8_image_guide_log', filename='image_guide', t_start=t_start, columns=['lat', 'lon', 'distance_to_goal', 'area_ratio', 'angle', 'add_pwr', 'isReach_goal'])
 
 #####=====Mission Sequence=====#####
 
@@ -416,12 +416,56 @@ phase_log.save_log('8', 'Image Guide Sequence', lat_log, lon_log)
 image_guide_log.save_log('Image Guide Sequence: Start')
 
 #-Image Guide Drive-#
-magx_off, magy_off = calibration.cal(30, -30, 30)
+#-setup-#
+t_start_goal = time.time()
+stuck_check_array = deque([0]*6, maxlen=6)
+add_pwr = 0
+add_count = 0
 
+magx_off, magy_off = calibration.cal(30, -30, 30)
+print('Goal Detection Start')
 while True:
-    lat_now, lon_now, distance_to_goal, area_ratio, angle, isReach_goal = goal_detect.main(lat_dest=LAT_GOAL, lon_dest=LON_GOAL, thd_distance_goal=THD_DISTANCE_GOAL, thd_red_area=THD_RED_RATIO, magx_off=magx_off, magy_off=magy_off)
-    image_guide_log.save_log(lat_now, lon_now, distance_to_goal, area_ratio, angle, isReach_goal)
+    if time.time()-t_start_goal > 600: #ゴール検知をはじめて10分を超えたら
+        print('Start Random Move')
+        stuck2.stuck_avoid()
+        t_start_goal = time.time() #タイマーのリセット
+        print('Finish Random Move')
+    
+    ###---現在のローバーの方位角を求める---###
+    magdata = bmx055.mag_dataRead()
+    magx, magy = magdata[0], magdata[1]
+    rover_aziimuth = calibration.angle(magx=magx, magy=magy, magx_off=magx_off, magy_off=magy_off)
+    stuck_check_array.append(rover_aziimuth)
+
+    if add_pwr != 0 and stuck_check_array[3] != 0: #追加のパワーがあるとき
+        for i in range(3):
+            expect_azimuth_add = stuck_check_array[i] + 30
+            if expect_azimuth_add >= 360:
+                expect_azimuth_add = expect_azimuth_add % 360
+            if stuck_check_array[i+1] - expect_azimuth_add > 30: #add_pwrを追加していて回りすぎているとき
+                add_count += 1
+            else:
+                add_count = 0
+        if add_count == 3:
+            add_pwr = 0
+            add_count = 0
+
+    if stuck_check_array[5] != 0: #スタックチェックを判定できるデータがそろったとき
+        expect_azimuth = stuck_check_array[0] + 90
+
+        if expect_azimuth >= 360:
+            expect_azimuth = expect_azimuth % 360
+
+        if stuck_check_array[5] - expect_azimuth < 0: #本来回っているはずの角度を下回っているとき
+            print('Rotation Stuck Detected')
+            add_pwr = 5
+            add_pwr = min(add_pwr, 25)
+            stuck_check_array = deque([0]*6, maxlen=6) #スタックチェック用の配列の初期化
+
+    lat_now, lon_now, distance_to_goal, area_ratio, angle, isReach_goal = goal_detect.main(lat_dest=LAT_GOAL, lon_dest=LON_GOAL, thd_distance_goal=THD_DISTANCE_GOAL, thd_red_area=THD_RED_RATIO, magx_off=magx_off, magy_off=magy_off, add_pwr=add_pwr)
+    image_guide_log.save_log(lat_now, lon_now, distance_to_goal, area_ratio, angle, add_pwr, isReach_goal)
     print(f'{distance_to_goal}m to Goal')
+
     if isReach_goal == 1: #ゴール判定
         print('Goal')
         break

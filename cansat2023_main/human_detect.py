@@ -185,7 +185,7 @@ if __name__ == '__main__':
             if stuck_check_array[5] - expect_azimuth < 0: #本来回っているはずの角度を下回っているとき
                 print('Rotation Stuck Detected')
                 add_pwr = 5
-                add_pwr = max
+                add_pwr = min(add_pwr, 25) #最大で25
                 stuck_check_array = deque([0]*6, maxlen=6) #スタックチェック用の配列の初期化
 
         result, judge_count, area_count, rotate_count, isHuman = main(lat_human=LAT_HUMAN, lon_human=LON_HUMAN, model=ML_people, judge_count=judge_count, area_count=area_count, rotate_count=rotate_count, add_pwr=add_pwr)

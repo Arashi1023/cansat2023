@@ -341,6 +341,7 @@ def main(lat_land, lon_land, lat_dest, lon_dest, check_count :int, add_pwr: int)
     lat_now, lon_now = gps.location()
 
     if para_dist <= SHORT_THD_DIST:
+        magx_off, magy_off = -830, -980
         print('Warning: Parachute is very close\nStarting Parachute Avoid Sequence')
         red_area, angle = detect_para()
         if red_area > PARA_THD_COVERED:
@@ -355,7 +356,7 @@ def main(lat_land, lon_land, lat_dest, lon_dest, check_count :int, add_pwr: int)
             # motor.move(PARA_PWR, PARA_PWR, T_FORWARD)
             mag_data = bmx055.mag_dataRead()
             mag_x, mag_y = mag_data[0], mag_data[1]
-            rover_azimuth = calibration.angle(mag_x, mag_y, magx_off, magy_off)
+            rover_azimuth = calibration.angle(mag_x, mag_y, magx_off=magx_off, magy_off=magy_off)
             rover_azimuth = basics.standarize_angle(rover_azimuth)
             target_azimuth = rover_azimuth
 
@@ -363,7 +364,7 @@ def main(lat_land, lon_land, lat_dest, lon_dest, check_count :int, add_pwr: int)
             t_start_runf = time.time()
             theta_array = [0]*5
             while time.time() - t_start_runf <= 2: #2秒間前進
-                PID.PID_run(target_azimuth, magx_off=700, magy_off=1080, theta_array=theta_array, loop_num=20)
+                PID.PID_run(target_azimuth, magx_off=magx_off, magy_off=magy_off, theta_array=theta_array, loop_num=20)
             motor.deceleration(15, 15)
             motor.motor_stop(0.2)
             # check_count += 1
@@ -440,9 +441,6 @@ def main2(zone: int, zone_count: int, magx_off: float, magy_off: float):
         #-パラシュートの方向から180度の向きに走らせる-#
         theta_array = [0]*5
         PID.PID_adjust_direction(target_azimuth=target_azimuth, magx_off=magx_off, magy_off=magy_off, theta_array=theta_array)
-
-
-
 
         #-走行-#
         red_area, angle = detect_para()
@@ -564,3 +562,68 @@ if __name__ == '__main__':
 
     #####################################################################
 
+    # zone = 0
+    # t_avoid_start = time.time()
+    # magx_off, magy_off = 0, 0
+
+    # #-get land info-#
+    # lat_land, lon_land = gps.location()
+
+    # while True:
+    #     #-Retry TimeOut-#
+    #     if time.time() - t_avoid_start >= 600:
+    #         red_area = detect_para()
+    #         if red_area == 0:
+    #             motor.move(60, 60, 2)
+    #             break
+    #         else:
+    #             print('Parachute is near')
+    #             print('Wait 10s')
+    #             time.sleep(10)
+
+    #     #-zone-#
+    #     para_info = calibration.calculate_direction(lat_land, lon_land)
+    #     para_dist = para_info['distance']
+    #     if para_dist < SHORT_THD_DIST:
+    #         zone = 1
+    #         magx_off, magy_off = -830, -980
+    #     elif SHORT_THD_DIST <= para_dist < LONG_THD_DIST:
+    #         zone = 2
+    #     elif para_dist >= LONG_THD_DIST:
+    #         zone = 3
+
+    #     ###---現在のローバーの方位角を求める---###
+    #     magdata = bmx055.mag_dataRead()
+    #     magx, magy = magdata[0], magdata[1]
+    #     rover_aziimuth = calibration.angle(magx=magx, magy=magy, magx_off=magx_off, magy_off=magy_off)
+    #     stuck_check_array.append(rover_aziimuth)
+
+    #     if add_pwr != 0 and stuck_check_array[3] != 0: #追加のパワーがあるとき
+    #         for i in range(3):
+    #             expect_azimuth_add = stuck_check_array[i] + 30
+    #             if expect_azimuth_add >= 360:
+    #                 expect_azimuth_add = expect_azimuth_add % 360
+    #             if stuck_check_array[i+1] - expect_azimuth_add > 30: #add_pwrを追加していて回りすぎているとき
+    #                 add_count += 1
+    #             else:
+    #                 add_count = 0
+    #         if add_count == 3:
+    #             add_pwr = 0
+    #             add_count = 0
+
+    #     if stuck_check_array[5] != 0: #スタックチェックを判定できるデータがそろったとき
+    #         expect_azimuth = stuck_check_array[0] + 90
+
+    #         if expect_azimuth >= 360:
+    #             expect_azimuth = expect_azimuth % 360
+
+    #         if stuck_check_array[5] - expect_azimuth < 0: #本来回っているはずの角度を下回っているとき
+    #             print('Rotation Stuck Detected')
+    #             add_pwr = 5
+    #             stuck_check_array = deque([0]*6, maxlen=6) #スタックチェック用の配列の初期化
+        
+    #     #-Parachute Avoid-#
+
+
+
+    

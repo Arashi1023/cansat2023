@@ -66,7 +66,7 @@ image_guide_log = log.Logger(dir='../logs/8_image_guide_log', filename='image_gu
 
 #####===== 1 Release Detect Sequence=====#####
 print('#####-----Release Detect Sequence: Start-----#####')
-phase_log.save_log('1', 'Release Detect Sequence: Start', 0, 0) #GPS情報取得できるのか？？？
+phase_log.save_log('1', 'Release Detect Sequence: Start', 0, 0) #GPS情報は取得しちゃだめ
 release_log.save_log('Release Detect Start')
 
 
@@ -110,7 +110,7 @@ print('#####-----Land Detect Sequence: Start-----#####')
 
 #-Log-#
 print('Saving Log...')
-phase_log.save_log('2', 'Land Detect Sequence: Start', 0, 0) #GPS情報取得できるのか？？
+phase_log.save_log('2', 'Land Detect Sequence: Start', 0, 0) #GPS情報取得は取得しちゃだめ
 
 #-Land Detect-#
 press_land_count = 0
@@ -148,7 +148,7 @@ print('#####-----Land Detect Sequence: End-----#####')
 print('#####-----Melt Sequence: Start-----#####')
 
 #-Log-#
-phase_log.save_log('3', 'Melt Sequence: Start', 0, 0) #GPS情報取得できるのか？？
+phase_log.save_log('3', 'Melt Sequence: Start', 0, 0) #GPS情報取得は取得しちゃだめ?
 melt_log.save_log('Melt Start')
 
 #-Melt-#
@@ -156,7 +156,7 @@ melt.melt_down(meltPin=MELT_PIN, t_melt=MELT_TIME)
 
 #-Log-#
 print('Saving Log...')
-phase_log.save_log('3', 'Melt Sequence: End', 0, 0) #GPS情報取得できるのか？？
+phase_log.save_log('3', 'Melt Sequence: End', 0, 0)
 melt_log.save_log('Melt Finished')
 
 #-send-#

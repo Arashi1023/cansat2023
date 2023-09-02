@@ -283,7 +283,7 @@ print('#####-----GPS Running Sequence to Human: Start-----#####')
 print('Saving Log...')
 lat_log, lon_log = gps.location()
 phase_log.save_log('5', 'GPS Running Sequence to Human: Start', lat_log, lon_log)
-report_log.save(lat_log, lon_log)
+report_log.save_log(lat_log, lon_log)
 
 #-GPS Running1-#
 direction = calibration.calculate_direction(lon2=LON_HUMAN, lat2=LAT_HUMAN)

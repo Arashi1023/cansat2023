@@ -199,39 +199,39 @@ print('Sending Data...')
 
 
 
-#####===== 4 Parachute Avoid Sequence=====#####
-print('#####-----Parachute Avoid Sequence: Start-----#####')
+# #####===== 4 Parachute Avoid Sequence=====#####
+# print('#####-----Parachute Avoid Sequence: Start-----#####')
 
-#-Log-#
-print('Saving Log...')
-lat_log, lon_log = gps.location()
-phase_log.save_log('4', 'Parachute Avoid Sequence: Start', lat_log, lon_log)
+# #-Log-#
+# print('Saving Log...')
+# lat_log, lon_log = gps.location()
+# phase_log.save_log('4', 'Parachute Avoid Sequence: Start', lat_log, lon_log)
 
-#-Parachute Avoid-#
-lat_land, lon_land = lat_log, lon_log #着地地点のGPS座標を取得
+# #-Parachute Avoid-#
+# lat_land, lon_land = lat_log, lon_log #着地地点のGPS座標を取得
 
-stuck2.ue_jug()
+# stuck2.ue_jug()
 
-check_count = 0 #パラ回避用のカウンター
-while True:
-    lat_now, lon_now, para_dist, red_area, angle, isDistant_parachute, check_count = para_avoid.main(lat_land, lon_land, lat_dest=LAT_HUMAN, lon_dest=LON_HUMAN, check_count=check_count)
+# check_count = 0 #パラ回避用のカウンター
+# while True:
+#     lat_now, lon_now, para_dist, red_area, angle, isDistant_parachute, check_count = para_avoid.main(lat_land, lon_land, lat_dest=LAT_HUMAN, lon_dest=LON_HUMAN, check_count=check_count)
     
-    #-Log-#
-    para_avoid_log.save_log(lat_now, lon_now, para_dist, red_area, angle, isDistant_parachute, check_count=check_count)
-    if isDistant_parachute == 1: #パラシュート回避用のフラグ
-        break
+#     #-Log-#
+#     para_avoid_log.save_log(lat_now, lon_now, para_dist, red_area, angle, isDistant_parachute, check_count=check_count)
+#     if isDistant_parachute == 1: #パラシュート回避用のフラグ
+#         break
 
-#-Log-#
-print('Saving Log...')
-lat_log, lon_log = gps.location()
-phase_log.save_log('4', 'Parachute Avoid Sequence: End', lat_log, lon_log)
+# #-Log-#
+# print('Saving Log...')
+# lat_log, lon_log = gps.location()
+# phase_log.save_log('4', 'Parachute Avoid Sequence: End', lat_log, lon_log)
 
-#-send-#
-print('Sending Data...')
-# send.send_data('Parachute Avoid finished')
-# time.sleep(10)
+# #-send-#
+# print('Sending Data...')
+# # send.send_data('Parachute Avoid finished')
+# # time.sleep(10)
 
-print('#####-----Parachute Avoid Sequence: End-----#####')
+# print('#####-----Parachute Avoid Sequence: End-----#####')
 
 
 

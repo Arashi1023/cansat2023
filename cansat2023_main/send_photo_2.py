@@ -350,75 +350,75 @@ if __name__ == '__main__':
 # #---------------------GPS情報送信--------------------------#
 
  #gps情報取得
-    open_gps()
-    t_start = time.time()
-    count = 0
-    while True:
-        try:
-            utc, lat, lon, sHeight, gHeight = read_gps()
-            if utc == -1.0:
-                if lat == -1.0:
-                    print("Reading gps Error")
-                    count_error = count_error +1
-                    if count_error > num_samples:
-                        send.send_data("human_GPS_start")
-                        print("human_GPS_start")
-                        time.sleep(delay)
-                        send.send_data("Reading gps Error")
-                        print("Reading gps Error")
-                        time.sleep(delay)
-                        send.send_data("human_GPS_fin")
-                        print("human_GPS_fin")
-                        time.sleep(delay)
-                        break
-                    # pass
-                else:
-                    # pass
-                    print("Status V")
-                    count_v = count_v + 1
-                    if count_v > num_samples:
-                        time.sleep(delay)
-                        send.send_data("human_GPS_start")
-                        print("human_GPS_start")
-                        time.sleep(delay)
-                        send.send_data("Status V")
-                        print("Status V")
-                        time.sleep(delay)
-                        send.send_data("human_GPS_fin")
-                        print("human_GPS_fin")
-                        time.sleep(delay)
-                        break
-            else:
-                # pass
-                print(utc, lat, lon, sHeight, gHeight)
-                lat, lon = location()
-                print(lat,lon)
-                count = count +1
-                if count % num_samples == 0:
-                    send_lat = lat
-                    send_lon = lon
-                    print(send_lat,send_lon)
-                 # 無線で送信
-                    time.sleep(delay)
-                    send.send_data("human_GPS_start")
-                    print("human_GPS_start")
-                    time.sleep(delay)
-                    send.send_data(str(send_lat))
-                    time.sleep(10)
-                    send.send_data(str(send_lon))
-                    print(send_lat,send_lon)
-                    time.sleep(delay)
-                    send.send_data("human_GPS_fin")
-                    print("human_GPS_fin")
-                    time.sleep (delay)
-                    break
-            time.sleep(1)
-        except KeyboardInterrupt:
-            close_gps()
-            print("\r\nKeyboard Intruppted, Serial Closed")
-        except:
-            close_gps()
-            print(traceback.format_exc())
+    # open_gps()
+    # t_start = time.time()
+    # count = 0
+    # while True:
+    #     try:
+    #         utc, lat, lon, sHeight, gHeight = read_gps()
+    #         if utc == -1.0:
+    #             if lat == -1.0:
+    #                 print("Reading gps Error")
+    #                 count_error = count_error +1
+    #                 if count_error > num_samples:
+    #                     send.send_data("human_GPS_start")
+    #                     print("human_GPS_start")
+    #                     time.sleep(delay)
+    #                     send.send_data("Reading gps Error")
+    #                     print("Reading gps Error")
+    #                     time.sleep(delay)
+    #                     send.send_data("human_GPS_fin")
+    #                     print("human_GPS_fin")
+    #                     time.sleep(delay)
+    #                     break
+    #                 # pass
+    #             else:
+    #                 # pass
+    #                 print("Status V")
+    #                 count_v = count_v + 1
+    #                 if count_v > num_samples:
+    #                     time.sleep(delay)
+    #                     send.send_data("human_GPS_start")
+    #                     print("human_GPS_start")
+    #                     time.sleep(delay)
+    #                     send.send_data("Status V")
+    #                     print("Status V")
+    #                     time.sleep(delay)
+    #                     send.send_data("human_GPS_fin")
+    #                     print("human_GPS_fin")
+    #                     time.sleep(delay)
+    #                     break
+    #         else:
+    #             # pass
+    #             print(utc, lat, lon, sHeight, gHeight)
+    #             lat, lon = location()
+    #             print(lat,lon)
+    #             count = count +1
+    #             if count % num_samples == 0:
+    #                 send_lat = lat
+    #                 send_lon = lon
+    #                 print(send_lat,send_lon)
+    #              # 無線で送信
+    #                 time.sleep(delay)
+    #                 send.send_data("human_GPS_start")
+    #                 print("human_GPS_start")
+    #                 time.sleep(delay)
+    #                 send.send_data(str(send_lat))
+    #                 time.sleep(10)
+    #                 send.send_data(str(send_lon))
+    #                 print(send_lat,send_lon)
+    #                 time.sleep(delay)
+    #                 send.send_data("human_GPS_fin")
+    #                 print("human_GPS_fin")
+    #                 time.sleep (delay)
+    #                 break
+    #         time.sleep(1)
+    #     except KeyboardInterrupt:
+    #         close_gps()
+    #         print("\r\nKeyboard Intruppted, Serial Closed")
+    #     except:
+    #         close_gps()
+    #         print(traceback.format_exc())
     
 
 
@@ -433,7 +433,7 @@ if __name__ == '__main__':
     
     # 入力ファイルパスと出力ファイルパスを指定してリサイズ
     input_file = photo_take    # 入力ファイルのパスを適切に指定してください
-    photo_name = "/home/dendenmushi/cansat2023/sequence/ML_imgs/send_photo_resize.jpg"  # 出力ファイルのパスを適切に指定してください
+    photo_name = "/home/dendenmushi/cansat2023/imags/test.jpg"  # 出力ファイルのパスを適切に指定してください
     new_width = 60            # リサイズ後の幅を指定します
     new_height = 80           # リサイズ後の高さを指定します
 
@@ -442,18 +442,20 @@ if __name__ == '__main__':
     
     print("写真撮影完了")
     
-    # 圧縮したい画像のパスと出力先のパスを指定します
-    input_image_path = photo_name
-    compressed_image_path = 'compressed_test.jpg'
     
-    # 圧縮率を指定します（0から100の範囲の整数）
-    compression_quality = photo_quality
+    # # 圧縮したい画像のパスと出力先のパスを指定します
+    # input_image_path = photo_name
+    # compressed_image_path = 'compressed_test.jpg'
     
-    # 画像を圧縮します
-    compress_image(input_image_path, compressed_image_path, compression_quality)
+    # # 圧縮率を指定します（0から100の範囲の整数）
+    # compression_quality = photo_quality
     
+    # # 画像を圧縮します
+    # compress_image(input_image_path, compressed_image_path, compression_quality)
+    
+
     # 圧縮後の画像をバイナリ形式に変換します
-    with open(compressed_image_path, 'rb') as f:
+    with open(photo_name, 'rb') as f:
         compressed_image_binary = f.read()
     
     

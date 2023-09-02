@@ -197,6 +197,7 @@ def calculate_offset(magdata):
 def cal(l, r, n):
     magdata = magdata_matrix(l, r, n)
     _, _, _, magx_off, magy_off, _ = calculate_offset(magdata)
+    print('magx_off:', magx_off, 'magy_off:', magy_off)
     return magx_off, magy_off
 
 #ちゃんと北をむいてる確認する
@@ -248,7 +249,7 @@ if __name__ == "__main__":
     motor.setup()
     bmx055.bmx055_setup()
     magx_off, magy_off = cal(n, -n, 40)
-    print(magx_off, magy_off)
+    # print(magx_off, magy_off)
 
     # magdata = magdata_matrix_hand()
     # _, _, _, magx_off, magy_off, _ = calculate_offset(magdata)

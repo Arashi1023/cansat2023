@@ -427,8 +427,10 @@ time.sleep(10)
 print('#####-----Human Detection Sequence: End-----#####')
 
 
+
+
+
 #####===== 7 GPS Running Sequence to Goal=====#####
-#編集ログ
 print('#####-----GPS Running Sequence to Goal: Start-----#####')
 
 #-Log-#

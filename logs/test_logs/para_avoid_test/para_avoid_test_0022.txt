@@ -1,0 +1,1 @@
+datetime,elapsed time,lat,lon,para_dist,red_area,angle,isDistant_para,check_count

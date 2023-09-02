@@ -1,0 +1,1 @@
+datetime,elapsed time,lat,lon,distance_to_goal,area_ratio,angle,add_pwr,isReach_goal

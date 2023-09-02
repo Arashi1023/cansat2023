@@ -1,0 +1,1 @@
+datetime,elapsed time,lat,lon,distance_to_parachute,red_area,angle,isDistant_parachute,check_count

@@ -1,0 +1,2 @@
+datetime,elapsed time,phase,condition,lat,lon
+2023-09-01 19:07:57.300553,1.146587610244751,1,Release Detect Sequence: Start,0,0

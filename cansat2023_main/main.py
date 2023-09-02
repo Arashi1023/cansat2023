@@ -35,7 +35,7 @@ import release
 import land
 import melt
 import beta_gps_running as gps_running
-import human_detection
+import human_detect
 import para_avoid
 import goal_detect
 
@@ -57,7 +57,7 @@ land_log = log.Logger(dir='../logs/2_land_log', filename='land', t_start=t_start
 melt_log = log.Logger(dir='../logs/3_melt_log', filename='melt', t_start=t_start, columns=['condition'])
 para_avoid_log = log.Logger(dir='../logs/4_para_avoid_log', filename='para_avoid', t_start=t_start, columns=['lat', 'lon', 'distance_to_parachute', 'red_area', 'angle', 'isDistant_parachute', 'check_count'])
 gps_running_human_log = log.Logger(dir='../logs/5_gps_running_human_log', filename='gps_running_human', t_start=t_start, columns=['lat', 'lon', 'distance_to_human', 'rover_azimuth', 'isReach_human'])
-human_detection_log = log.Logger(dir='../logs/6_human_detection_log', filename='human_detection', t_start=t_start, columns=[])
+human_detection_log = log.Logger(dir='../logs/6_human_detection_log', filename='human_detection', t_start=t_start, columns=['lat', 'lon', 'result', 'judge_count', 'area_count', 'rotate_count', 'add_pwr', 'isHuman'])
 gps_running_goal_log = log.Logger(dir='../logs/7_gps_running_goal_log', filename='gps_running_goal', t_start=t_start, columns=['lat', 'lon', 'distance_to_goal', 'rover_azimuth', 'isReach_goal'])
 image_guide_log = log.Logger(dir='../logs/8_image_guide_log', filename='image_guide', t_start=t_start, columns=['lat', 'lon', 'distance_to_goal', 'area_ratio', 'angle', 'add_pwr', 'isReach_goal'])
 
@@ -315,31 +315,57 @@ stuck_check_array = deque([0]*6, maxlen=6)
 add_pwr = 0
 add_count = 0
 
+magx_off, magy_off = calibration.cal(30, -30, 30)
 
+while True:
+    ###---回転場所の整地---###
+    if rotate_count == 0: #ある地点で1枚目の写真を撮影するとき
+        magx_off_stuck, magy_off_stuck = calibration.cal(30, -30, 30)
+        stuck_check_array = deque([0]*6, maxlen=6) #スタックチェック用の配列の初期化
+        add_pwr = 0 #捜索地点を変えたら追加のパワーをリセット
+        lat_now, lon_now = gps.location()
 
+    ###---現在のローバーの方位角を求める---###
+    magdata = bmx055.mag_dataRead()
+    magx, magy = magdata[0], magdata[1]
+    rover_aziimuth = calibration.angle(magx=magx, magy=magy, magx_off=magx_off, magy_off=magy_off)
+    stuck_check_array.append(rover_aziimuth)
 
+    if add_pwr != 0 and stuck_check_array[3] != 0: #追加のパワーがあるとき
+        for i in range(3):
+            expect_azimuth_add = stuck_check_array[i] + 30
+            if expect_azimuth_add >= 360:
+                expect_azimuth_add = expect_azimuth_add % 360
+            if stuck_check_array[i+1] - expect_azimuth_add > 30: #add_pwrを追加していて回りすぎているとき
+                add_count += 1
+            else:
+                add_count = 0
+        if add_count == 3:
+            add_pwr = 0
+            add_count = 0
 
+    if stuck_check_array[5] != 0: #スタックチェックを判定できるデータがそろったとき
+        expect_azimuth = stuck_check_array[0] + 90
 
+        if expect_azimuth >= 360:
+            expect_azimuth = expect_azimuth % 360
 
+        if stuck_check_array[5] - expect_azimuth < 0: #本来回っているはずの角度を下回っているとき
+            print('Rotation Stuck Detected')
+            add_pwr = 5
+            add_pwr = min(add_pwr, 25) #最大で25
+            stuck_check_array = deque([0]*6, maxlen=6) #スタックチェック用の配列の初期化
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    result, judge_count, area_count, rotate_count, isHuman = human_detect.main(lat_human=LAT_HUMAN, lon_human=LON_HUMAN, model=ML_people, judge_count=judge_count, area_count=area_count, rotate_count=rotate_count, add_pwr=add_pwr)
+    human_detection_log.save_log(lat_now, lon_now, result, judge_count, area_count, rotate_count, add_pwr, isHuman)
+    print('result:', result)
+    if isHuman == 1:
+        print('Found a Missing Person')
+        break
+    if area_count == 9:
+        print('Could Not Find a Missin Person')
+        print('Mission Failed')
+        break
 
 #-Log-#
 print('Saving Log...')

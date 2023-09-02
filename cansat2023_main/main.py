@@ -51,7 +51,7 @@ bme280.bme280_calib_param() #これなに？？？
 
 #####=====log setup=====#####
 phase_log = log.Logger(dir='../logs/0_phase_log', filename='phase', t_start=t_start, columns=['phase', 'condition', 'lat', 'lon'])
-report_log = log.Logger(dir='../logs/0_report_log', filename='report', t_start=t_start, columns=[])
+report_log = log.Logger(dir='../logs/0_report_log', filename='report', t_start=t_start, columns=['N', 'W'])
 release_log = log.Logger(dir='../logs/1_release_log', filename='release', t_start=t_start, columns=['latest_press', 'delta_press', 'press_release_count', 'isRelease'])
 land_log = log.Logger(dir='../logs/2_land_log', filename='land', t_start=t_start, columns=['latest_press', 'delta_press', 'press_land_count', 'isLand'])
 melt_log = log.Logger(dir='../logs/3_melt_log', filename='melt', t_start=t_start, columns=['condition'])

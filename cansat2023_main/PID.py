@@ -8,7 +8,6 @@ import bmx055
 import stuck2
 import motor
 import time
-import other
 import send
 from collections import deque
 import basics

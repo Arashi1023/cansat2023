@@ -9,29 +9,15 @@ from math import sqrt
 import bme280
 import bmx055
 import motor
-import save_photo as save_img
-import send
 import gps
-import gps_navigate
-import stuck2
 import other
-import send_photo
 import take
 from machine_learning import DetectPeople
 import calibration
 import PID
 import log
-import basics
 
 from main_const import *
-import release
-import land
-import melt
-import beta_gps_running as gps_running
-import human_detection
-import para_avoid
-import goal_detect
-import beta_gps_running as gps_running
 
 
 # log_humandetect=other.filename('/home/dendenmushi/cansat2023/sequence/log/humandetectlog/humandetectlog','txt')

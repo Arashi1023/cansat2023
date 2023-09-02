@@ -1,6 +1,5 @@
 import time
 import bme280
-import send
 import log
 from main_const import *
 #from other import print

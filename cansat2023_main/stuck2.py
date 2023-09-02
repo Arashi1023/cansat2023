@@ -1,9 +1,7 @@
 import time
-import datetime
 import random
 
 from other import print_im920sl
-import im920sl
 import im920sl2
 import motor
 import gps_navigate

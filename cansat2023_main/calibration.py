@@ -3,11 +3,9 @@ import numpy as np
 import math
 import time
 import traceback
-import datetime
 import numpy as np
 
 import bmx055
-import other
 import gps
 import gps_navigate
 from other import print_im920sl

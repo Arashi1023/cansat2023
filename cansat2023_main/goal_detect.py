@@ -8,17 +8,13 @@ from math import sqrt
 import numpy as np
 from collections import deque
 
-import bme280
 import bmx055
 import motor
 import save_photo
-import send
 import gps
 import gps_navigate
 import other
-import send_photo
 import take
-# from libs.machine_learning import DetectPeople
 import calibration
 import PID
 import log

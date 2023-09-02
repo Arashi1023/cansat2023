@@ -376,7 +376,7 @@ def main(lat_land, lon_land, lat_dest, lon_dest, check_count :int, add_pwr: int)
     
     elif SHORT_THD_DIST < para_dist <= LONG_THD_DIST:
         print('Starting Calibration')
-        magx_off, magy_off = calibration.cal(30, -30, 30) #キャリブレーション
+        magx_off, magy_off = calibration.cal(40, -40, 30) #キャリブレーション
         para_direction = calibration.calculate_direction(lon2=lon_land, lat2=lat_land) #パラシュート位置の取得
         para_azimuth = para_direction["azimuth1"]
         target_azimuth = para_azimuth + 180

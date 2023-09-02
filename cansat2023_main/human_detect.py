@@ -117,7 +117,7 @@ def main(lat_human, lon_human, model, judge_count, area_count, rotate_count, add
             print('Move to next area')
             lat_search, lon_serch = area_info[area_count]
             PID.drive2(lat_search, lon_serch, thd_distance=5, t_cal=60, loop_num=20)
-            magx_off, magy_off = calibration.cal(30, -30, 30)
+            # magx_off, magy_off = calibration.cal(40, -40, 30) 整地2回やってしまう
 
     return result, judge_count, area_count, rotate_count, isHuman
 
@@ -147,12 +147,12 @@ if __name__ == '__main__':
     # magx_off = 0
     # magy_off = 0
 
-    magx_off, magy_off = calibration.cal(30, -30, 30)
+    magx_off, magy_off = calibration.cal(40, -40, 30)
 
     while True:
         ###---回転場所の整地---###
         if rotate_count == 0: #ある地点で1枚目の写真を撮影するとき
-            magx_off_stuck, magy_off_stuck = calibration.cal(30, -30, 30)
+            magx_off_stuck, magy_off_stuck = calibration.cal(40, -40, 30)
             stuck_check_array = deque([0]*6, maxlen=6) #スタックチェック用の配列の初期化
             add_pwr = 0 #捜索地点を変えたら追加のパワーをリセット
             lat_now, lon_now = gps.location()

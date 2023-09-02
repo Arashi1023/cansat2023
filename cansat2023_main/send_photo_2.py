@@ -430,6 +430,7 @@ if __name__ == '__main__':
 
     photo_take = picture(file_name, 320, 240)
     print("撮影した写真のファイルパス：", photo_take)
+    photo_take = cv2.imread(photo_take)
 
     gray_image = cv2.cvtColor(photo_take, cv2.COLOR_BGR2GRAY)
     

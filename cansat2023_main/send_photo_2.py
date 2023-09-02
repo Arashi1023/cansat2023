@@ -478,6 +478,7 @@ if __name__ == '__main__':
 
     
     # バイナリデータを32バイトずつ表示し、ファイルに保存する
+    print(data)
     with open(output_filename, "w") as f:
         print(len(data)//chunk_size)
         for i in range(0, len(data), chunk_size):

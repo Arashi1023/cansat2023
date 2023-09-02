@@ -437,8 +437,8 @@ if __name__ == '__main__':
     # 入力ファイルパスと出力ファイルパスを指定してリサイズ
     # input_file = gray_image    # 入力ファイルのパスを適切に指定してください
     input_file = "resized_.jpg"
-    new_width = 60            # リサイズ後の幅を指定します
-    new_height = 80 
+    new_width = 30            # リサイズ後の幅を指定します
+    new_height = 40 
     gray_image = cv2.resize(gray_image, (new_height, new_width))
     cv2.imwrite(input_file, gray_image)
     # photo_name = "/home/dendenmushi/cansat2023/imags/wireless_test/test.jpg"  # 出力ファイルのパスを適切に指定してください

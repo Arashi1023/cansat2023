@@ -477,8 +477,8 @@ phase_log.save_log('8', 'Image Guide Sequence: End', lat_log, lon_log)
 
 #-send-#
 print('Sending Data...')
-send.send_data('Image Guide finished')
-time.sleep(10)
+# send.send_data('Image Guide finished')
+# time.sleep(10)
 
 print('#####-----Image Guide Sequence: End-----#####')
 

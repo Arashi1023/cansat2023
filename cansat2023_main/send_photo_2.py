@@ -8,7 +8,8 @@ import pigpio
 import numpy as np
 import traceback
 import cv2
-
+import other
+import gps
 import send
 from take import picture
 

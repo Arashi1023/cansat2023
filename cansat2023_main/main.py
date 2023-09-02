@@ -173,16 +173,8 @@ print('#####-----Melt Sequence: End-----#####')
 print('Waiting for Stabilizer to be restored...')
 time.sleep(2)
 
-#####-----GPSの取得チェック-----##### いらないかも...
-# while True:
-#     lat_test, lon_test = gps.location()
-#     if lat_test == 0 and lon_test == 0:
-#         print('Waiting for GPS...')
-#     elif lat_test != 0 and lon_test != 0: #0だった場合はGPSが取得できていないので再取得
-#         print('GPS received')
-#         break
-
 lat_test, lon_test = gps.location()
+report_log.save_log(lat_test, lon_test) #着地地点のGPS座標の取得とログの保存
 print('GPS received')
 
 #-send-#

@@ -23,6 +23,7 @@ import stuck2
 
 from main_const import *
 # import gps_running1
+motor.setup()
 
 #細かいノイズを除去するために画像を圧縮
 def mosaic(original_img, ratio):
@@ -460,7 +461,7 @@ def main(lat_dest: float, lon_dest: float, thd_distance_goal: float, thd_red_are
     ###-----画像誘導モードの範囲外にいた場合の処理-----###
     else:
         print('ゴールから遠すぎます\nGPS誘導を行います')
-        lat_now, lon_now, distance_to_dest, rover_azimuth, isReach_dest = PID.drive2(lon_dest=LON_GOAL, lat_dest=LAT_GOAL, thd_distance=5, t_cal=T_CAL, loop_num=LOOP_NUM)
+        lat_now, lon_now, distance_to_dest, rover_azimuth, isReach_dest = PID.drive2(lon_dest=LON_GOAL, lat_dest=LAT_GOAL, thd_distance=3, t_cal=T_CAL, loop_num=LOOP_NUM)
 
     time.sleep(0.04) #9軸センサ読み取り用
 

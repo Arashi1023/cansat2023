@@ -257,7 +257,10 @@ while True: #1ループおおよそT_CAL秒
     lat_now, lon_now, distance_to_dest, rover_azimuth, isReach_dest = PID.drive2(lon_dest=LON_HUMAN, lat_dest=LAT_HUMAN, thd_distance=THD_DISTANCE_DEST, t_cal=T_CAL, loop_num=LOOP_NUM)
     print('disntance to dest=' + str(distance_to_dest) + 'm')
     print('isReach_dest=' + str(isReach_dest))
+
     #-Log-#
+    lat_now, lon_now = gps.location() #ログ用のGPS情報の取得
+    report_log.save_log(lat_now, lon_now)
     gps_running_goal_log.save_log(lat_now, lon_now, distance_to_dest, rover_azimuth, isReach_dest)    
     
     #-send-#
@@ -356,6 +359,11 @@ while True:
             stuck_check_array = deque([0]*6, maxlen=6) #スタックチェック用の配列の初期化
 
     result, judge_count, area_count, rotate_count, isHuman = human_detect.main(lat_human=LAT_HUMAN, lon_human=LON_HUMAN, model=ML_people, judge_count=judge_count, area_count=area_count, rotate_count=rotate_count, add_pwr=add_pwr)
+    
+    #-Log-#
+    lat_now, lon_now = gps.location()
+    if rotate_count == 0: #場所を移動したときに最初の1回のみログに記録する
+        report_log.save_log(lat_now, lon_now)
     human_detection_log.save_log(lat_now, lon_now, result, judge_count, area_count, rotate_count, add_pwr, isHuman)
     print('result:', result)
     if isHuman == 1:
@@ -401,7 +409,10 @@ while True: #1ループおおよそT_CAL秒
 
     print('disntance to dest=' + str(distance_to_dest) + 'm')
     print('isReach_dest=' + str(isReach_dest))
+    
     #-Log-#
+    lat_now, lon_now = gps.location() #ログ用のGPS情報の取得
+    report_log.save_log(lat_now, lon_now)
     gps_running_goal_log.save_log(lat_now, lon_now, distance_to_dest, rover_azimuth, isReach_dest)
 
     #-send-#
@@ -421,6 +432,7 @@ print(f'{distance_to_dest}m to Goal')
 #-Log-#
 print('Saving Log...')
 lat_log, lon_log = gps.location()
+report_log.save_log(lat_log, lon_log)
 phase_log.save_log('7', 'GPS Running Sequence to Goal: End', lat_log, lon_log)
 
 # #-send-#
@@ -490,6 +502,9 @@ while True:
             stuck_check_array = deque([0]*6, maxlen=6) #スタックチェック用の配列の初期化
 
     lat_now, lon_now, distance_to_goal, area_ratio, angle, isReach_goal = goal_detect.main(lat_dest=LAT_GOAL, lon_dest=LON_GOAL, thd_distance_goal=THD_DISTANCE_GOAL, thd_red_area=THD_RED_RATIO, magx_off=magx_off, magy_off=magy_off, add_pwr=add_pwr)
+    
+    lat_now, lon_now = gps.location() #ログ用のGPS情報の取得
+    report_log.save_log(lat_now, lon_now)
     image_guide_log.save_log(lat_now, lon_now, distance_to_goal, area_ratio, angle, add_pwr, isReach_goal)
     print('area_ratio: ' + str(area_ratio))
 

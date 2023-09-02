@@ -256,6 +256,7 @@ while True: #1ループおおよそT_CAL秒
     #-T_CALごとに以下の情報を取得-#
     lat_now, lon_now, distance_to_dest, rover_azimuth, isReach_dest = PID.drive2(lon_dest=LON_HUMAN, lat_dest=LAT_HUMAN, thd_distance=THD_DISTANCE_DEST, t_cal=T_CAL, loop_num=LOOP_NUM)
     print('disntance to dest=' + str(distance_to_dest) + 'm')
+    print('isReach_dest=' + str(isReach_dest))
     #-Log-#
     gps_running_goal_log.save_log(lat_now, lon_now, distance_to_dest, rover_azimuth, isReach_dest)    
     
@@ -374,6 +375,7 @@ while True: #1ループおおよそT_CAL秒
     lat_now, lon_now, distance_to_dest, rover_azimuth, isReach_dest = PID.drive2(lon_dest=LON_GOAL, lat_dest=LAT_GOAL, thd_distance=THD_DISTANCE_DEST, t_cal=T_CAL, loop_num=LOOP_NUM)
 
     print('disntance to dest=' + str(distance_to_dest) + 'm')
+    print('isReach_dest=' + str(isReach_dest))
     #-Log-#
     gps_running_goal_log.save_log(lat_now, lon_now, distance_to_dest, rover_azimuth, isReach_dest)
 

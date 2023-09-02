@@ -314,6 +314,7 @@ judge_count = 0
 stuck_check_array = deque([0]*6, maxlen=6)
 add_pwr = 0
 add_count = 0
+t_start_detect = time.time()
 
 magx_off, magy_off = calibration.cal(30, -30, 30)
 

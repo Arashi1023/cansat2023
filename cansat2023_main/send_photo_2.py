@@ -24,7 +24,7 @@ count_v = 0
 count_error = 0
 id_counter = 1
 
-file_name = "/home/dendenmushi/cansat2023/sequence/ML_imgs/sendtest_photo.jpg"  # 保存するファイル名を指定
+file_name = "/home/dendenmushi/cansat2023/imags/wirelss_test/sendtest_photo.jpg"  # 保存するファイル名を指定
 
 ELLIPSOID_GRS80 = 1  # GRS80
 ELLIPSOID_WGS84 = 2  # WGS84
@@ -430,10 +430,12 @@ if __name__ == '__main__':
 
     photo_take = picture(file_name, 320, 240)
     print("撮影した写真のファイルパス：", photo_take)
+
+    gray_image = cv2.cvtColor(photo_take, cv2.COLOR_BGR2GRAY)
     
     # 入力ファイルパスと出力ファイルパスを指定してリサイズ
-    input_file = photo_take    # 入力ファイルのパスを適切に指定してください
-    photo_name = "/home/dendenmushi/cansat2023/imags/test.jpg"  # 出力ファイルのパスを適切に指定してください
+    input_file = gray_image    # 入力ファイルのパスを適切に指定してください
+    photo_name = "/home/dendenmushi/cansat2023/imags/wireless_test/test.jpg"  # 出力ファイルのパスを適切に指定してください
     new_width = 60            # リサイズ後の幅を指定します
     new_height = 80           # リサイズ後の高さを指定します
 
@@ -441,7 +443,7 @@ if __name__ == '__main__':
     resize_image(input_file, photo_name, new_width, new_height)
     
     print("写真撮影完了")
-    
+
     
     # # 圧縮したい画像のパスと出力先のパスを指定します
     # input_image_path = photo_name
@@ -455,7 +457,7 @@ if __name__ == '__main__':
     
 
     # 圧縮後の画像をバイナリ形式に変換します
-    with open(photo_name, 'rb') as f:
+    with open(input_file, 'rb') as f:
         compressed_image_binary = f.read()
     
     

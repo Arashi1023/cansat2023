@@ -80,8 +80,8 @@ def magdata_matrix(l, r, n):
         motor.deceleration(l, r)
     except KeyboardInterrupt:
         print('Interrupt')
-    except Exception as e:
-        print(e.message())
+#    except Exception as e:
+#        print(e.message())
 
     return magdata
 

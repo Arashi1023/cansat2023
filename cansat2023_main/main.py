@@ -34,9 +34,9 @@ from main_const import *
 import release
 import land
 import melt
-import beta_gps_running as gps_running
+#import beta_gps_running as gps_running
 import human_detect
-import para_avoid
+#import para_avoid
 import goal_detect
 
 #####=====clock setup=====#####
@@ -48,7 +48,7 @@ gps.open_gps()
 bmx055.bmx055_setup()
 bme280.bme280_setup()
 bme280.bme280_calib_param() #これなに？？？
-
+motor.setup()
 #####=====log setup=====#####
 phase_log = log.Logger(dir='../logs/0_phase_log', filename='phase', t_start=t_start, columns=['phase', 'condition', 'lat', 'lon'])
 report_log = log.Logger(dir='../logs/0_report_log', filename='report', t_start=t_start, columns=['N', 'W'])
@@ -75,7 +75,7 @@ press_release_count = 0
 press_array = [0]*2
 
 while True:
-    if time.time() - t_start > RELEASE_TIMEOUT: #タイムアウトの設定
+    if time.time() - t_start > 3: #RELEASE_TIMEOUT: タイムアウトの設定
         print('Release Sequence Timeout')
         release_log.save_log('Release Sequence Timeout')
         break
@@ -171,7 +171,7 @@ print('#####-----Melt Sequence: End-----#####')
 #====================================================================================================#
 #####-----スタビライザーの復元-----#####
 print('Waiting for Stabilizer to be restored...')
-time.sleep(15)
+time.sleep(2)
 
 #####-----GPSの取得チェック-----##### いらないかも...
 # while True:

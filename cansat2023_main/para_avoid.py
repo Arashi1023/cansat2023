@@ -389,7 +389,7 @@ def main(lat_land, lon_land, lat_dest, lon_dest, check_count :int, add_pwr: int)
         theta_array = [0]*5
         t_run_start = time.time()
         while time.time() - t_run_start <= PARA_RUN_SHORT:
-            PID.PID_run(target_azimuth=target_azimuth, magx_off=magx_off, magy_off=magy_off, loop_num=20)
+            PID.PID_run(target_azimuth=target_azimuth, magx_off=magx_off, magy_off=magy_off,theta_array=theta_array, loop_num=20)
         motor.deceleration(15, 15)
         motor.motor_stop(1)
 
@@ -424,7 +424,7 @@ def main2(zone: int, zone_count: int, magx_off: float, magy_off: float):
             print('パラシュートが頭上にあります')
             time.sleep(5)
         elif red_area == 0 and check_count == 0:
-        
+            pass
         else:
             print('パラシュートを発見しました')
             print('回転します')
@@ -474,14 +474,15 @@ def main2(zone: int, zone_count: int, magx_off: float, magy_off: float):
                     PID.PID_run(target_azimuth=target_azimuth, magx_off=magx_off, magy_off=magy_off, loop_num=20)
                 motor.deceleration(15, 15)
                 motor.motor_stop(1)
-            else:
+#            else:
                 #回転後にパラシュートがある場合はこの処理を一度中止
-                pass
+#                pass
 
         
     elif zone == 3:
         print('パラシュートから10m以上離れています')
     
+
 
     time.sleep(0.04) #magのための待機時間
 

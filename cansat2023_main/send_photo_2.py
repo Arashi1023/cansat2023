@@ -435,7 +435,8 @@ if __name__ == '__main__':
     gray_image = cv2.cvtColor(photo_take, cv2.COLOR_BGR2GRAY)
     
     # 入力ファイルパスと出力ファイルパスを指定してリサイズ
-    input_file = gray_image    # 入力ファイルのパスを適切に指定してください
+    # input_file = gray_image    # 入力ファイルのパスを適切に指定してください
+    input_file = "resized_.jpg"
     new_width = 60            # リサイズ後の幅を指定します
     new_height = 80 
     gray_image = cv2.resize(gray_image, (new_height, new_width))

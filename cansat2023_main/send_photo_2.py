@@ -1,3 +1,19 @@
+#このプログラムは没です。。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 import time
 from PIL import Image
 import base64

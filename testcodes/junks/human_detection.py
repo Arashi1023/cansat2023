@@ -24,13 +24,7 @@ import log
 import basics
 
 from main_const import *
-import release
-import land
-import melt
-import beta_gps_running as gps_running
-import human_detection
-import para_avoid
-import goal_detect
+
 
 from main_const import *
 

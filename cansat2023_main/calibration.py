@@ -254,12 +254,12 @@ if __name__ == "__main__":
     # _, _, _, magx_off, magy_off, _ = calculate_offset(magdata)
     # print(magx_off, magy_off)
     # print(type(magx_off))
-    while 1:
-        # magx, magy, magz = get_data_offset(magx_off, magy_off, 0)
-        magx, magy, magz = bmx055.mag_dataRead()
-        angle_ = angle(magx, magy, magx_off, magy_off)
-        print(angle_)
-        time.sleep(0.5)
+    # while 1:
+    #     # magx, magy, magz = get_data_offset(magx_off, magy_off, 0)
+    #     magx, magy, magz = bmx055.mag_dataRead()
+    #     angle_ = angle(magx, magy, magx_off, magy_off)
+    #     print(angle_)
+    #     time.sleep(0.5)
         
     # try:
     #     r = float(input('右の出力は？'))

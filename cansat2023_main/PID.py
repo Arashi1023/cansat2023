@@ -590,18 +590,8 @@ def drive2(lon_dest :float, lat_dest: float, thd_distance: int, t_cal: float, lo
     lat_old, lon_old = gps.location() #最初のスタックチェック用の変数の設定
     rover_azimuth = calibration.angle(mag_x, mag_y, magx_off, magy_off) #戻り値
 
-    #------無線通信による現在位置情報の送信-----#
-
-    # lat_str = "{:.6f}".format(lat_old)  # 緯度を小数点以下8桁に整形
-    # lon_str = "{:.6f}".format(lon_old)  # 経度を小数点以下8桁に整形
-    # send.send_data(lat_str)
-    # time.sleep(9)
-    # send.send_data(lon_str)
-    # time.sleep(9)
-
-    t_run_start = time.time() #GPS走行開始前の時刻
-
     theta_array = [0]*5
+    t_run_start = time.time() #GPS走行開始前の時刻
 
     while time.time() - t_run_start <= t_cal:
         print("-------gps走行-------")

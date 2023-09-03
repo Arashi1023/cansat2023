@@ -173,7 +173,7 @@ print('#####-----Melt Sequence: End-----#####')
 #====================================================================================================#
 #####-----スタビライザーの復元-----#####
 print('Waiting for Stabilizer to be restored...')
-time.sleep(2) #本当は15秒まつ
+time.sleep(15) #本当は15秒まつ
 
 lat_test, lon_test = gps.location()
 # report_log.save_log(lat_test, lon_test) #着地地点のGPS座標の取得とログの保存 実質スタート地点の保存
@@ -181,7 +181,7 @@ phase_log.save_log('3', 'GPS Received', lat_test, lon_test) #GPS情報の取得�
 print('GPS received')
 
 #-send-#
-print('Sending Data...')
+#print('Sending Data...')
 #basics.send_locations(lat=lat_test, lon=lon_test, text='GPS received')
 #====================================================================================================#
 
@@ -198,7 +198,7 @@ lat_log, lon_log = gps.location()
 phase_log.save_log('4', 'Parachute Avoid Sequence: Start', lat_log, lon_log)
 
 #-send-#
-print('Sending Data...')
+#print('Sending Data...')
 #basics.send_locations(lat=lat_log, lon=lon_log, text='Para Avo S')
 
 #-Parachute Avoid-#
@@ -269,7 +269,7 @@ phase_log.save_log('4', 'Parachute Avoid Sequence: End', lat_log, lon_log)
 
 #-send-#
 print('Sending Data...')
-#basics.send_locations(lat=lat_log, lon=lon_log, text='Para Avo F')
+basics.send_locations(lat=lat_log, lon=lon_log, text='Para Avo F')
 
 print('#####-----Parachute Avoid Sequence: End-----#####')
 
@@ -289,7 +289,7 @@ phase_log.save_log('5', 'GPS Running Sequence to Human: Start', lat_log, lon_log
 
 #-send-#
 print('Sending Data...')
-#basics.send_locations(lat=lat_log, lon=lon_log, text='Run1 S')
+basics.send_locations(lat=lat_log, lon=lon_log, text='Run1 S')
 
 #-GPS Running1-#
 direction = calibration.calculate_direction(lon2=LON_HUMAN, lat2=LAT_HUMAN)
@@ -309,8 +309,8 @@ while True: #1ループおおよそT_CAL秒
     # gps_running_goal_log.save_log(lat_now, lon_now, distance_to_dest, rover_azimuth, isReach_dest)
     
     #-send-#
-    #lat_now, lon_now = gps.location()
-    #basics.send_locations(lat=lat_now, lon=lon_now, text='Run1')
+    lat_now, lon_now = gps.location()
+    basics.send_locations(lat=lat_now, lon=lon_now, text='Run1')
 
     if isReach_dest == 1: #ゴール判定
         break
@@ -324,7 +324,7 @@ phase_log.save_log('5', 'GPS Running Sequence to Human: End', lat_log, lon_log)
 
 #-send-#
 print('Sending Data...')
-#basics.send_locations(lat=lat_log, lon=lon_log, text='Run1 F')
+basics.send_locations(lat=lat_log, lon=lon_log, text='Run1 F')
 
 print('#####-----GPS Running Sequence to Human: End-----#####')
 
@@ -342,7 +342,7 @@ phase_log.save_log('6', 'Human Detection Sequence: Start', lat_log, lon_log)
 
 #-send-#
 print('Sending Data...')
-#basics.send_locations(lat=lat_log, lon=lon_log, text='Human S')
+basics.send_locations(lat=lat_log, lon=lon_log, text='Human S')
 
 #-Human Detection-#
 
@@ -410,8 +410,8 @@ while True:
     lat_now, lon_now = gps.location()
     # if rotate_count == 0: #場所を移動したときに最初の1回のみログに記録する
     #     report_log.save_log(lat_now, lon_now)
-    #if rotate_count == 0:
-    lat_area, lon_area = gps.location()
+    if rotate_count == 0:
+        lat_area, lon_area = gps.location()
     human_detection_log.save_log(lat_area, lon_area, result, judge_count, area_count, rotate_count, add_pwr, isHuman)
     print('result:', result)
     if isHuman == 1:
@@ -430,17 +430,16 @@ phase_log.save_log('6', 'Human Detection Sequence: End', lat_log, lon_log)
 #-send-#
 print('Sending Data...')
 if area_count !=9:
-    print('a')
-#basics.send_locations(lat=lat_log, lon=lon_log, text='Human E')
+    basics.send_locations(lat=lat_log, lon=lon_log, text='Human E')
 else:
     print('Reporting Mission Failed')
-    #basics.send_locations(lat=lat_log, lon=lon_log, text='Mission Failed')
+    basics.send_locations(lat=lat_log, lon=lon_log, text='Mission Failed')
     phase_log.save_log('6', 'Mission Failed ###---Not Sending Image---###', lat_log, lon_log)
 
 print('#####-----Human Detection Sequence: End-----#####')
 
 
-if isHuman != 1 and isHuman != 0: #人を見つけたときに限り以下の処理を行い画像伝送を行う
+if isHuman == 1: #人を見つけたときに限り以下の処理を行い画像伝送を行う
     print('#####-----Sending Image-----#####')
     #-Log-#
     print('Saving Log...')
@@ -622,7 +621,7 @@ phase_log.save_log('7', 'GPS Running Sequence to Goal: Start', lat_log, lon_log)
 
 #-send-#
 print('Sending Data...')
-#basics.send_locations(lat=lat_log, lon=lon_log, text='Run2 S')
+basics.send_locations(lat=lat_log, lon=lon_log, text='Run2 S')
 
 #-GPS Running2-#
 
@@ -644,8 +643,8 @@ while True: #1ループおおよそT_CAL秒
     # gps_running_goal_log.save_log(lat_now, lon_now, distance_to_dest, rover_azimuth, isReach_dest)
 
     #-send-#
-    #lat_now, lon_now = gps.location()
-    #basics.send_locations(lat=lat_now, lon=lon_now, text='Run2')
+    lat_now, lon_now = gps.location()
+    basics.send_locations(lat=lat_now, lon=lon_now, text='Run2')
     
     if isReach_dest == 1: #ゴール判定
         print('Finishing GPS Running')
@@ -658,7 +657,7 @@ phase_log.save_log('7', 'GPS Running Sequence to Goal: End', lat_log, lon_log)
 
 #-send-#
 print('Sending Data...')
-#basics.send_locations(lat=lat_log, lon=lon_log, text='Run2 F')
+basics.send_locations(lat=lat_log, lon=lon_log, text='Run2 F')
 
 print('#####-----GPS Running Sequence to Goal: End-----#####')
 

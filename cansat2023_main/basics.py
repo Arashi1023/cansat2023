@@ -4,6 +4,7 @@
 import time
 import datetime
 import cv2
+import send
 
 def standarize_angle(angle):
     '''
@@ -28,6 +29,16 @@ def save_img(img, img_path, img_name):
     cv2.imwrite(final_img_path, img)
 
     print("photo_saved")
+
+def send_locations(lat: float, lon: float, text: str):
+    send.send_data(text)
+    time.sleep(10)
+    lat_str = "{:.6f}".format(lat)  # 緯度を小数点以下8桁に整形
+    lon_str = "{:.6f}".format(lon)  # 経度を小数点以下8桁に整形
+    send.send_data(lat_str)
+    time.sleep(9)
+    send.send_data(lon_str)
+    time.sleep(9)
 
 if __name__ == "__main__":
     angle = int(input())

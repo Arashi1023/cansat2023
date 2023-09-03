@@ -68,7 +68,6 @@ print('#####-----Release Detect Sequence: Start-----#####')
 phase_log.save_log('1', 'Release Detect Sequence: Start', 0, 0) #GPS情報は取得しちゃだめ
 release_log.save_log('Release Detect Start')
 
-
 #-Release Detect-#
 press_release_count = 0
 press_array = [0]*2
@@ -133,9 +132,9 @@ print('Saving Log...')
 phase_log.save_log('2', 'Land Detect Sequence: End', 0, 0)
 
 #-send-#
-# print('Sending Data...')
-# send.send_data('Land finished')
-# time.sleep(10)
+print('Sending Data...')
+send.send_data('Land finished')
+time.sleep(10)
 
 print('#####-----Land Detect Sequence: End-----#####')
 
@@ -159,11 +158,13 @@ phase_log.save_log('3', 'Melt Sequence: End', 0, 0)
 melt_log.save_log('Melt Finished')
 
 #-send-#
-# print('Sending Data...')
-# # send.send_data('Melt finished')
-# # time.sleep(10)
+print('Sending Data...')
+send.send_data('Melt finished')
+time.sleep(10)
 
 print('#####-----Melt Sequence: End-----#####')
+
+
 
 
 
@@ -178,12 +179,7 @@ print('GPS received')
 
 #-send-#
 print('Sending Data...')
-# lat_str = "{:.6f}".format(lat_test)  # 緯度を小数点以下8桁に整形
-# lon_str = "{:.6f}".format(lon_test)  # 経度を小数点以下8桁に整形
-# send.send_data(lat_str)
-# time.sleep(9)
-# send.send_data(lon_str)
-# time.sleep(9)
+basics.send_locations(lat=lat_test, lon=lon_test, text='GPS received')
 #====================================================================================================#
 
 
@@ -193,10 +189,10 @@ print('Sending Data...')
 #####===== 4 Parachute Avoid Sequence=====#####
 print('#####-----Parachute Avoid Sequence: Start-----#####')
 
-# #-Log-#
-# print('Saving Log...')
-# lat_log, lon_log = gps.location()
-# phase_log.save_log('4', 'Parachute Avoid Sequence: Start', lat_log, lon_log)
+#-Log-#
+print('Saving Log...')
+lat_log, lon_log = gps.location()
+phase_log.save_log('4', 'Parachute Avoid Sequence: Start', lat_log, lon_log)
 
 # #-Parachute Avoid-#
 t_start = time.time()
@@ -266,8 +262,7 @@ phase_log.save_log('4', 'Parachute Avoid Sequence: End', lat_log, lon_log)
 
 #-send-#
 print('Sending Data...')
-# send.send_data('Parachute Avoid finished')
-# time.sleep(10)
+basics.send_locations(lat=lat_log, lon=lon_log, text='Para Avo F')
 
 print('#####-----Parachute Avoid Sequence: End-----#####')
 
@@ -284,6 +279,10 @@ print('Saving Log...')
 lat_log, lon_log = gps.location()
 phase_log.save_log('5', 'GPS Running Sequence to Human: Start', lat_log, lon_log)
 report_log.save_log(lat_log, lon_log)
+
+#-send-#
+print('Sending Data...')
+basics.send_locations(lat=lat_log, lon=lon_log, text='Run1 S')
 
 #-GPS Running1-#
 direction = calibration.calculate_direction(lon2=LON_HUMAN, lat2=LAT_HUMAN)
@@ -321,9 +320,8 @@ lat_log, lon_log = gps.location()
 phase_log.save_log('5', 'GPS Running Sequence to Human: End', lat_log, lon_log)
 
 #-send-#
-# print('Sending Data...')
-# send.send_data('Run1 finished')
-# time.sleep(10)
+print('Sending Data...')
+basics.send_locations(lat=lat_log, lon=lon_log, text='Run1 F')
 
 print('#####-----GPS Running Sequence to Human: End-----#####')
 
@@ -425,6 +423,8 @@ time.sleep(10)
 
 print('#####-----Human Detection Sequence: End-----#####')
 
+
+print('#####-----Human Detection Sequence: End-----#####')
 #-Sending Photos-#
 chunk_size = 4   # 送る文字数。この数字の2倍の文字数が送られる。1ピクセルの情報は16進数で6文字で表せられるため、6の倍数の文字を送りたい。
 delay = 3   # 伝送間隔（秒）
@@ -511,13 +511,13 @@ time.sleep(15)
 lat_log,lon_log=gps.location()
 phase_log.save_log('6', 'Image Sending Sequence: Start', lat_log, lon_log)
 #file_path = latest_picture_path
-file_name = "../imgs/human_detect/all/jpg"  # 保存するファイル名を指定
+file_name = "../imgs/human_detect/send/send"  # 保存するファイル名を指定
 photo_take = take.picture(file_name, 320, 240)
 print("撮影した写真のファイルパス：", photo_take)
 
 # 入力ファイルパスと出力ファイルパスを指定してリサイズ
 input_file = photo_take     # 入力ファイルのパスを適切に指定してください
-photo_name = "../imgs/human_detect/all/send_photo_resize.jpg"  # 出力ファイルのパスを適切に指定してください
+photo_name = "../imgs/human_detect/send/send_photo_resize.jpg"  # 出力ファイルのパスを適切に指定してください
 new_width = 60            # リサイズ後の幅を指定します
 new_height = 80           # リサイズ後の高さを指定します
 
@@ -528,7 +528,7 @@ print("写真撮影完了")
 
 # 圧縮したい画像のパスと出力先のパスを指定します
 input_image_path = photo_name
-compressed_image_path = 'compressed_test.jpg'
+compressed_image_path = '../imgs/human_detect/send/compressed_test.jpg'
 
 # 圧縮率を指定します（0から100の範囲の整数）
 compression_quality = photo_quality
@@ -586,6 +586,8 @@ print("データを", output_filename, "に保存しました。")
 lat_log,lon_log=gps.location()
 phase_log.save_log('6', 'Image Sending Sequence: End', lat_log, lon_log)
 
+
+
 ########################################################################################################################################
 
 
@@ -599,6 +601,10 @@ print('#####-----GPS Running Sequence to Goal: Start-----#####')
 print('Saving Log...')
 lat_log, lon_log = gps.location()
 phase_log.save_log('7', 'GPS Running Sequence to Goal: Start', lat_log, lon_log)
+
+#-send-#
+print('Sending Data...')
+basics.send_locations(lat=lat_log, lon=lon_log, text='Run2 S')
 
 #-GPS Running2-#
 
@@ -640,9 +646,8 @@ report_log.save_log(lat_log, lon_log)
 phase_log.save_log('7', 'GPS Running Sequence to Goal: End', lat_log, lon_log)
 
 # #-send-#
-# print('Sending Data...')
-# send.send_data('Run2 finished')
-# time.sleep(10)
+print('Sending Data...')
+basics.send_locations(lat=lat_log, lon=lon_log, text='Run2 F')
 
 print('#####-----GPS Running Sequence to Goal: End-----#####')
 
@@ -657,6 +662,10 @@ print('#####-----Image Guide Sequence: Start-----#####')
 lat_log, lon_log = gps.location()
 phase_log.save_log('8', 'Image Guide Sequence', lat_log, lon_log)
 image_guide_log.save_log('Image Guide Sequence: Start')
+
+#-send-#
+print('Sending Data...')
+basics.send_locations(lat=lat_log, lon=lon_log, text='Img Guide S')
 
 #-Image Guide Drive-#
 #-setup-#
@@ -720,11 +729,11 @@ while True:
 print('Saving Log...')
 lat_log, lon_log = gps.location()
 phase_log.save_log('8', 'Image Guide Sequence: End', lat_log, lon_log)
+report_log.save_log('(PDT)', 'N', lat_log, 'W', lon_log)
 
 #-send-#
 print('Sending Data...')
-# send.send_data('Image Guide finished')
-# time.sleep(10)
+basics.send_locations(lat=lat_log, lon=lon_log, text='Img Guide F')
 
 print('#####-----Image Guide Sequence: End-----#####')
 
@@ -734,13 +743,11 @@ print('#####-----Image Guide Sequence: End-----#####')
 
 #####=====Mission End=====#####
 print('Mission Accomlished')
-send.send_data('Mission Accompished')
-time.sleep(10)
+#-send-#
+print('Sending Data...')
+send.send_data('Mission Accomlished')
 
 #-Log-#
 print('Saving Log...')
-last_lat, last_lon = gps.location()
-phase_log.save_log('10', 'All Phase Comleted', last_lat, last_lon)
-release_log.save_log('(PDT)', 'N', last_lat, 'W', last_lon)
-
+phase_log.save_log('9', 'All Phase Comleted', lat_log, lat_log)
 print("Log saved\nEnding Program")

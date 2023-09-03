@@ -283,7 +283,7 @@ print('#####-----GPS Running Sequence to Human: Start-----#####')
 print('Saving Log...')
 lat_log, lon_log = gps.location()
 phase_log.save_log('5', 'GPS Running Sequence to Human: Start', lat_log, lon_log)
-report_log.save_log(lat_log, lon_log)
+# report_log.save_log(lat_log, lon_log) #GPS走行スタート地点
 
 #-send-#
 print('Sending Data...')

@@ -73,7 +73,7 @@ press_release_count = 0
 press_array = [0]*2
 
 while True:
-    if time.time() - t_start > 3: #RELEASE_TIMEOUT: タイムアウトの設定
+    if time.time() - t_start > 10: #RELEASE_TIMEOUT: タイムアウトの設定
         print('Release Sequence Timeout')
         release_log.save_log('Release Sequence Timeout')
         break
@@ -132,9 +132,9 @@ print('Saving Log...')
 phase_log.save_log('2', 'Land Detect Sequence: End', 0, 0)
 
 #-send-#
-print('Sending Data...')
-send.send_data('Land finished')
-time.sleep(10)
+# print('Sending Data...')
+# send.send_data('Land finished')
+# time.sleep(10)
 
 print('#####-----Land Detect Sequence: End-----#####')
 
@@ -158,9 +158,9 @@ phase_log.save_log('3', 'Melt Sequence: End', 0, 0)
 melt_log.save_log('Melt Finished')
 
 #-send-#
-print('Sending Data...')
-send.send_data('Melt finished')
-time.sleep(10)
+# print('Sending Data...')
+# send.send_data('Melt finished')
+# time.sleep(10)
 
 print('#####-----Melt Sequence: End-----#####')
 
@@ -171,10 +171,11 @@ print('#####-----Melt Sequence: End-----#####')
 #====================================================================================================#
 #####-----スタビライザーの復元-----#####
 print('Waiting for Stabilizer to be restored...')
-time.sleep(2)
+time.sleep(2) #本当は15秒まつ
 
 lat_test, lon_test = gps.location()
 report_log.save_log(lat_test, lon_test) #着地地点のGPS座標の取得とログの保存 実質スタート地点の保存
+phase_log.save_log('3', 'GPS Received', lat_test, lon_test) #GPS情報の取得とログの保存
 print('GPS received')
 
 #-send-#
@@ -194,7 +195,11 @@ print('Saving Log...')
 lat_log, lon_log = gps.location()
 phase_log.save_log('4', 'Parachute Avoid Sequence: Start', lat_log, lon_log)
 
-# #-Parachute Avoid-#
+#-send-#
+print('Sending Data...')
+basics.send_locations(lat=lat_log, lon=lon_log, text='Para Avo S')
+
+#-Parachute Avoid-#
 t_start = time.time()
 stuck_check_array = deque([0]*6, maxlen=6)
 add_pwr = 0

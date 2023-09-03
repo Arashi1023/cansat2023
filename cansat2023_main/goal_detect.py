@@ -23,7 +23,7 @@ import stuck2
 
 from main_const import *
 # import gps_running1
-motor.setup()
+#motor.setup()
 
 #細かいノイズを除去するために画像を圧縮
 def mosaic(original_img, ratio):

@@ -26,7 +26,7 @@ import basics
 
 from main_const import *
 import goal_detect
-
+motor.setup()
 def detect_para():
     '''
     

@@ -20,10 +20,10 @@ MELT_TIME = 4 #溶断回路に印加する時間
 #-----パラシュート回避-----#
 # PARA_CHECK_COUNT = 5
 PARA_THD_RED_AREA = 0
-PARA_THD_COVERED = 69120 #パラシュートが覆いかぶさっているか判定する閾値
+PARA_THD_COVERED = 48384 #パラシュートが覆いかぶさっているか判定する閾値
 PARA_PWR = 25 #パラシュートを見つけたときに回転するモーター出力
 T_CHECK = 0.15
-T_ROTATE = 0.25 #パラシュートを見つけたときに回転する時間
+T_ROTATE = 0.35 #パラシュートを見つけたときに回転する時間
 T_FORWARD = 3
 THD_AVOID_ANGLE = 15
 PARA_FORWARD_ANGLE = 45

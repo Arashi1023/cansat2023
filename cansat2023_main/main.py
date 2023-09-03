@@ -337,6 +337,10 @@ print('Saving Log...')
 lat_log, lon_log = gps.location()
 phase_log.save_log('6', 'Human Detection Sequence: Start', lat_log, lon_log)
 
+#-send-#
+print('Sending Data...')
+basics.send_locations(lat=lat_log, lon=lon_log, text='Human S')
+
 #-Human Detection-#
 
 #-Load Model-#
@@ -418,13 +422,17 @@ phase_log.save_log('6', 'Human Detection Sequence: End', lat_log, lon_log)
 
 #-send-#
 print('Sending Data...')
-send.send_data('Human Detection finished')
-time.sleep(10)
+basics.send_locations(lat=lat_log, lon=lon_log, text='Human E')
 
 print('#####-----Human Detection Sequence: End-----#####')
 
 
-print('#####-----Human Detection Sequence: End-----#####')
+
+print('#####-----Sending Image-----#####')
+#-Log-#
+print('Saving Log...')
+phase_log.save_log('6', 'Image Sending Sequence: Start', lat_log, lon_log)
+
 #-Sending Photos-#
 chunk_size = 4   # 送る文字数。この数字の2倍の文字数が送られる。1ピクセルの情報は16進数で6文字で表せられるため、6の倍数の文字を送りたい。
 delay = 3   # 伝送間隔（秒）
@@ -508,8 +516,8 @@ while True:
 #---------------------画像伝送----------------------------#
 
 time.sleep(15)
-lat_log,lon_log=gps.location()
-phase_log.save_log('6', 'Image Sending Sequence: Start', lat_log, lon_log)
+# lat_log,lon_log=gps.location()
+# phase_log.save_log('6', 'Image Sending Sequence: Start', lat_log, lon_log)
 #file_path = latest_picture_path
 file_name = "../imgs/human_detect/send/send"  # 保存するファイル名を指定
 photo_take = take.picture(file_name, 320, 240)
@@ -583,7 +591,6 @@ execution_time = end_time - start_time  # 実行時間を計算
 print("実行時間:", execution_time, "秒")
 print("データを", output_filename, "に保存しました。")
 
-lat_log,lon_log=gps.location()
 phase_log.save_log('6', 'Image Sending Sequence: End', lat_log, lon_log)
 
 

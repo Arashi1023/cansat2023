@@ -428,7 +428,8 @@ if area_count !=9:
 else:
     print('Reporting Mission Failed')
     basics.send_locations(lat=lat_log, lon=lon_log, text='Mission Failed')
-    
+    phase_log.save_log('6', 'Mission Failed ###---Not Sending Image---###', lat_log, lon_log)
+
 print('#####-----Human Detection Sequence: End-----#####')
 
 

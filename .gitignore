@@ -7,4 +7,5 @@ sequence/photo_storage
 
 cansat2023_main/__pycache__
 imgs/parachute_avoid/all
+imgs/human_detect/all
 cansat2023_sub

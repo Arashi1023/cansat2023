@@ -691,9 +691,9 @@ def drive3(lon_dest :float, lat_dest: float, thd_distance: int, t_cal: float, lo
         distance_to_dest, target_azimuth = direction["distance"], direction["azimuth1"]
         print(lat_now, lon_now)
 
-        #-Log-#
-        if report_count % 30 == 0:
-            report_log.save_log(lat_now, lon_now, target_azimuth)
+        # #-Log-#
+        # if report_count % 30 == 0:
+        #     report_log.save_log(lat_now, lon_now, target_azimuth)
 
         #-----スタックチェック用の変数の更新-----#
         lat_new, lon_new = lat_now, lon_now
@@ -709,10 +709,13 @@ def drive3(lon_dest :float, lat_dest: float, thd_distance: int, t_cal: float, lo
 
         #-----PID制御による走行-----#
         if distance_to_dest > thd_distance:
-            PID_run(target_azimuth, magx_off, magy_off, theta_array, loop_num)
+            error_theta = PID_run(target_azimuth, magx_off, magy_off, theta_array, loop_num)
         else:
             isReach_dest = 1 #ゴール判定用のフラグ
             break
+
+        #-Log-#
+        report_log.save_log(lat_now, lon_now, target_azimuth, -error_theta)
 
         stuck_count += 1 #25回に一回スタックチェックを行う
         report_count += 1

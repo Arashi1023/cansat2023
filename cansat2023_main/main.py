@@ -423,8 +423,12 @@ phase_log.save_log('6', 'Human Detection Sequence: End', lat_log, lon_log)
 
 #-send-#
 print('Sending Data...')
-basics.send_locations(lat=lat_log, lon=lon_log, text='Human E')
-
+if area_count !=9:
+    basics.send_locations(lat=lat_log, lon=lon_log, text='Human E')
+else:
+    print('Reporting Mission Failed')
+    basics.send_locations(lat=lat_log, lon=lon_log, text='Mission Failed')
+    
 print('#####-----Human Detection Sequence: End-----#####')
 
 

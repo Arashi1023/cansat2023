@@ -714,13 +714,16 @@ def drive3(lon_dest :float, lat_dest: float, thd_distance: int, t_cal: float, lo
             error_theta = PID_run(target_azimuth, magx_off, magy_off, theta_array, loop_num)
         else:
             isReach_dest = 1 #ゴール判定用のフラグ
-            break
 
         #-Log-#
-        report_log.save_log(lat_now, lon_now, target_azimuth, -error_theta)
+        if report_count % 30 == 0:
+            report_log.save_log(lat_now, lon_now, target_azimuth, -error_theta)
 
         stuck_count += 1 #25回に一回スタックチェックを行う
         report_count += 1
+
+        if isReach_dest == 1:
+            break
 
     motor.motor_stop(1)
 

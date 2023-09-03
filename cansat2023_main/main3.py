@@ -176,7 +176,7 @@ print('Waiting for Stabilizer to be restored...')
 time.sleep(15) #本当は15秒まつ
 
 lat_test, lon_test = gps.location()
-report_log.save_log(lat_test, lon_test) #着地地点のGPS座標の取得とログの保存 実質スタート地点の保存
+# report_log.save_log(lat_test, lon_test) #着地地点のGPS座標の取得とログの保存 実質スタート地点の保存
 phase_log.save_log('3', 'GPS Received', lat_test, lon_test) #GPS情報の取得とログの保存
 print('GPS received')
 

@@ -428,171 +428,171 @@ basics.send_locations(lat=lat_log, lon=lon_log, text='Human E')
 print('#####-----Human Detection Sequence: End-----#####')
 
 
+if isHuman == 1: #人を見つけたときに限り以下の処理を行い画像伝送を行う
+    print('#####-----Sending Image-----#####')
+    #-Log-#
+    print('Saving Log...')
+    phase_log.save_log('6', 'Image Sending Sequence: Start', lat_log, lon_log)
 
-print('#####-----Sending Image-----#####')
-#-Log-#
-print('Saving Log...')
-phase_log.save_log('6', 'Image Sending Sequence: Start', lat_log, lon_log)
+    #-Sending Photos-#
+    chunk_size = 4   # 送る文字数。この数字の2倍の文字数が送られる。1ピクセルの情報は16進数で6文字で表せられるため、6の倍数の文字を送りたい。
+    delay = 3   # 伝送間隔（秒）
+    num_samples = 10 #GPSを読み取る回数
+    photo_quality = 30 #伝送する画像の圧縮率
+    count = 0
+    count_v = 0
+    count_error = 0
+    id_counter = 1
 
-#-Sending Photos-#
-chunk_size = 4   # 送る文字数。この数字の2倍の文字数が送られる。1ピクセルの情報は16進数で6文字で表せられるため、6の倍数の文字を送りたい。
-delay = 3   # 伝送間隔（秒）
-num_samples = 10 #GPSを読み取る回数
-photo_quality = 30 #伝送する画像の圧縮率
-count = 0
-count_v = 0
-count_error = 0
-id_counter = 1
-
-while True:
-    try:
-        utc, lat, lon, sHeight, gHeight = gps.read_gps()
-        if utc == -1.0:
-            if lat == -1.0:
-                print("Reading gps Error")
-                count_error = count_error +1
-                if count_error > num_samples:
-                    send.send_data("human_GPS_start")
-                    print("human_GPS_start")
-                    time.sleep(delay)
-                    send.send_data("Reading gps Error")
+    while True:
+        try:
+            utc, lat, lon, sHeight, gHeight = gps.read_gps()
+            if utc == -1.0:
+                if lat == -1.0:
                     print("Reading gps Error")
-                    time.sleep(delay)
-                    send.send_data("human_GPS_fin")
-                    print("human_GPS_fin")
-                    time.sleep(delay)
-                    break
-                # pass
+                    count_error = count_error +1
+                    if count_error > num_samples:
+                        send.send_data("human_GPS_start")
+                        print("human_GPS_start")
+                        time.sleep(delay)
+                        send.send_data("Reading gps Error")
+                        print("Reading gps Error")
+                        time.sleep(delay)
+                        send.send_data("human_GPS_fin")
+                        print("human_GPS_fin")
+                        time.sleep(delay)
+                        break
+                    # pass
+                else:
+                    # pass
+                    print("Status V")
+                    count_v = count_v + 1
+                    if count_v > num_samples:
+                        time.sleep(delay)
+                        send.send_data("human_GPS_start")
+                        print("human_GPS_start")
+                        time.sleep(delay)
+                        send.send_data("Status V")
+                        print("Status V")
+                        time.sleep(delay)
+                        send.send_data("human_GPS_fin")
+                        print("human_GPS_fin")
+                        time.sleep(delay)
+                        break
             else:
                 # pass
-                print("Status V")
-                count_v = count_v + 1
-                if count_v > num_samples:
+                print(utc, lat, lon, sHeight, gHeight)
+                lat, lon = gps.location()
+                print(lat,lon)
+                count = count +1
+                if count % num_samples == 0:
+                    send_lat = "{:.6f}".format(lat)
+                    send_lon = "{:.6f}".format(lon)
+                    print(send_lat,send_lon)
+                # 無線で送信
                     time.sleep(delay)
                     send.send_data("human_GPS_start")
                     print("human_GPS_start")
                     time.sleep(delay)
-                    send.send_data("Status V")
-                    print("Status V")
+                    send.send_data(send_lat)
+                    send.send_data(send_lon)
+                    print(lat,lon)
                     time.sleep(delay)
                     send.send_data("human_GPS_fin")
                     print("human_GPS_fin")
-                    time.sleep(delay)
+                    time.sleep (delay)
                     break
-        else:
-            # pass
-            print(utc, lat, lon, sHeight, gHeight)
-            lat, lon = gps.location()
-            print(lat,lon)
-            count = count +1
-            if count % num_samples == 0:
-                send_lat = "{:.6f}".format(lat)
-                send_lon = "{:.6f}".format(lon)
-                print(send_lat,send_lon)
-            # 無線で送信
-                time.sleep(delay)
-                send.send_data("human_GPS_start")
-                print("human_GPS_start")
-                time.sleep(delay)
-                send.send_data(send_lat)
-                send.send_data(send_lon)
-                print(lat,lon)
-                time.sleep(delay)
-                send.send_data("human_GPS_fin")
-                print("human_GPS_fin")
-                time.sleep (delay)
-                break
-        time.sleep(1)
-    except KeyboardInterrupt:
-        gps.close_gps()
-        print("\r\nKeyboard Intruppted, Serial Closed")
-    except:
-        gps.close_gps()
-        print(traceback.format_exc())
+            time.sleep(1)
+        except KeyboardInterrupt:
+            gps.close_gps()
+            print("\r\nKeyboard Intruppted, Serial Closed")
+        except:
+            gps.close_gps()
+            print(traceback.format_exc())
 
 
 
 
 
-#---------------------画像伝送----------------------------#
+    #---------------------画像伝送----------------------------#
 
-time.sleep(15)
-# lat_log,lon_log=gps.location()
-# phase_log.save_log('6', 'Image Sending Sequence: Start', lat_log, lon_log)
-#file_path = latest_picture_path
-file_name = "../imgs/human_detect/send/send"  # 保存するファイル名を指定
-photo_take = take.picture(file_name, 320, 240)
-print("撮影した写真のファイルパス：", photo_take)
+    time.sleep(15)
+    # lat_log,lon_log=gps.location()
+    # phase_log.save_log('6', 'Image Sending Sequence: Start', lat_log, lon_log)
+    #file_path = latest_picture_path
+    file_name = "../imgs/human_detect/send/send"  # 保存するファイル名を指定
+    photo_take = take.picture(file_name, 320, 240)
+    print("撮影した写真のファイルパス：", photo_take)
 
-# 入力ファイルパスと出力ファイルパスを指定してリサイズ
-input_file = photo_take     # 入力ファイルのパスを適切に指定してください
-photo_name = "../imgs/human_detect/send/send_photo_resize.jpg"  # 出力ファイルのパスを適切に指定してください
-new_width = 60            # リサイズ後の幅を指定します
-new_height = 80           # リサイズ後の高さを指定します
+    # 入力ファイルパスと出力ファイルパスを指定してリサイズ
+    input_file = photo_take     # 入力ファイルのパスを適切に指定してください
+    photo_name = "../imgs/human_detect/send/send_photo_resize.jpg"  # 出力ファイルのパスを適切に指定してください
+    new_width = 60            # リサイズ後の幅を指定します
+    new_height = 80           # リサイズ後の高さを指定します
 
-# リサイズを実行
-send_photo.resize_image(input_file, photo_name, new_width, new_height)
+    # リサイズを実行
+    send_photo.resize_image(input_file, photo_name, new_width, new_height)
 
-print("写真撮影完了")
+    print("写真撮影完了")
 
-# 圧縮したい画像のパスと出力先のパスを指定します
-input_image_path = photo_name
-compressed_image_path = '../imgs/human_detect/send/compressed_test.jpg'
+    # 圧縮したい画像のパスと出力先のパスを指定します
+    input_image_path = photo_name
+    compressed_image_path = '../imgs/human_detect/send/compressed_test.jpg'
 
-# 圧縮率を指定します（0から100の範囲の整数）
-compression_quality = photo_quality
+    # 圧縮率を指定します（0から100の範囲の整数）
+    compression_quality = photo_quality
 
-# 画像を圧縮します
-send_photo.compress_image(input_image_path, compressed_image_path, compression_quality)
+    # 画像を圧縮します
+    send_photo.compress_image(input_image_path, compressed_image_path, compression_quality)
 
-# 圧縮後の画像をバイナリ形式に変換します
-with open(compressed_image_path, 'rb') as f:
-    compressed_image_binary = f.read()
-
-
-data = compressed_image_binary  # バイナリデータを指定してください
-output_filename = "output.txt"  # 保存先のファイル名
-
-start_time = time.time()  # プログラム開始時刻を記録
-
-send.send_data ("wireless_start")
-
-print("写真伝送開始します")
-time.sleep(1)
+    # 圧縮後の画像をバイナリ形式に変換します
+    with open(compressed_image_path, 'rb') as f:
+        compressed_image_binary = f.read()
 
 
-# バイナリデータを32バイトずつ表示し、ファイルに保存する
-with open(output_filename, "w") as f:
-    for i in range(0, len(data), chunk_size):
-        if id_counter%30==0:
-            time.sleep(10)
-        chunk = data[i:i+chunk_size]
-        chunk_str = "".join(format(byte, "02X") for byte in chunk)
-        
-        # 識別番号とデータを含む行の文字列を作成
-        line_with_id = f"{id_counter}-{chunk_str}"
+    data = compressed_image_binary  # バイナリデータを指定してください
+    output_filename = "output.txt"  # 保存先のファイル名
 
-        #chunk_strにデータがある
-        print(line_with_id)
-        send.send_data(line_with_id)
-        # 表示間隔を待つ
-        time.sleep(delay)
-        id_counter = id_counter +1
+    start_time = time.time()  # プログラム開始時刻を記録
 
-        # ファイルに書き込む
-        f.write(line_with_id + "\n")
+    send.send_data ("wireless_start")
 
-send.send_data ("wireless_fin")
-send.send_data("num=" + str(id_counter))
-time.sleep(10)
+    print("写真伝送開始します")
+    time.sleep(1)
 
-end_time = time.time()  # プログラム終了時刻を記録
-execution_time = end_time - start_time  # 実行時間を計算
 
-print("実行時間:", execution_time, "秒")
-print("データを", output_filename, "に保存しました。")
+    # バイナリデータを32バイトずつ表示し、ファイルに保存する
+    with open(output_filename, "w") as f:
+        for i in range(0, len(data), chunk_size):
+            if id_counter%30==0:
+                time.sleep(10)
+            chunk = data[i:i+chunk_size]
+            chunk_str = "".join(format(byte, "02X") for byte in chunk)
+            
+            # 識別番号とデータを含む行の文字列を作成
+            line_with_id = f"{id_counter}-{chunk_str}"
 
-phase_log.save_log('6', 'Image Sending Sequence: End', lat_log, lon_log)
+            #chunk_strにデータがある
+            print(line_with_id)
+            send.send_data(line_with_id)
+            # 表示間隔を待つ
+            time.sleep(delay)
+            id_counter = id_counter +1
+
+            # ファイルに書き込む
+            f.write(line_with_id + "\n")
+
+    send.send_data ("wireless_fin")
+    send.send_data("num=" + str(id_counter))
+    time.sleep(10)
+
+    end_time = time.time()  # プログラム終了時刻を記録
+    execution_time = end_time - start_time  # 実行時間を計算
+
+    print("実行時間:", execution_time, "秒")
+    print("データを", output_filename, "に保存しました。")
+
+    phase_log.save_log('6', 'Image Sending Sequence: End', lat_log, lon_log)
 
 
 

@@ -379,6 +379,8 @@ def PID_run(target_azimuth: float, magx_off: float, magy_off: float, theta_array
 
         count += 1
 
+    return error_theta
+
         #-----角度の取得-----#
         # error_theta = get_theta_dest(target_azimuth, magx_off, magy_off)
 

@@ -94,7 +94,7 @@ def main(lat_human, lon_human, model, judge_count, area_count, rotate_count, add
     lat_search, lon_serch = area_info[area_count]
 
     ###---撮影した画像に人がいる確率を求める---###
-    img_path = take.picture('../imgs/human_detect/image', 320, 240)
+    img_path = take.picture('../imgs/human_detect/all/image', 320, 240)
     result = model.predict(image_path=img_path)
 
     if result > JUDGE_PROBABILITY:

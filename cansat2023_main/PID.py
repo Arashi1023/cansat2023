@@ -347,6 +347,8 @@ def PID_run(target_azimuth: float, magx_off: float, magy_off: float, theta_array
 
         #-----相対角度の取得-----#
         error_theta = get_theta_dest(target_azimuth, magx_off, magy_off)
+        if _ == 0:
+            control = -error_theta
 
         #-----thetaの値を蓄積する-----#
         theta_array = latest_theta_array(error_theta, theta_array)
@@ -379,7 +381,7 @@ def PID_run(target_azimuth: float, magx_off: float, magy_off: float, theta_array
 
         count += 1
 
-    return error_theta
+    return control
 
         #-----角度の取得-----#
         # error_theta = get_theta_dest(target_azimuth, magx_off, magy_off)
@@ -711,13 +713,13 @@ def drive3(lon_dest :float, lat_dest: float, thd_distance: int, t_cal: float, lo
 
         #-----PID制御による走行-----#
         if distance_to_dest > thd_distance:
-            error_theta = PID_run(target_azimuth, magx_off, magy_off, theta_array, loop_num)
+            control = PID_run(target_azimuth, magx_off, magy_off, theta_array, loop_num)
         else:
             isReach_dest = 1 #ゴール判定用のフラグ
 
         #-Log-#
         if report_count % 30 == 0:
-            report_log.save_log(lat_now, lon_now, target_azimuth, -error_theta)
+            report_log.save_log(lat_now, lon_now, target_azimuth, control)
 
         stuck_count += 1 #25回に一回スタックチェックを行う
         report_count += 1

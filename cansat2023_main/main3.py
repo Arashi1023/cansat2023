@@ -309,6 +309,7 @@ while True: #1ループおおよそT_CAL秒
     # gps_running_goal_log.save_log(lat_now, lon_now, distance_to_dest, rover_azimuth, isReach_dest)
     
     #-send-#
+    lat_now, lon_now = gps.location()
     basics.send_locations(lat=lat_now, lon=lon_now, text='Run1')
 
     if isReach_dest == 1: #ゴール判定
@@ -638,18 +639,16 @@ while True: #1ループおおよそT_CAL秒
     # gps_running_goal_log.save_log(lat_now, lon_now, distance_to_dest, rover_azimuth, isReach_dest)
 
     #-send-#
+    lat_now, lon_now = gps.location()
     basics.send_locations(lat=lat_now, lon=lon_now, text='Run2')
     
     if isReach_dest == 1: #ゴール判定
         print('Finishing GPS Running')
         break
 
-print(f'{distance_to_dest}m to Goal')
-
 #-Log-#
 print('Saving Log...')
 lat_log, lon_log = gps.location()
-report_log.save_log(lat_log, lon_log)
 phase_log.save_log('7', 'GPS Running Sequence to Goal: End', lat_log, lon_log)
 
 #-send-#

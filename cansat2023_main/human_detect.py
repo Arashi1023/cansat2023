@@ -74,7 +74,7 @@ def get_locations(lat_human, lon_human):
 
     return area_info
 
-def main(lat_human, lon_human, model, judge_count, area_count, rotate_count, add_pwr):
+def main(lat_human, lon_human, model, judge_count, area_count, rotate_count, add_pwr, report_log):
     '''
     人の位置情報をもとに周囲を捜索するプログラム
     Parameters
@@ -116,7 +116,7 @@ def main(lat_human, lon_human, model, judge_count, area_count, rotate_count, add
         if area_count <= 8:
             print('Move to next area')
             lat_search, lon_serch = area_info[area_count]
-            PID.drive2(lat_search, lon_serch, thd_distance=5, t_cal=60, loop_num=20)
+            PID.drive3(lat_search, lon_serch, thd_distance=5, t_cal=60, loop_num=20, report_log=report_log)
             # magx_off, magy_off = calibration.cal(40, -40, 30) 整地2回やってしまう
 
     return result, judge_count, area_count, rotate_count, isHuman

@@ -588,7 +588,6 @@ def drive2(lon_dest :float, lat_dest: float, thd_distance: int, t_cal: float, lo
     mag_x = magdata[0]
     mag_y = magdata[1]
     lat_old, lon_old = gps.location() #最初のスタックチェック用の変数の設定
-    
     rover_azimuth = calibration.angle(mag_x, mag_y, magx_off, magy_off) #戻り値
 
     #------無線通信による現在位置情報の送信-----#

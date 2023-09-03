@@ -727,7 +727,7 @@ while True:
     lat_now, lon_now, distance_to_goal, area_ratio, angle, isReach_goal = goal_detect.main(lat_dest=LAT_GOAL, lon_dest=LON_GOAL, thd_distance_goal=THD_DISTANCE_GOAL, thd_red_area=THD_RED_RATIO, magx_off=magx_off, magy_off=magy_off, add_pwr=add_pwr)
     
     lat_now, lon_now = gps.location() #ログ用のGPS情報の取得
-    report_log.save_log(lat_now, lon_now)
+    # report_log.save_log(lat_now, lon_now)
     image_guide_log.save_log(lat_now, lon_now, distance_to_goal, area_ratio, angle, add_pwr, isReach_goal)
     print('area_ratio: ' + str(area_ratio))
 
@@ -739,7 +739,7 @@ while True:
 print('Saving Log...')
 lat_log, lon_log = gps.location()
 phase_log.save_log('8', 'Image Guide Sequence: End', lat_log, lon_log)
-report_log.save_log('(PDT)', 'N', lat_log, 'W', lon_log)
+report_log.save_log(lat_log, lon_log, 0, 0)
 
 #-send-#
 print('Sending Data...')

@@ -52,7 +52,7 @@ motor.setup()
 
 #####=====log setup=====#####
 phase_log = log.Logger(dir='../logs/0_phase_log', filename='phase', t_start=t_start, columns=['phase', 'condition', 'lat', 'lon'])
-report_log = log.Logger(dir='../logs/0_report_log', filename='report', t_start=t_start, columns=['N', 'W'])
+report_log = log.Logger(dir='../logs/0_report_log', filename='report', t_start=t_start, columns=['N', 'W', 'target_azimuth', 'control'])
 release_log = log.Logger(dir='../logs/1_release_log', filename='release', t_start=t_start, columns=['latest_press', 'delta_press', 'press_release_count', 'isRelease'])
 land_log = log.Logger(dir='../logs/2_land_log', filename='land', t_start=t_start, columns=['latest_press', 'delta_press', 'press_land_count', 'isLand'])
 melt_log = log.Logger(dir='../logs/3_melt_log', filename='melt', t_start=t_start, columns=['condition'])
@@ -366,7 +366,7 @@ magx_off, magy_off = calibration.cal(30, -30, 30)
 while True:
     ###---回転場所の整地---###
     if rotate_count == 0: #ある地点で1枚目の写真を撮影するとき
-        magx_off_stuck, magy_off_stuck = calibration.cal(30, -30, 30)
+        magx_off_stuck, magy_off_stuck = calibration.cal(40, -40, 30)
         stuck_check_array = deque([0]*6, maxlen=6) #スタックチェック用の配列の初期化
         add_pwr = 0 #捜索地点を変えたら追加のパワーをリセット
         lat_now, lon_now = gps.location()
@@ -402,13 +402,17 @@ while True:
             add_pwr = min(add_pwr, 25) #最大で25
             stuck_check_array = deque([0]*6, maxlen=6) #スタックチェック用の配列の初期化
 
-    result, judge_count, area_count, rotate_count, isHuman = human_detect.main(lat_human=LAT_HUMAN, lon_human=LON_HUMAN, model=ML_people, judge_count=judge_count, area_count=area_count, rotate_count=rotate_count, add_pwr=add_pwr)
+
+
+    result, judge_count, area_count, rotate_count, isHuman = human_detect.main(lat_human=LAT_HUMAN, lon_human=LON_HUMAN, model=ML_people, judge_count=judge_count, area_count=area_count, rotate_count=rotate_count, add_pwr=add_pwr, report_log=report_log)
     
     #-Log-#
     lat_now, lon_now = gps.location()
-    if rotate_count == 0: #場所を移動したときに最初の1回のみログに記録する
-        report_log.save_log(lat_now, lon_now)
-    human_detection_log.save_log(lat_now, lon_now, result, judge_count, area_count, rotate_count, add_pwr, isHuman)
+    # if rotate_count == 0: #場所を移動したときに最初の1回のみログに記録する
+    #     report_log.save_log(lat_now, lon_now)
+    if rotate_count == 0:
+        lat_area, lon_area = gps.location()
+    human_detection_log.save_log(lat_area, lon_area, result, judge_count, area_count, rotate_count, add_pwr, isHuman)
     print('result:', result)
     if isHuman == 1:
         print('Found a Missing Person')

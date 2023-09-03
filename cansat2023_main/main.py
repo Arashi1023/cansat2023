@@ -48,6 +48,7 @@ bmx055.bmx055_setup()
 bme280.bme280_setup()
 bme280.bme280_calib_param() #これなに？？？
 motor.setup()
+
 #####=====log setup=====#####
 phase_log = log.Logger(dir='../logs/0_phase_log', filename='phase', t_start=t_start, columns=['phase', 'condition', 'lat', 'lon'])
 report_log = log.Logger(dir='../logs/0_report_log', filename='report', t_start=t_start, columns=['N', 'W'])

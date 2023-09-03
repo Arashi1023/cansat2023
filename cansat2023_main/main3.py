@@ -681,7 +681,7 @@ stuck_check_array = deque([0]*6, maxlen=6)
 add_pwr = 0
 add_count = 0
 
-magx_off, magy_off = calibration.cal(30, -30, 30)
+magx_off, magy_off = calibration.cal(40, -40, 30)
 print('Goal Detection Start')
 while True:
     if time.time()-t_start_goal > 600: #ゴール検知をはじめて10分を超えたら

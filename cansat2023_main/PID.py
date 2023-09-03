@@ -298,7 +298,7 @@ def PID_adjust_direction(target_azimuth, magx_off, magy_off, theta_array: list):
 
     motor.motor_stop(1)
 
-def PID_run(target_azimuth: float, magx_off: float, magy_off: float, theta_array: list, loop_num: int):
+def PID_run(target_azimuth: float, magx_off: float, magy_off: float, theta_array: list, loop_num: int=20):
     '''
     目標地点までの方位角が既知の場合にPID制御により走行する関数
 
@@ -336,7 +336,7 @@ def PID_run(target_azimuth: float, magx_off: float, magy_off: float, theta_array
     theta_array.append(error_theta)
 
     #-----制御処理-----#
-    for _ in range(loop_num):
+    for _ in range(loop_num): #1秒間の間に20回ループが回る
 
         if count < 10: #25から15に変更 by 田口 8/23 15から10に変更 by 田口 8/31
             Ki = 0

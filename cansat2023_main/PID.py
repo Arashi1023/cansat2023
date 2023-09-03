@@ -625,6 +625,100 @@ def drive2(lon_dest :float, lat_dest: float, thd_distance: int, t_cal: float, lo
 
     return lat_now, lon_now, distance_to_dest, rover_azimuth, isReach_dest
 
+def drive3(lon_dest :float, lat_dest: float, thd_distance: int, t_cal: float, loop_num: int, report_log):
+    '''
+    任意の地点までPID制御により走行する関数
+    最終version これを使う
+    
+    Parameters
+    ----------
+    lon_dest : float
+        目標地点の経度
+    lat : float
+        目標地点の緯度
+    thd_distance : float
+        目標地点に到達したと判定する距離（10mぐらいが望ましい？？短くしすぎるとうまく停止してくれない）
+    t_cal : float
+        キャリブレーションを行う間隔
+    log_path : 
+        ログの保存先
+    t_start : float
+        開始時間
+    '''
+
+    #-----PID制御用のパラメータの設定-----#
+    # KP = 0.4
+    # KD = 3
+    # KI = 0.03
+
+    #-----初期設定-----#
+    stuck_count = 1
+    isReach_dest = 0
+    report_count = 0
+
+    #-----上向き判定-----#
+    stuck2.ue_jug()
+
+    #-----キャリブレーション-----#
+    time.sleep(1)
+    magx_off, magy_off = calibration.cal(40, -40, 30)
+
+    #-----目標地点への角度を取得-----#
+    direction = calibration.calculate_direction(lon2=lon_dest, lat2=lat_dest)
+    target_azimuth, distance_to_dest = direction["azimuth1"], direction["distance"]
+
+    #-----PID制御による角度調整-----#
+    theta_array = [0]*5
+    PID_adjust_direction(target_azimuth, magx_off, magy_off, theta_array)
+
+    #-----現在のローバーの情報取得-----#
+    magdata = bmx055.mag_dataRead()
+    mag_x = magdata[0]
+    mag_y = magdata[1]
+    lat_old, lon_old = gps.location() #最初のスタックチェック用の変数の設定
+    rover_azimuth = calibration.angle(mag_x, mag_y, magx_off, magy_off) #戻り値
+
+    theta_array = [0]*5
+    t_run_start = time.time() #GPS走行開始前の時刻
+
+    print('###---GPS走行---###')
+
+    while time.time() - t_run_start <= t_cal:
+        lat_now, lon_now = gps.location()
+        direction = gps_navigate.vincenty_inverse(lat_now, lon_now, lat_dest, lon_dest)
+        distance_to_dest, target_azimuth = direction["distance"], direction["azimuth1"]
+        print(lat_now, lon_now)
+
+        #-Log-#
+        if report_count % 30 == 0:
+            report_log.save_log(lat_now, lon_now, target_azimuth)
+
+        #-----スタックチェック用の変数の更新-----#
+        lat_new, lon_new = lat_now, lon_now
+
+        #-----スタックチェック-----#
+        if stuck_count % 25 == 0:
+            if stuck2.stuck_jug(lat_old, lon_old, lat_new, lon_new, thd=STUCK_JUDGE_THD_DISTANCE):
+                pass
+            else:
+                stuck2.stuck_avoid()
+                pass
+            lat_old, lon_old = gps.location()
+
+        #-----PID制御による走行-----#
+        if distance_to_dest > thd_distance:
+            PID_run(target_azimuth, magx_off, magy_off, theta_array, loop_num)
+        else:
+            isReach_dest = 1 #ゴール判定用のフラグ
+            break
+
+        stuck_count += 1 #25回に一回スタックチェックを行う
+        report_count += 1
+
+    motor.motor_stop(1)
+
+    return lat_now, lon_now, distance_to_dest, rover_azimuth, isReach_dest
+
 
 
 if __name__ == "__main__":

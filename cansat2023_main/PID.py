@@ -646,6 +646,8 @@ def drive3(lon_dest :float, lat_dest: float, thd_distance: int, t_cal: float, lo
         ログの保存先
     t_start : float
         開始時間
+    report_log :
+        ログの保存先インスタンス
     '''
 
     #-----PID制御用のパラメータの設定-----#

@@ -72,7 +72,7 @@ def add_text_to_last_line(output_file, text_to_add):
         print(f"エラーが発生しました: {e}")
 
 #report file
-output_file = './test_control_record_report.txt'
+output_file = './control_record_report.txt'
 
 #reset
 line_to_delete_below = 3

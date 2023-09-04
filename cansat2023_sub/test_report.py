@@ -76,7 +76,7 @@ def add_text_to_last_line(output_file, text_to_add):
         print(f"エラーが発生しました: {e}")
 
 #report file
-output_file = './control_record_report.csv'
+output_file = './control_record_report.txt'
 input_file = get_last_file_in_folder('../logs/0_report_log')
 
 #reset

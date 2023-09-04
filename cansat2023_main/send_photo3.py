@@ -502,9 +502,10 @@ if __name__ == '__main__':
             
             #リストに追加
             wireless_send += chunk_str
+            print(wireless_send)
             
             #受信できているかを確認する
-            receive_text = receive_data
+            receive_text = receive_data()
             wireless_receive += receive_text
             print(wireless_receive)
             

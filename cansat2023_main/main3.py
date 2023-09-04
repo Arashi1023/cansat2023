@@ -231,18 +231,18 @@ while True:
     rover_aziimuth = calibration.angle(magx=magx, magy=magy, magx_off=magx_off, magy_off=magy_off)
     stuck_check_array.append(rover_aziimuth)
 
-    if add_pwr != 0 and stuck_check_array[3] != 0: #追加のパワーがあるとき
-        for i in range(3):
-            expect_azimuth_add = stuck_check_array[i] + 30
-            if expect_azimuth_add >= 360:
-                expect_azimuth_add = expect_azimuth_add % 360
-            if stuck_check_array[i+1] - expect_azimuth_add > 30: #add_pwrを追加していて回りすぎているとき
-                add_count += 1
-            else:
-                add_count = 0
-        if add_count == 3:
-            add_pwr = 0
-            add_count = 0
+    # if add_pwr != 0 and stuck_check_array[3] != 0: #追加のパワーがあるとき
+    #     for i in range(3):
+    #         expect_azimuth_add = stuck_check_array[i] + 30
+    #         if expect_azimuth_add >= 360:
+    #             expect_azimuth_add = expect_azimuth_add % 360
+    #         if stuck_check_array[i+1] - expect_azimuth_add > 30: #add_pwrを追加していて回りすぎているとき
+    #             add_count += 1
+    #         else:
+    #             add_count = 0
+    #     if add_count == 3:
+    #         add_pwr = 0
+    #         add_count = 0
     
     add_pwr = 0 #追加のパワーをリセット
 

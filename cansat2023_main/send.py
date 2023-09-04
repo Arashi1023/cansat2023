@@ -22,6 +22,18 @@ def send_reset(t_reset = 10):
     pi.write(sendPin, 1)
     time.sleep(1)
 
+def send_on(sendPin=22):
+    '''
+    無線をONにするための関数
+    '''
+    pi.write(sendPin, 1)
+
+def send_off(sendPin=22):
+    '''
+    無線をOFFにするための関数
+    '''
+    pi.write(sendPin, 0)
+
 if __name__ == '__main__':
     while 1:
         text = str(input())

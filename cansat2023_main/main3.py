@@ -39,6 +39,17 @@ import human_detect
 import para_avoid
 import goal_detect
 
+#####=====wireless com=====#####
+#-Setting up wireless communication-#
+send.send_data('CONNECTION TEST START')
+send.send_data('Wait for sometime')
+time.sleep(60) #繋げている状態で何分か待つ
+send.send_data('CONNECTION TEST FINISHED')
+#-Turning off wireless communication-#
+send.send_off() #分離機構の展開までの間は無線通信を切る
+
+
+
 #####=====clock setup=====#####
 t_start = time.time()
 
@@ -179,6 +190,9 @@ lat_test, lon_test = gps.location()
 # report_log.save_log(lat_test, lon_test) #着地地点のGPS座標の取得とログの保存 実質スタート地点の保存
 phase_log.save_log('3', 'GPS Received', lat_test, lon_test) #GPS情報の取得とログの保存
 print('GPS received')
+
+#-Turning On wireless communication-#
+send.send_on()
 
 #-send-#
 print('Sending Data...')

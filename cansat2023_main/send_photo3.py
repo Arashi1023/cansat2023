@@ -430,39 +430,30 @@ if __name__ == '__main__':
 
     photo_take = picture(file_name, 320, 240)
     print("撮影した写真のファイルパス：", photo_take)
-    photo_take = cv2.imread(photo_take)
-
-    gray_image = cv2.cvtColor(photo_take, cv2.COLOR_BGR2GRAY)
     
     # 入力ファイルパスと出力ファイルパスを指定してリサイズ
-    # input_file = gray_image    # 入力ファイルのパスを適切に指定してください
-    input_file = "resized_.jpg"
-    new_width = 30            # リサイズ後の幅を指定します
-    new_height = 40 
-    gray_image = cv2.resize(gray_image, (new_height, new_width))
-    cv2.imwrite(input_file, gray_image)
-    # photo_name = "/home/dendenmushi/cansat2023/imags/wireless_test/test.jpg"  # 出力ファイルのパスを適切に指定してください
-              # リサイズ後の高さを指定します
+    input_file = photo_take    # 入力ファイルのパスを適切に指定してください
+    photo_name = "/home/dendenmushi/cansat2023/sequence/ML_imgs/send_photo_resize.jpg"  # 出力ファイルのパスを適切に指定してください
+    new_width = 60            # リサイズ後の幅を指定します
+    new_height = 80           # リサイズ後の高さを指定します
 
     # リサイズを実行
-    # resize_image(input_file, photo_name, new_width, new_height)
+    resize_image(input_file, photo_name, new_width, new_height)
     
     print("写真撮影完了")
-
     
-    # # 圧縮したい画像のパスと出力先のパスを指定します
-    # input_image_path = photo_name
-    # compressed_image_path = 'compressed_test.jpg'
+    # 圧縮したい画像のパスと出力先のパスを指定します
+    input_image_path = photo_name
+    compressed_image_path = 'compressed_test.jpg'
     
-    # # 圧縮率を指定します（0から100の範囲の整数）
-    # compression_quality = photo_quality
+    # 圧縮率を指定します（0から100の範囲の整数）
+    compression_quality = photo_quality
     
-    # # 画像を圧縮します
-    # compress_image(input_image_path, compressed_image_path, compression_quality)
+    # 画像を圧縮します
+    compress_image(input_image_path, compressed_image_path, compression_quality)
     
-
     # 圧縮後の画像をバイナリ形式に変換します
-    with open(input_file, 'rb') as f:
+    with open(compressed_image_path, 'rb') as f:
         compressed_image_binary = f.read()
     
     
@@ -478,9 +469,7 @@ if __name__ == '__main__':
 
     
     # バイナリデータを32バイトずつ表示し、ファイルに保存する
-
     with open(output_filename, "w") as f:
-        print(len(data)//chunk_size)
         for i in range(0, len(data), chunk_size):
             if id_counter%30==0:
                 time.sleep(20)

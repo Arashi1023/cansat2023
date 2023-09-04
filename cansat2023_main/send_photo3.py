@@ -486,6 +486,9 @@ if __name__ == '__main__':
             #chunk_strにデータがある
             print(line_with_id)
             send.send_data(line_with_id)
+            #受信できているかを確認する
+            receive_text = send.receive_data()
+            print(receive_text)
             # 表示間隔を待つ
             time.sleep(delay)
             id_counter = id_counter +1
@@ -496,9 +499,6 @@ if __name__ == '__main__':
             #リストに追加
             wireless_send.append(chunk_str)
             print(wireless_send)
-            
-            #受信できているかを確認する
-            receive_text = send.receive_data()
             wireless_receive.append(receive_text)
             print(wireless_receive)
             

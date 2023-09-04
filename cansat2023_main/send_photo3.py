@@ -501,7 +501,7 @@ if __name__ == '__main__':
             f.write(line_with_id + "\n")
             
             #リストに追加
-            wireless_send += chunk_str
+            wireless_send.append(chunk_str)
             print(wireless_send)
             
             #受信できているかを確認する

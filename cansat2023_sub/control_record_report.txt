@@ -1,9 +1,10 @@
 Brief description of the control algorithm:
-This CanSat is controlled using the relative positions of the current location and the goal. The data
-used are the current position acquired using the GNSS receiver, the pre-set goal information and the
-azimuth angle that the CanSat is facing, acquired from the magnetic field sensor. Using these, the
-CanSat determines its travel time and direction of travel. By repeating this process several times, the
-CanSat travels autonomously to the goal.
+This CanSat is guided to the destination based on information obtained from GPS. 
+It determines the distance and direction using its own location information, 
+the destination's location information, and data obtained from geomagnetism, 
+and then travels accordingly. 
+Additionally, this CanSat is set with a mission to "search for missing person" 
+and will head towards the goal after finding a missing person.
 
 Time and position at which control was initiated:
 2023-09-03 02:31:03.652533,97.96674370765686,35.924266,139.91215,80.79094289355506,17.1597764147391

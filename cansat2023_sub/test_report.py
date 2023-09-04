@@ -80,7 +80,7 @@ output_file = './control_record_report.txt'
 input_file = get_last_file_in_folder('../logs/0_report_log')
 
 #reset
-line_to_delete_below = 7 #cansatの説明文の長さによって変えて
+line_to_delete_below = 9 #cansatの説明文の長さによって変えて
 delete_lines_below(output_file, line_to_delete_below)
 print("0")
 

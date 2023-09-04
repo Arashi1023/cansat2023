@@ -1,0 +1,8 @@
+Brief description of the control algorithm:
+This CanSat is controlled using the relative positions of the current location and the goal. The data
+used are the current position acquired using the GNSS receiver, the pre-set goal information and the
+azimuth angle that the CanSat is facing, acquired from the magnetic field sensor. Using these, the
+CanSat determines its travel time and direction of travel. By repeating this process several times, the
+CanSat travels autonomously to the goal.
+
+

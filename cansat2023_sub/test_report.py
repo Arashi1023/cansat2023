@@ -13,6 +13,7 @@ def get_last_file_in_folder(folder_path):
         return "フォルダ内にファイルが見つかりませんでした。"
 
 def delete_lines_below(file_path, line_number):
+    # ファイルの指定した行以下を削除する
     try:
         with open(file_path, 'r') as file:
             lines = file.readlines()
@@ -29,6 +30,7 @@ def delete_lines_below(file_path, line_number):
 
 
 def extract_and_write(input_file, output_file, start_line, end_line=float('inf')):
+    # ファイルの指定した範囲を取得し、別のファイルに追記する
     try:
         with open(input_file, 'r') as infile:
             lines = infile.readlines()
@@ -46,6 +48,7 @@ def extract_and_write(input_file, output_file, start_line, end_line=float('inf')
         print(f"エラーが発生しました: {e}")
 
 def extract_single_line(input_file, output_file, line_number):
+    # ファイルの指定した1行を取得し、別のファイルに追記する
     try:
         with open(input_file, 'r') as infile:
             lines = infile.readlines()
@@ -62,6 +65,7 @@ def extract_single_line(input_file, output_file, line_number):
         print(f"エラーが発生しました: {e}")
 
 def add_text_to_last_line(output_file, text_to_add):
+    # ファイルにテキストを追加する
     try:
         with open(output_file, 'a') as outfile:
             # 「あいうえお」を追加して新しいファイルに書き込む
@@ -73,85 +77,96 @@ def add_text_to_last_line(output_file, text_to_add):
 
 #report file
 output_file = './control_record_report.txt'
+input_file = get_last_file_in_folder('./logs/0_report_log')
 
 #reset
-line_to_delete_below = 3
+line_to_delete_below = 7
 delete_lines_below(output_file, line_to_delete_below)
 print("0")
 
 #開始時間
-input_file = get_last_file_in_folder('./log/reportlog')
-line_number=1
-extract_single_line(input_file, output_file, line_number)
+text_to_add = "Time and position at which control was initiated:"
+add_text_to_last_line(output_file, text_to_add)
 print("1")
+
+# input_file = get_last_file_in_folder('./logs/0_report_log')
+line_number=2
+extract_single_line(input_file, output_file, line_number)
+print("2")
 
 #終了時間
 text_to_add = "Time and position at which the control ended:"
 add_text_to_last_line(output_file, text_to_add)
-print("2")
-
-line_number=2
-extract_single_line(input_file, output_file, line_number)
 print("3")
+
+line_number=-1
+extract_single_line(input_file, output_file, line_number)
+print("4")
 
 text_to_add = "All control history:"
 add_text_to_last_line(output_file, text_to_add)
 print("4")
 
-#log_phase
-input_file = get_last_file_in_folder('./log/phaselog')
+#report_log
+# input_file = get_last_file_in_folder('./logs/0_report_log')
 start_line = 1
 extract_and_write(input_file, output_file, start_line)
 print("5")
 
-text_to_add = "Detailed control record:"
-add_text_to_last_line(output_file, text_to_add)
-print("6")
+# #log_phase
+# input_file = get_last_file_in_folder('./log/phaselog')
+# start_line = 1
+# extract_and_write(input_file, output_file, start_line)
+# print("5")
 
-#log_release
-input_file = get_last_file_in_folder('./log/releaselog')
-start_line = 1
-extract_and_write(input_file, output_file, start_line)
-print("7")
+# text_to_add = "Detailed control record:"
+# add_text_to_last_line(output_file, text_to_add)
+# print("6")
 
-#log_landing
-input_file = get_last_file_in_folder('./log/landinglog')
-start_line = 1
-extract_and_write(input_file, output_file, start_line)
-print("8")
+# #log_release
+# input_file = get_last_file_in_folder('./log/releaselog')
+# start_line = 1
+# extract_and_write(input_file, output_file, start_line)
+# print("7")
 
-#log_melting
-input_file = get_last_file_in_folder('./log/meltinglog')
-start_line = 1
-extract_and_write(input_file, output_file, start_line)
-print("9")
+# #log_landing
+# input_file = get_last_file_in_folder('./log/landinglog')
+# start_line = 1
+# extract_and_write(input_file, output_file, start_line)
+# print("8")
 
-#log_para
-input_file = get_last_file_in_folder('./log/para_avoid_log')
-start_line = 1
-extract_and_write(input_file, output_file, start_line)
-print("10")
+# #log_melting
+# input_file = get_last_file_in_folder('./log/meltinglog')
+# start_line = 1
+# extract_and_write(input_file, output_file, start_line)
+# print("9")
 
-#log_gpsrunning1
-input_file = get_last_file_in_folder('./log/gpsrunning1log')
-start_line = 1
-extract_and_write(input_file, output_file, start_line)
-print("11")
+# #log_para
+# input_file = get_last_file_in_folder('./log/para_avoid_log')
+# start_line = 1
+# extract_and_write(input_file, output_file, start_line)
+# print("10")
 
-#log_humandetect
-input_file = get_last_file_in_folder('./log/humandetectlog')
-start_line = 1
-extract_and_write(input_file, output_file, start_line)
-print("12")
+# #log_gpsrunning1
+# input_file = get_last_file_in_folder('./log/gpsrunning1log')
+# start_line = 1
+# extract_and_write(input_file, output_file, start_line)
+# print("11")
 
-#log_gpsrunning2
-input_file = get_last_file_in_folder('./log/gpsrunning2log')
-start_line = 1
-extract_and_write(input_file, output_file, start_line)
-print("13")
+# #log_humandetect
+# input_file = get_last_file_in_folder('./log/humandetectlog')
+# start_line = 1
+# extract_and_write(input_file, output_file, start_line)
+# print("12")
 
-#log_photorunning
-input_file = get_last_file_in_folder('./log/photorunninglog')
-start_line = 1
-extract_and_write(input_file, output_file, start_line)
-print("14")
+# #log_gpsrunning2
+# input_file = get_last_file_in_folder('./log/gpsrunning2log')
+# start_line = 1
+# extract_and_write(input_file, output_file, start_line)
+# print("13")
+
+# #log_photorunning
+# input_file = get_last_file_in_folder('./log/photorunninglog')
+# start_line = 1
+# extract_and_write(input_file, output_file, start_line)
+# print("14")

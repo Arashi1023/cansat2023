@@ -44,7 +44,7 @@ def send_off(sendPin=22):
 if __name__ == '__main__':
     while 1:
         text = str(input())
-        receive_data
+        receive_text = receive_data
         if text =="A":
             try:
                 print("キルで")
@@ -55,4 +55,5 @@ if __name__ == '__main__':
 
         else:
             send_data(text)
+            print(receive_text)
             print('送信しました')

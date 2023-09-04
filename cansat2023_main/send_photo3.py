@@ -265,13 +265,6 @@ def vincenty_inverse(lat1, lon1, lat2, lon2, ellipsoid=None):
     # return s(distance), and alpha(angle)
     return s, math.degrees(alpha)
 
-def receive_data(serial_port):
-    port = '/dev/ttyAMA0'
-    baudrate = 19200
-    serial_port = serial.Serial(port, baudrate)
-    received_data = serial_port.readline().strip().decode()
-    return received_data
-
 def gps_data_read():
     '''
     GPSを読み込むまでデータをとり続ける関数
@@ -505,8 +498,8 @@ if __name__ == '__main__':
             print(wireless_send)
             
             #受信できているかを確認する
-            receive_text = receive_data()
-            wireless_receive += receive_text
+            receive_text = send.receive_data()
+            wireless_receive.append(receive_text)
             print(wireless_receive)
             
 

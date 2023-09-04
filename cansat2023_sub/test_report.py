@@ -80,7 +80,7 @@ output_file = './control_record_report.txt'
 input_file = get_last_file_in_folder('/Users/arass/OneDrive/ドキュメント/GitHub/cansat2023/kari/cansat2023/logs/0_report_log')
 
 #reset
-line_to_delete_below = 7
+line_to_delete_below = 7 #cansatの説明文の長さによって変えて
 delete_lines_below(output_file, line_to_delete_below)
 print("0")
 
@@ -93,6 +93,9 @@ line_number=2
 extract_single_line(input_file, output_file, line_number)
 print("2")
 
+# 改行を挿入
+add_text_to_last_line(output_file, "")  
+
 #終了時間
 text_to_add = "Time and position at which the control ended:"
 add_text_to_last_line(output_file, text_to_add)
@@ -101,6 +104,9 @@ print("3")
 line_number=-1
 extract_single_line(input_file, output_file, line_number)
 print("4")
+
+# 改行を挿入
+add_text_to_last_line(output_file, "")
 
 #制御記録
 text_to_add = "All control history:"

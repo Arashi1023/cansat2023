@@ -13,9 +13,10 @@ def send_data(data, port='/dev/ttyAMA0', baudrate=19200):
 
 
 def receive_data(port='/dev/ttyAMA0', baudrate=19200):
+    global IM920Serial
     IM920Serial = serial.Serial(port, baudrate)
     IM920Serial.flushInput()  # 入力バッファをクリア
-    received_data = IM920Serial.readline().decode().strip()  # データを読み込み、改行文字を削除
+    received_data = IM920Serial.readline().strip().decode()  # データを読み込み、改行文字を削除
     print(receive_data)
     return received_data
 
@@ -53,8 +54,12 @@ if __name__ == '__main__':
             except:
                 pi.write(sendPin, 0)
 
-        else:
-            send_data(text)
-            print('送信しました')
-            receive_data
-            print("受信")
+        
+        send_data(text)
+        print('送信しました')
+        received_text = receive_data()
+        receive_data
+        print("受信",received_text)
+        
+    # シリアルポートのクローズ
+    IM920Serial.close()

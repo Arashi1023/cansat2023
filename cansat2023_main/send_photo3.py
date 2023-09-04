@@ -475,8 +475,8 @@ if __name__ == '__main__':
     # バイナリデータを32バイトずつ表示し、ファイルに保存する
     with open(output_filename, "w") as f:
         for i in range(0, len(data), chunk_size):
-            if id_counter%30==0:
-                time.sleep(20)
+            # if id_counter%30==0:
+            #     time.sleep(20)
             chunk = data[i:i+chunk_size]
             chunk_str = "".join(format(byte, "02X") for byte in chunk)
             
@@ -489,8 +489,8 @@ if __name__ == '__main__':
             #受信できているかを確認する
             receive_text = send.receive_data()
             print(receive_text)
-            # 表示間隔を待つ
-            time.sleep(delay)
+            # # 表示間隔を待つ
+            # time.sleep(delay)
             id_counter = id_counter +1
     
             # ファイルに書き込む

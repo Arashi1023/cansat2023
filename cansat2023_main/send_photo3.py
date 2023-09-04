@@ -440,7 +440,7 @@ if __name__ == '__main__':
     
     # 入力ファイルパスと出力ファイルパスを指定してリサイズ
     input_file = photo_take    # 入力ファイルのパスを適切に指定してください
-    photo_name = "/home/dendenmushi/cansat2023/sequence/ML_imgs/send_photo_resize.jpg"  # 出力ファイルのパスを適切に指定してください
+    photo_name = "/home/dendenmushi/cansat2023/imgs/wirelss_test/sendtest_photo.jpg"  # 出力ファイルのパスを適切に指定してください
     new_width = 60            # リサイズ後の幅を指定します
     new_height = 80           # リサイズ後の高さを指定します
 
@@ -451,7 +451,7 @@ if __name__ == '__main__':
     
     # 圧縮したい画像のパスと出力先のパスを指定します
     input_image_path = photo_name
-    compressed_image_path = 'compressed_test.jpg'
+    compressed_image_path = '/home/dendenmushi/cansat2023/imgs/wirelss_test/compressed_test.jpg'
     
     # 圧縮率を指定します（0から100の範囲の整数）
     compression_quality = photo_quality

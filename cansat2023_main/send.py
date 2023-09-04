@@ -13,17 +13,10 @@ def send_data(data, port='/dev/ttyAMA0', baudrate=19200):
 
 
 def receive_data(port='/dev/ttyAMA0', baudrate=19200):
-    try:
-        IM920Serial = serial.Serial(port, baudrate)
-        IM920Serial.flushInput()  # 入力バッファをクリア
-
-        while True:
-            received_data = IM920Serial.readline().decode().strip()  # データを読み込み、改行文字を削除
-            if received_data:
-                print("受信データ:", received_data)
-
-    except KeyboardInterrupt:
-        print("受信を停止しました。")
+    IM920Serial = serial.Serial(port, baudrate)
+    IM920Serial.flushInput()  # 入力バッファをクリア
+    received_data = IM920Serial.readline().decode().strip()  # データを読み込み、改行文字を削除
+    return received_data
 
 def send_reset(t_reset = 10):
     """
@@ -51,6 +44,7 @@ def send_off(sendPin=22):
 if __name__ == '__main__':
     while 1:
         text = str(input())
+        receive_data
         if text =="A":
             try:
                 print("キルで")
@@ -62,4 +56,3 @@ if __name__ == '__main__':
         else:
             send_data(text)
             print('送信しました')
-            receive_data

@@ -26,7 +26,7 @@ class Logger:
             os.makedirs(dir)
         
         file_num = len(os.listdir(dir))
-        self.path = dir + '/' + filename + '_' + str(file_num).zfill(4) + '.txt'
+        self.path = dir + '/' + filename + '_' + str(file_num).zfill(4) + '.csv'
         self.t_start = t_start
 
         columns_txt = 'datetime(PDT),elapsed time,' + ','.join(columns) + '\n'

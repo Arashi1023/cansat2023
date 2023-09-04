@@ -243,6 +243,8 @@ while True:
         if add_count == 3:
             add_pwr = 0
             add_count = 0
+    
+    add_pwr = 0 #追加のパワーをリセット
 
     if stuck_check_array[5] != 0: #スタックチェックを判定できるデータがそろったとき
         expect_azimuth = stuck_check_array[0] + 90

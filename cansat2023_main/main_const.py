@@ -20,7 +20,7 @@ MELT_TIME = 4 #溶断回路に印加する時間
 #-----パラシュート回避-----#
 # PARA_CHECK_COUNT = 5
 PARA_THD_RED_AREA = 0
-PARA_THD_COVERED = 48384 #パラシュートが覆いかぶさっているか判定する閾値
+PARA_THD_COVERED = 69120*0.7 #パラシュートが覆いかぶさっているか判定する閾値
 PARA_PWR = 25 #パラシュートを見つけたときに回転するモーター出力
 T_CHECK = 0.15
 T_ROTATE = 0.35 #パラシュートを見つけたときに回転する時間
@@ -50,7 +50,7 @@ LON_HUMAN = 139.9124594
 
 JUDGE_PROBABILITY = 0.5 #人である確率がこれ以上のとき人がいると判定する
 ADDITIONAL_JUDGE_COUNT = 3 #人がいると判定したとき、追加の確認を行う回数
-ROTATE_COUNT = 24 # 1つの場所で回転する回数
+ROTATE_COUNT = 36 # 1つの場所で回転する回数
 
 HD_ROT_PWR = 25
 HD_ROT_TIME = 0.15

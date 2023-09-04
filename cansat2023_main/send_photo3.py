@@ -8,6 +8,7 @@ import pigpio
 import numpy as np
 import traceback
 import cv2
+import serial
 import other
 import gps
 import send
@@ -265,6 +266,9 @@ def vincenty_inverse(lat1, lon1, lat2, lon2, ellipsoid=None):
     return s, math.degrees(alpha)
 
 def receive_data(serial_port):
+    port = '/dev/ttyAMA0'
+    baudrate = 19200
+    serial_port = serial.Serial(port, baudrate)
     received_data = serial_port.readline().strip().decode()
     return received_data
 
@@ -455,6 +459,10 @@ if __name__ == '__main__':
     # 画像を圧縮します
     compress_image(input_image_path, compressed_image_path, compression_quality)
     
+    #送受信データのリスト
+    wireless_send = []
+    wireless_receive =[]
+
     # 圧縮後の画像をバイナリ形式に変換します
     with open(compressed_image_path, 'rb') as f:
         compressed_image_binary = f.read()
@@ -491,6 +499,15 @@ if __name__ == '__main__':
     
             # ファイルに書き込む
             f.write(line_with_id + "\n")
+            
+            #リストに追加
+            wireless_send += chunk_str
+            
+            #受信できているかを確認する
+            receive_text = receive_data
+            wireless_receive += receive_text
+            print(wireless_receive)
+            
 
     send.send_data ("wireless_fin")
     send.send_data("num=" + str(id_counter))

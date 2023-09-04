@@ -77,7 +77,7 @@ def add_text_to_last_line(output_file, text_to_add):
 
 #report file
 output_file = './control_record_report.txt'
-input_file = get_last_file_in_folder('/Users/arass/OneDrive/ドキュメント/GitHub/cansat2023/kari/cansat2023/logs/0_report_log')
+input_file = get_last_file_in_folder('../logs/0_report_log')
 
 #reset
 line_to_delete_below = 7 #cansatの説明文の長さによって変えて

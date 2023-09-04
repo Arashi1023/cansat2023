@@ -264,6 +264,9 @@ def vincenty_inverse(lat1, lon1, lat2, lon2, ellipsoid=None):
     # return s(distance), and alpha(angle)
     return s, math.degrees(alpha)
 
+def receive_data(serial_port):
+    received_data = serial_port.readline().strip().decode()
+    return received_data
 
 def gps_data_read():
     '''

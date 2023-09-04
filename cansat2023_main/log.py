@@ -29,7 +29,7 @@ class Logger:
         self.path = dir + '/' + filename + '_' + str(file_num).zfill(4) + '.txt'
         self.t_start = t_start
 
-        columns_txt = 'datetime,elapsed time,' + ','.join(columns) + '\n'
+        columns_txt = 'datetime(PDT),elapsed time,' + ','.join(columns) + '\n'
         with open(self.path, mode='w') as f:
             f.write(columns_txt)
 

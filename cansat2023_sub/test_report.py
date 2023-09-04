@@ -77,7 +77,7 @@ def add_text_to_last_line(output_file, text_to_add):
 
 #report file
 output_file = './control_record_report.txt'
-input_file = get_last_file_in_folder('./logs/0_report_log')
+input_file = get_last_file_in_folder('logs/0_report_log')
 
 #reset
 line_to_delete_below = 7
@@ -89,7 +89,6 @@ text_to_add = "Time and position at which control was initiated:"
 add_text_to_last_line(output_file, text_to_add)
 print("1")
 
-# input_file = get_last_file_in_folder('./logs/0_report_log')
 line_number=2
 extract_single_line(input_file, output_file, line_number)
 print("2")
@@ -103,15 +102,14 @@ line_number=-1
 extract_single_line(input_file, output_file, line_number)
 print("4")
 
+#制御記録
 text_to_add = "All control history:"
 add_text_to_last_line(output_file, text_to_add)
-print("4")
+print("5")
 
-#report_log
-# input_file = get_last_file_in_folder('./logs/0_report_log')
 start_line = 1
 extract_and_write(input_file, output_file, start_line)
-print("5")
+print("6")
 
 # #log_phase
 # input_file = get_last_file_in_folder('./log/phaselog')

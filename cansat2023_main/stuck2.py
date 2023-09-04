@@ -117,37 +117,39 @@ def random(a, b, k):
 def stuck_avoid_move(x):
     if x == 0:
         print_im920sl('stuck_avoid_move():0')
-        motor.move(-100, -100, 5)
-        motor.move(-60, -60, 3)
+        motor.move(-100, -100, 2)
+        motor.move(-60, -60, 5)
+        time.sleep(1)
     elif x == 1:
         print_im920sl('stuck_avoid_move():1')
         motor.move(40, -40, 1)
-        motor.move(100, 100, 5)
+        motor.move(80, 80, 5)
+        time.sleep(1)
     elif x == 2:
         print_im920sl('stuck_avoid_move():2')
         motor.move(-100, 100, 2)
-        motor.move(100, 100, 5)
-
+        motor.move(80, 80, 5)
+        time.sleep(1)
     elif x == 3:
         print_im920sl('stuck_avoid_move():3')
         motor.move(100, -100, 2)
-        motor.move(100, 100, 5)
-
+        motor.move(80, 80, 5)
+        time.sleep(1)
     elif x == 4:
         print_im920sl('stuck_avoid_move():4')
         motor.move(40, -40, 1)
-        motor.move(-80, -100, 5)
-
+        motor.move(-80, -80, 5)
+        time.sleep(1)
     elif x == 5:
         print_im920sl('stuck_avoid_move():5')
         motor.move(40, -40, 1)
-        motor.move(-100, -80, 5)
-
+        motor.move(-80, -80, 5)
+        time.sleep(1)
     elif x == 6:
         print_im920sl('stuck_avoid_move():6')
         motor.move(100, -100, 3)
-        motor.move(100, 100, 3)
-
+        motor.move(80, 80, 3)
+        time.sleep(1)
 
 def stuck_avoid():
     print_im920sl('start stuck  avoid')
@@ -195,6 +197,7 @@ def stuck_avoid():
                 break
         if flag:
             break
+    time.sleep(10) #モータ休めるために停止
     print_im920sl('complete stuck avoid')
     print('complete stuck avoid')
 

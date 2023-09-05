@@ -499,7 +499,7 @@ if __name__ == '__main__':
                     receive_count = 1
                     break
                 receive_count += 1
-            receive_text = send.receive_data(3)
+            #receive_text = send.receive_data(3)
             # time.sleep(delay)
             id_counter = id_counter +1
     

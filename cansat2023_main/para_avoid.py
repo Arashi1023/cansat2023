@@ -324,6 +324,7 @@ def main(lat_land, lon_land, lat_dest, lon_dest, check_count :int, add_pwr: int,
     isDistant_para = 0 #パラシュート回避用のフラグ
     red_area = 0
     angle = 0
+    control_num = 0
 
     para_info = calibration.calculate_direction(lon2=lon_land, lat2=lat_land)
     para_dist = para_info['distance'] #パラシュートまでの距離を計算
@@ -337,13 +338,16 @@ def main(lat_land, lon_land, lat_dest, lon_dest, check_count :int, add_pwr: int,
         print('Warning: Parachute is very close\nStarting Parachute Avoid Sequence')
         red_area, angle = detect_para()
         if red_area > PARA_THD_COVERED:
+            control_num = 1
             print('Parachute on top')
             time.sleep(5)
         elif red_area == 0 and check_count == 0:
+            control_num = 2
             print('Parachute Not Found\nChecking Around')
             para_pwr = PARA_PWR + add_pwr
             motor.move(para_pwr, -para_pwr, T_CHECK)
         elif red_area == 0 and check_count > 0:
+            control_num = 3
             print("Move Forwward")
             # motor.move(PARA_PWR, PARA_PWR, T_FORWARD)
             mag_data = bmx055.mag_dataRead()
@@ -361,6 +365,7 @@ def main(lat_land, lon_land, lat_dest, lon_dest, check_count :int, add_pwr: int,
             motor.motor_stop(0.2)
             # check_count += 1
         else:
+            control_num = 4
             print('Parachute Found\nTurning Around')
             para_pwr = PARA_PWR + add_pwr
             motor.move(para_pwr, -para_pwr, T_ROTATE)
@@ -383,6 +388,7 @@ def main(lat_land, lon_land, lat_dest, lon_dest, check_count :int, add_pwr: int,
         red_area, angle = detect_para()      
 
         if red_area == 0:
+            control_num = 5
             t_run_start = time.time()
             while time.time() - t_run_start <= PARA_RUN_SHORT:
                 PID.PID_run(target_azimuth=target_azimuth, magx_off=magx_off, magy_off=magy_off,theta_array=theta_array, loop_num=20)
@@ -394,6 +400,7 @@ def main(lat_land, lon_land, lat_dest, lon_dest, check_count :int, add_pwr: int,
                 target_azimuth = target_azimuth % 360
             red_area, angle = detect_para()
             if red_area == 0:
+                control_num = 6
                 t_run_start = time.time()
                 while time.time() - t_run_start <= PARA_RUN_SHORT:
                     PID.PID_run(target_azimuth=target_azimuth, magx_off=magx_off, magy_off=magy_off,theta_array=theta_array, loop_num=20)
@@ -406,6 +413,7 @@ def main(lat_land, lon_land, lat_dest, lon_dest, check_count :int, add_pwr: int,
         goal_azimuth = goal_info['azimuth1']
 
         if abs(goal_azimuth - para_azimuth) < THD_AVOID_ANGLE:
+            control_num = 7
             print('Parachute is on the way')
             target_azimuth = para_azimuth + PARA_FORWARD_ANGLE #パラシュートの方向から45度の方向に走らせる
             print("Heading " + str(target_azimuth) + " degrees")
@@ -422,58 +430,57 @@ def main(lat_land, lon_land, lat_dest, lon_dest, check_count :int, add_pwr: int,
             isDistant_para = 1
     
     time.sleep(1)
-    para_avoid_log.save_log(lat_now, lon_now, para_dist, )
+    para_avoid_log.save_log(lat_now, lon_now, para_dist, red_area, control_num, isDistant_para)
 
-
-    return lat_now, lon_now, para_dist, red_area, angle, isDistant_para, check_count
+    return isDistant_para
     
-def main2(lat_land, lon_land, lat_dest, lon_dest, para_avoid_log):
-    check_count = 0
-    isparafound = 0
+# def main2(lat_land, lon_land, lat_dest, lon_dest, para_avoid_log):
+#     check_count = 0
+#     isparafound = 0
 
-    while True:
-        #-Setup-#
-        stuck2.ue_jug()
-        magx_off, magy_off = -830, -980
+#     while True:
+#         #-Setup-#
+#         stuck2.ue_jug()
+#         magx_off, magy_off = -830, -980
 
-        para_info = calibration.calculate_direction(lon2=lon_land, lat2=lat_land)
-        para_dist = para_info['distance'] #パラシュートまでの距離を計算
-        para_azimuth = para_info['azimuth1'] #パラシュートの方位角を計算
-        print(f'{para_dist}m')
+#         para_info = calibration.calculate_direction(lon2=lon_land, lat2=lat_land)
+#         para_dist = para_info['distance'] #パラシュートまでの距離を計算
+#         para_azimuth = para_info['azimuth1'] #パラシュートの方位角を計算
+#         print(f'{para_dist}m')
 
-        if para_dist <= SHORT_THD_DIST:
-            red_area, angle = detect_para()
-            if red_area > PARA_THD_COVERED:
-                print('Parachute On Top')
-                time.sleep(10)
-            elif red_area == 0 and isparafound == 1:
-                print('Parachute Not Found\nMoving Forward')
-                mag_data = bmx055.mag_dataRead()
-                mag_x, mag_y = mag_data[0], mag_data[1]
-                rover_azimuth = calibration.angle(mag_x, mag_y, magx_off=magx_off, magy_off=magy_off)
-                rover_azimuth = basics.standarize_angle(rover_azimuth)
-                target_azimuth = rover_azimuth
+#         if para_dist <= SHORT_THD_DIST:
+#             red_area, angle = detect_para()
+#             if red_area > PARA_THD_COVERED:
+#                 print('Parachute On Top')
+#                 time.sleep(10)
+#             elif red_area == 0 and isparafound == 1:
+#                 print('Parachute Not Found\nMoving Forward')
+#                 mag_data = bmx055.mag_dataRead()
+#                 mag_x, mag_y = mag_data[0], mag_data[1]
+#                 rover_azimuth = calibration.angle(mag_x, mag_y, magx_off=magx_off, magy_off=magy_off)
+#                 rover_azimuth = basics.standarize_angle(rover_azimuth)
+#                 target_azimuth = rover_azimuth
 
-                #-run forward-#
-                t_start_runf = time.time()
-                theta_array = [0]*5
-                while time.time() - t_start_runf <= 2: #2秒間前進
-                    PID.PID_run(target_azimuth, magx_off=magx_off, magy_off=magy_off, theta_array=theta_array, loop_num=20)
-                motor.deceleration(20, 20)
-                motor.motor_stop(0.2)
+#                 #-run forward-#
+#                 t_start_runf = time.time()
+#                 theta_array = [0]*5
+#                 while time.time() - t_start_runf <= 2: #2秒間前進
+#                     PID.PID_run(target_azimuth, magx_off=magx_off, magy_off=magy_off, theta_array=theta_array, loop_num=20)
+#                 motor.deceleration(20, 20)
+#                 motor.motor_stop(0.2)
                     
-            elif red_area == 0 and isparafound == 0:
-                print('Checking Around')
-                motor.move(PARA_PWR, -PARA_PWR, T_CHECK)
-            else:
-                print('Parachute Found\nTurning Around')
-                motor.move(PARA_PWR, -PARA_PWR, T_ROTATE)
-                isparafound = 1
+#             elif red_area == 0 and isparafound == 0:
+#                 print('Checking Around')
+#                 motor.move(PARA_PWR, -PARA_PWR, T_CHECK)
+#             else:
+#                 print('Parachute Found\nTurning Around')
+#                 motor.move(PARA_PWR, -PARA_PWR, T_ROTATE)
+#                 isparafound = 1
 
-        elif SHORT_THD_DIST < para_dist <= LONG_THD_DIST:
-            pass
-        else:
-            break
+#         elif SHORT_THD_DIST < para_dist <= LONG_THD_DIST:
+#             pass
+#         else:
+#             break
 
 if __name__ == '__main__':
     # パラメータ

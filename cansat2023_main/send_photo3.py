@@ -488,11 +488,15 @@ if __name__ == '__main__':
             send.send_data(line_with_id)
             #受信できているかを確認する
             receive_time = time.time()
-            while time.time() - receive_time > delay:
+            receive_count = 0
+            while time.time() - receive_time >= delay:
                 receive_text = send.receive_data
                 if receive_text == "OK":
                     print("OK")
+                    receive_count = 1
                     break
+            if receive_count == 0:
+                receive_text = "NG"
             # time.sleep(delay)
             id_counter = id_counter +1
     

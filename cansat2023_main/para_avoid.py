@@ -533,7 +533,7 @@ def main2(lat_land, lon_land, lat_dest, lon_dest, check_count :int, add_pwr: int
         if abs(goal_azimuth - para_azimuth) < THD_AVOID_ANGLE:
             print('Parachute is on the way')
             target_azimuth = para_azimuth + PARA_FORWARD_ANGLE #パラシュートの方向から45度の方向に走らせる
-            print("Heading " + str(target_azimuth) + " degrees")
+            print(f"Heading{target_azimuth}degrees")
 
             magx_off, magy_off = calibration.cal(40, -40, 30) #キャリブレーション
 

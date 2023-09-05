@@ -219,6 +219,7 @@ print('Para Avoid Start')
 check_count = 0 #パラ回避用のカウンター
 lat_land, lon_land = gps.location()
 
+#-Parachute Avoid-#
 para_avoid.main2(lat_land, lon_land, lat_dest=LAT_HUMAN, lon_dest=LON_HUMAN, para_avoid_log=para_avoid_log)
 
 print("Para Avoid End")

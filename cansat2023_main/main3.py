@@ -71,7 +71,7 @@ para_avoid_log = log.Logger(dir='../logs/4_para_avoid_log', filename='para_avoid
 gps_running_human_log = log.Logger(dir='../logs/5_gps_running_human_log', filename='gps_running_human', t_start=t_start, columns=['lat', 'lon', 'distance_to_human', 'rover_azimuth', 'isReach_human'])
 human_detection_log = log.Logger(dir='../logs/6_human_detection_log', filename='human_detection', t_start=t_start, columns=['lat', 'lon', 'result', 'judge_count', 'area_count', 'rotate_count', 'add_pwr', 'isHuman'])
 gps_running_goal_log = log.Logger(dir='../logs/7_gps_running_goal_log', filename='gps_running_goal', t_start=t_start, columns=['lat', 'lon', 'distance_to_goal', 'rover_azimuth', 'isReach_goal'])
-image_guide_log = log.Logger(dir='../logs/8_image_guide_log', filename='image_guide', t_start=t_start, columns=['lat', 'lon', 'distance_to_goal', 'area_ratio', 'angle', 'add_pwr', 'isReach_goal'])
+image_guide_log = log.Logger(dir='../logs/8_image_guide_log', filename='image_guide', t_start=t_start, columns=['lat', 'lon', 'distance_to_goal', 'area_ratio', 'target_azimuth', 'isReach_goal'])
 
 #####=====Mission Sequence=====#####
 
@@ -358,7 +358,7 @@ phase_log.save_log('6', 'Human Detection Sequence: Start', lat_log, lon_log)
 
 #-send-#
 print('Sending Data...')
-#basics.send_locations(lat=lat_log, lon=lon_log, text='Human S')
+basics.send_locations(lat=lat_log, lon=lon_log, text='Human S')
 
 #-Human Detection-#
 
@@ -386,6 +386,7 @@ while True:
         stuck_check_array = deque([0]*6, maxlen=6) #スタックチェック用の配列の初期化
         add_pwr = 0 #捜索地点を変えたら追加のパワーをリセット
         lat_now, lon_now = gps.location()
+        phase_log.save_log('6', f'Human Detection Sequence: Area{area_count}', lat_now, lon_now)
 
     ###---現在のローバーの方位角を求める---###
     magdata = bmx055.mag_dataRead()
@@ -418,23 +419,17 @@ while True:
             add_pwr = min(add_pwr, 25) #最大で25
             stuck_check_array = deque([0]*6, maxlen=6) #スタックチェック用の配列の初期化
 
-
-
     result, judge_count, area_count, rotate_count, isHuman = human_detect.main(lat_human=LAT_HUMAN, lon_human=LON_HUMAN, model=ML_people, judge_count=judge_count, area_count=area_count, rotate_count=rotate_count, add_pwr=add_pwr, report_log=report_log)
-    
+
     #-Log-#
-    lat_now, lon_now = gps.location()
-    # if rotate_count == 0: #場所を移動したときに最初の1回のみログに記録する
-    #     report_log.save_log(lat_now, lon_now)
-    #if rotate_count == 0:
-    lat_area, lon_area = gps.location()
-    human_detection_log.save_log(lat_area, lon_area, result, judge_count, area_count, rotate_count, add_pwr, isHuman)
+    human_detection_log.save_log(area_count, rotate_count, result, judge_count, isHuman)
+
     print('result:', result)
     if isHuman == 1:
         print('Found a Missing Person')
         break
     if area_count == 9:
-        print('Could Not Find a Missin Person')
+        print('Could Not Find a Missing Person')
         print('Mission Failed')
         break
 
@@ -446,17 +441,16 @@ phase_log.save_log('6', 'Human Detection Sequence: End', lat_log, lon_log)
 #-send-#
 print('Sending Data...')
 if area_count !=9:
-    print('a')
-#basics.send_locations(lat=lat_log, lon=lon_log, text='Human E')
+    basics.send_locations(lat=lat_log, lon=lon_log, text='Human E')
 else:
     print('Reporting Mission Failed')
-    #basics.send_locations(lat=lat_log, lon=lon_log, text='Mission Failed')
+    basics.send_locations(lat=lat_log, lon=lon_log, text='Mission Failed')
     phase_log.save_log('6', 'Mission Failed ###---Not Sending Image---###', lat_log, lon_log)
 
 print('#####-----Human Detection Sequence: End-----#####')
 
 
-if isHuman != 1 and isHuman != 0: #人を見つけたときに限り以下の処理を行い画像伝送を行う
+if isHuman != 1: #人を見つけたときに限り以下の処理を行い画像伝送を行う
     print('#####-----Sending Image-----#####')
     #-Log-#
     print('Saving Log...')
@@ -743,15 +737,9 @@ while True:
             add_pwr = min(add_pwr, 25)
             stuck_check_array = deque([0]*6, maxlen=6) #スタックチェック用の配列の初期化
 
-    lat_now, lon_now, distance_to_goal, area_ratio, angle, isReach_goal = goal_detect.main(lat_dest=LAT_GOAL, lon_dest=LON_GOAL, thd_distance_goal=THD_DISTANCE_GOAL, thd_red_area=THD_RED_RATIO, magx_off=magx_off, magy_off=magy_off, add_pwr=add_pwr)
-    
-    lat_now, lon_now = gps.location() #ログ用のGPS情報の取得
-    # report_log.save_log(lat_now, lon_now)
-    image_guide_log.save_log(lat_now, lon_now, distance_to_goal, area_ratio, angle, add_pwr, isReach_goal)
-    print('area_ratio: ' + str(area_ratio))
+    isReach_goal = goal_detect.main(lat_dest=LAT_GOAL, lon_dest=LON_GOAL, thd_distance_goal=THD_DISTANCE_GOAL, thd_red_area=THD_RED_RATIO, magx_off=magx_off, magy_off=magy_off, add_pwr=add_pwr, img_guide_log=image_guide_log)
 
     if isReach_goal == 1: #ゴール判定
-        print('Goal')
         break
 
 #-Log-#
@@ -772,6 +760,7 @@ print('#####-----Image Guide Sequence: End-----#####')
 
 #####=====Mission End=====#####
 print('Mission Accomlished')
+
 #-send-#
 print('Sending Data...')
 send.send_data('Mission Accomlished')

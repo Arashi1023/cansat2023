@@ -393,7 +393,7 @@ def TEST_img_guide_drive(magx_off, magy_off, thd_distance_goal=10, thd_red_area=
     #     print('Error\nTry again')
     return area_ratio, angle, isReach_goal
 
-def main(lat_dest: float, lon_dest: float, thd_distance_goal: float, thd_red_area: float, magx_off: float, magy_off: float, add_pwr: float):
+def main(lat_dest: float, lon_dest: float, thd_distance_goal: float, thd_red_area: float, magx_off: float, magy_off: float, add_pwr: float, img_guide_log):
     '''
     目的：画像誘導によりゴールに到達する
     8月28日作成 by 田口
@@ -448,8 +448,8 @@ def main(lat_dest: float, lon_dest: float, thd_distance_goal: float, thd_red_are
             ###-----PID制御により前進-----###
             theta_array = [0]*5
             PID.PID_run(target_azimuth, magx_off, magy_off, theta_array=theta_array, loop_num=20)
-            motor.deceleration(15, 15)
-            motor.motor_stop(0.2)
+            motor.deceleration(20, 20)
+            motor.motor_stop(0.5)
 
         ###-----撮像した画像の中にゴールが映っていない場合の処理-----###
         elif area_ratio == 0:
@@ -457,19 +457,24 @@ def main(lat_dest: float, lon_dest: float, thd_distance_goal: float, thd_red_are
             pwr_unfound = 25 + add_pwr
             motor.motor_move(pwr_unfound, -pwr_unfound, 0.15)
             motor.motor_stop(0.5)
+            target_azimuth = 000 #見つかっていない場合
     
     ###-----画像誘導モードの範囲外にいた場合の処理-----###
     else:
         print('ゴールから遠すぎます\nGPS誘導を行います')
-        lat_now, lon_now, distance_to_dest, rover_azimuth, isReach_dest = PID.drive2(lon_dest=LON_GOAL, lat_dest=LAT_GOAL, thd_distance=3, t_cal=T_CAL, loop_num=LOOP_NUM)
+        PID.drive2(lon_dest=LON_GOAL, lat_dest=LAT_GOAL, thd_distance=3, t_cal=T_CAL, loop_num=LOOP_NUM)
+        target_azimuth = 000 #見つかっていない場合
+    
+    #-Log-#
+    img_guide_log.save_log(lat_now, lon_now, distance_to_goal, area_ratio, target_azimuth, isReach_goal)
 
     time.sleep(0.04) #9軸センサ読み取り用
 
     ###-----ゴールした場合の処理-----###
     if isReach_goal == 1:
-        print('ゴールしました。画像誘導を終了します。')
+        print('Goal')
 
-    return lat_now, lon_now, distance_to_goal, area_ratio, angle, isReach_goal
+    return isReach_goal
 
 if __name__ == "__main__":
     #実験用の座標

@@ -482,7 +482,7 @@ def main2(lat_land, lon_land, lat_dest, lon_dest, check_count :int, add_pwr: int
             theta_array = [0]*5
             while time.time() - t_start_runf <= 2: #2秒間前進
                 PID.PID_run(target_azimuth, magx_off=magx_off, magy_off=magy_off, theta_array=theta_array, loop_num=20)
-            motor.deceleration(15, 15)
+            motor.deceleration(10, 10)
             motor.motor_stop(0.2)
             # check_count += 1
         else:

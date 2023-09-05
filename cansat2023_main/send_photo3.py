@@ -464,65 +464,49 @@ if __name__ == '__main__':
     data = compressed_image_binary  # バイナリデータを指定してください
     output_filename = "output.txt"  # 保存先のファイル名
     
-    start_time = time.time()  # プログラム開始時刻を記録
+    wireless_start_time = time.time()  # プログラム開始時刻を記録
     
-    send.send_data ("wireless_start")
+    if time.time() - wireless_start_time >= 18000:
 
-    print("写真伝送開始します")
-    time.sleep(1)
+        send.send_data ("wireless_start")
+        send.receive_data()
+        print("写真伝送開始します")
+        time.sleep(1)
 
-    
-    # バイナリデータを32バイトずつ表示し、ファイルに保存する
-    with open(output_filename, "w") as f:
-        for i in range(0, len(data), chunk_size):
-            # if id_counter%30==0:
-            #     time.sleep(20)
-            chunk = data[i:i+chunk_size]
-            chunk_str = "".join(format(byte, "02X") for byte in chunk)
-            
-            # 識別番号とデータを含む行の文字列を作成
-            line_with_id = f"{id_counter}-{chunk_str}"
+        
+        # バイナリデータを32バイトずつ表示し、ファイルに保存する
+        with open(output_filename, "w") as f:
+            for i in range(0, len(data), chunk_size):
 
-            #chunk_strにデータがある
-            print(line_with_id)
-            send.send_data(line_with_id)
-            #受信できているかを確認する
-            # receive_count = 0
-            # while 1:
-            #     time.sleep(0.5)
-            #     receive_text = send.receive_data(0.5)
-            #     if receive_count == 3:
-            #         receive_text = 'NG'
-            #         break
-            #     if receive_text == 'OK':
-            #         print("OK")
-            #         receive_count = 1
-            #         break
-            #     receive_count += 1
-            #receive_text = send.receive_data(3)
-            # time.sleep(delay)
+                chunk = data[i:i+chunk_size]
+                chunk_str = "".join(format(byte, "02X") for byte in chunk)
+                
+                # 識別番号とデータを含む行の文字列を作成
+                line_with_id = f"{id_counter}-{chunk_str}"
 
-            receive_text = send.receive_data()
+                #chunk_strにデータがある
+                print(line_with_id)
+                send.send_data(line_with_id)
 
-            id_counter = id_counter +1
-    
-            # ファイルに書き込む
-            f.write(line_with_id + "\n")
-            
-            #リストに追加
-            wireless_send.append(chunk_str)
-            print(wireless_send)
-            wireless_receive.append(receive_text)
-            print(wireless_receive)
-            
+                #受信確認
+                receive_text = send.receive_data()
 
-    send.send_data ("wireless_fin")
-    send.send_data("num=" + str(id_counter))
-    print("待ち時間")
-    time.sleep(15)
+                #何行目かを記録する
+                id_counter = id_counter +1
+        
+                # ファイルに書き込む
+                f.write(line_with_id + "\n")
+                
+
+        send.send_data ("wireless_fin")
+        send.receive_data()
+        send.send_data("num=" + str(id_counter))
+        send.receive_data()
+        print("待ち時間")
+        time.sleep(15)
     
     end_time = time.time()  # プログラム終了時刻を記録
-    execution_time = end_time - start_time  # 実行時間を計算
+    execution_time = end_time - wireless_start_time  # 実行時間を計算
     
     print("実行時間:", execution_time, "秒")
     print("データを", output_filename, "に保存しました。")

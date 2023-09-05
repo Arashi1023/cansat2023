@@ -491,9 +491,7 @@ if __name__ == '__main__':
             receive_count = 0
             while 1:
                 time.sleep(0.5)
-                print("呼び込み前")
                 receive_text = send.receive_data()
-                print("飛び込み後")
                 if receive_count == 3:
                     receive_text = 'NG'
                     break

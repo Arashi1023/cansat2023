@@ -14,13 +14,9 @@ def send_data(data, port='/dev/ttyAMA0', baudrate=19200):
 
 def receive_data(port='/dev/ttyAMA0', baudrate=19200):
     global IM920Serial
-    print("1")
     IM920Serial = serial.Serial(port, baudrate)
-    print("2")
     IM920Serial.flushInput()  # 入力バッファをクリア
-    print("3")
     received_data = IM920Serial.readline().strip().decode()  # データを読み込み、改行文字を削除
-    print("4")
     return received_data
     
 

@@ -105,9 +105,9 @@ phase_log.save_log('1', 'Release Detect Sequence: Start', 0, 0)
 release_log.save_log('Release Detected')
 
 #-send-#
-# print('Sending Data...')
-# send.send_data('Release finished')
-# time.sleep(10)
+print('Sending Data...')
+send.send_data('Release finished')
+time.sleep(10)
 
 print('#####-----Release Detect Sequence: End-----#####')
 
@@ -145,9 +145,9 @@ print('Saving Log...')
 phase_log.save_log('2', 'Land Detect Sequence: End', 0, 0)
 
 #-send-#
-# print('Sending Data...')
-# send.send_data('Land finished')
-# time.sleep(10)
+print('Sending Data...')
+send.send_data('Land finished')
+time.sleep(10)
 
 print('#####-----Land Detect Sequence: End-----#####')
 
@@ -171,9 +171,9 @@ phase_log.save_log('3', 'Melt Sequence: End', 0, 0)
 melt_log.save_log('Melt Finished')
 
 #-send-#
-# print('Sending Data...')
-# send.send_data('Melt finished')
-# time.sleep(10)
+print('Sending Data...')
+send.send_data('Melt finished')
+time.sleep(10)
 
 print('#####-----Melt Sequence: End-----#####')
 
@@ -196,7 +196,7 @@ send.send_on()
 
 #-send-#
 print('Sending Data...')
-#basics.send_locations(lat=lat_test, lon=lon_test, text='GPS received')
+basics.send_locations(lat=lat_test, lon=lon_test, text='GPS received')
 #====================================================================================================#
 
 
@@ -213,7 +213,7 @@ phase_log.save_log('4', 'Parachute Avoid Sequence: Start', lat_log, lon_log)
 
 #-send-#
 print('Sending Data...')
-#basics.send_locations(lat=lat_log, lon=lon_log, text='Para Avo S')
+basics.send_locations(lat=lat_log, lon=lon_log, text='Para Avo S')
 
 #-Parachute Avoid-#
 t_start = time.time()
@@ -285,7 +285,7 @@ phase_log.save_log('4', 'Parachute Avoid Sequence: End', lat_log, lon_log)
 
 #-send-#
 print('Sending Data...')
-#basics.send_locations(lat=lat_log, lon=lon_log, text='Para Avo F')
+basics.send_locations(lat=lat_log, lon=lon_log, text='Para Avo F')
 
 print('#####-----Parachute Avoid Sequence: End-----#####')
 

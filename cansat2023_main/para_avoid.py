@@ -394,7 +394,7 @@ def main(lat_land, lon_land, lat_dest, lon_dest, check_count :int, add_pwr: int,
             target_azimuth = para_azimuth + PARA_FORWARD_ANGLE #パラシュートの方向から45度の方向に走らせる
             print("Heading " + str(target_azimuth) + " degrees")
 
-            magx_off, magy_off = calibration.cal(30, -30, 30) #キャリブレーション
+            magx_off, magy_off = calibration.cal(40, -40, 30) #キャリブレーション
 
             t_run_start = time.time()
             while time.time() - t_run_start <= PARA_RUN_LONG:
@@ -405,6 +405,10 @@ def main(lat_land, lon_land, lat_dest, lon_dest, check_count :int, add_pwr: int,
         else:
             isDistant_para = 1
     
+    time.sleep(1)
+    para_avoid_log.save_log(lat_now, lon_now, para_dist, )
+
+
     return lat_now, lon_now, para_dist, red_area, angle, isDistant_para, check_count
 
 if __name__ == '__main__':

@@ -472,7 +472,7 @@ def main(lat_dest: float, lon_dest: float, thd_distance_goal: float, thd_red_are
 
     ###-----ゴールした場合の処理-----###
     if isReach_goal == 1:
-        print('ゴールしました。画像誘導を終了します。')
+        print('Goal')
 
     return isReach_goal
 

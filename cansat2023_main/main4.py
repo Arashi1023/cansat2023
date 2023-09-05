@@ -272,7 +272,7 @@ while True:
 
     isDistant_para, check_count = para_avoid.main(lat_land, lon_land, lat_dest=LAT_HUMAN, lon_dest=LON_HUMAN, check_count=check_count, add_pwr=add_pwr, para_avoid_log=para_avoid_log)
     print(isDistant_para, check_count)
-    # para_avoid_log.save_log(lat_now, lon_now, para_dist, red_area, angle, isDistant_para, check_count)
+
     if isDistant_para == 1:
         break
 

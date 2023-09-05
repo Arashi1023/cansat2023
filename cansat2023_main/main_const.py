@@ -5,7 +5,7 @@
 RELEASE_THD_PRESS = 1.5 #？秒あたりの気圧の変化量がこれ以上あった場合に放出判定を行う
 RELEASE_JUDGE_COUNT = 4 #
 RELEASE_JUDGE_TIME = 10 #気圧データを取得する間隔
-RELEASE_TIMEOUT = 20 #(秒) プログラム開始時間からの経過時間
+RELEASE_TIMEOUT = 10 #(秒) プログラム開始時間からの経過時間
 
 
 #-----着地判定-----#

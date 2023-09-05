@@ -45,6 +45,7 @@ send.send_data('CONNECTION TEST START')
 send.send_data('Wait for sometime')
 time.sleep(60) #繋げている状態で何分か待つ
 send.send_data('CONNECTION TEST FINISHED')
+time.sleep(20)
 #-Turning off wireless communication-#
 send.send_off() #分離機構の展開までの間は無線通信を切る
 
@@ -86,7 +87,7 @@ press_release_count = 0
 press_array = [0]*2
 
 while True:
-    if time.time() - t_start > 10: #RELEASE_TIMEOUT: タイムアウトの設定
+    if time.time() - t_start > RELEASE_TIMEOUT: #タイムアウトの設定
         print('Release Sequence Timeout')
         release_log.save_log('Release Sequence Timeout')
         break
@@ -274,7 +275,7 @@ while True:
 
     isDistant_para, check_count = para_avoid.main(lat_land, lon_land, lat_dest=LAT_HUMAN, lon_dest=LON_HUMAN, check_count=check_count, add_pwr=add_pwr, para_avoid_log=para_avoid_log)
     print(isDistant_para, check_count)
-    # para_avoid_log.save_log(lat_now, lon_now, para_dist, red_area, angle, isDistant_para, check_count)
+
     if isDistant_para == 1:
         break
 

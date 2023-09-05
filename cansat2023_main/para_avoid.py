@@ -524,7 +524,7 @@ def main2(lat_land, lon_land, lat_dest, lon_dest, check_count :int, add_pwr: int
                     PID.PID_run(target_azimuth=target_azimuth, magx_off=magx_off, magy_off=magy_off,theta_array=theta_array, loop_num=20)
                 motor.deceleration(15, 15)
                 motor.motor_stop(1)
-
+        time.sleep(0.5)
 
     elif para_dist > LONG_THD_DIST: #これどうする？？
         goal_info = calibration.calculate_direction(lon2=lon_dest, lat2=lat_dest)

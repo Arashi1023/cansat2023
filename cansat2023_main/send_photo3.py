@@ -487,20 +487,20 @@ if __name__ == '__main__':
             print(line_with_id)
             send.send_data(line_with_id)
             #受信できているかを確認する
-            receive_time = time.time()
-            receive_count = 0
-            while 1:
-                time.sleep(0.5)
-                receive_text = send.receive_data()
-                if receive_count == 3:
-                    receive_text = 'NG'
-                    break
-                if receive_text == 'OK':
-                    print("OK")
-                    receive_count = 1
-                    break
-                receive_count += 0.5
-            #receive_text = send.receive_data()
+            # receive_time = time.time()
+            # receive_count = 0
+            # while 1:
+            #     time.sleep(0.5)
+            #     receive_text = send.receive_data()
+            #     if receive_count == 3:
+            #         receive_text = 'NG'
+            #         break
+            #     if receive_text == 'OK':
+            #         print("OK")
+            #         receive_count = 1
+            #         break
+            #     receive_count += 0.5
+            receive_text = send.receive_data(3)
             # time.sleep(delay)
             id_counter = id_counter +1
     

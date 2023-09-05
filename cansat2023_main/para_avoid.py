@@ -302,11 +302,9 @@ def wgps_para_avoid(small_thd_dist :int, large_thd_dist :int, check_count :int, 
         while time.time() - t_start_run <= T_FORWARD:
             PID.PID_run(target_azimuth, magx_off, magy_off, theta_array, loop_num=25)
 
-def main(lat_land, lon_land, lat_dest, lon_dest, check_count :int, add_pwr: int):
+def main(lat_land, lon_land, lat_dest, lon_dest, check_count :int, add_pwr: int, para_avoid_log):
     '''
     目的：パラシュートを回避する
-
-
 
     田口作成 2023/08/29
     Parameters
@@ -381,11 +379,27 @@ def main(lat_land, lon_land, lat_dest, lon_dest, check_count :int, add_pwr: int)
         theta_array = [0]*5
         PID.PID_adjust_direction(target_azimuth=target_azimuth, magx_off=magx_off, magy_off=magy_off, theta_array=theta_array)
         theta_array = [0]*5
-        t_run_start = time.time()
-        while time.time() - t_run_start <= PARA_RUN_SHORT:
-            PID.PID_run(target_azimuth=target_azimuth, magx_off=magx_off, magy_off=magy_off,theta_array=theta_array, loop_num=20)
-        motor.deceleration(15, 15)
-        motor.motor_stop(1)
+
+        red_area, angle = detect_para()      
+
+        if red_area == 0:
+            t_run_start = time.time()
+            while time.time() - t_run_start <= PARA_RUN_SHORT:
+                PID.PID_run(target_azimuth=target_azimuth, magx_off=magx_off, magy_off=magy_off,theta_array=theta_array, loop_num=20)
+            motor.deceleration(15, 15)
+            motor.motor_stop(1)
+        else:
+            target_azimuth = para_azimuth + 90
+            if target_azimuth >= 360:
+                target_azimuth = target_azimuth % 360
+            red_area, angle = detect_para()
+            if red_area == 0:
+                t_run_start = time.time()
+                while time.time() - t_run_start <= PARA_RUN_SHORT:
+                    PID.PID_run(target_azimuth=target_azimuth, magx_off=magx_off, magy_off=magy_off,theta_array=theta_array, loop_num=20)
+                motor.deceleration(15, 15)
+                motor.motor_stop(1)
+
 
     elif para_dist > LONG_THD_DIST: #これどうする？？
         goal_info = calibration.calculate_direction(lon2=lon_dest, lat2=lat_dest)
@@ -396,8 +410,10 @@ def main(lat_land, lon_land, lat_dest, lon_dest, check_count :int, add_pwr: int)
             target_azimuth = para_azimuth + PARA_FORWARD_ANGLE #パラシュートの方向から45度の方向に走らせる
             print("Heading " + str(target_azimuth) + " degrees")
 
-            magx_off, magy_off = calibration.cal(30, -30, 30) #キャリブレーション
+            magx_off, magy_off = calibration.cal(40, -40, 30) #キャリブレーション
 
+
+            para
             t_run_start = time.time()
             while time.time() - t_run_start <= PARA_RUN_LONG:
                 theta_array = [0]*5
@@ -407,6 +423,10 @@ def main(lat_land, lon_land, lat_dest, lon_dest, check_count :int, add_pwr: int)
         else:
             isDistant_para = 1
     
+    time.sleep(1)
+    para_avoid_log.save_log(lat_now, lon_now, para_dist, )
+
+
     return lat_now, lon_now, para_dist, red_area, angle, isDistant_para, check_count
 
 if __name__ == '__main__':

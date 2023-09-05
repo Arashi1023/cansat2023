@@ -718,7 +718,7 @@ def drive3(lon_dest :float, lat_dest: float, thd_distance: int, t_cal: float, lo
             isReach_dest = 1 #ゴール判定用のフラグ
 
         #-Log-#
-        if report_count % 30 == 0:
+        if report_count % 20 == 0: #30から20回に一回ログをとることにした
             report_log.save_log(lat_now, lon_now, target_azimuth, control)
 
         stuck_count += 1 #25回に一回スタックチェックを行う

@@ -105,9 +105,9 @@ phase_log.save_log('1', 'Release Detect Sequence: Start', 0, 0)
 release_log.save_log('Release Detected')
 
 #-send-#
-# print('Sending Data...')
-# send.send_data('Release finished')
-# time.sleep(10)
+print('Sending Data...')
+send.send_data('Release finished')
+time.sleep(10)
 
 print('#####-----Release Detect Sequence: End-----#####')
 
@@ -145,9 +145,9 @@ print('Saving Log...')
 phase_log.save_log('2', 'Land Detect Sequence: End', 0, 0)
 
 #-send-#
-# print('Sending Data...')
-# send.send_data('Land finished')
-# time.sleep(10)
+print('Sending Data...')
+send.send_data('Land finished')
+time.sleep(10)
 
 print('#####-----Land Detect Sequence: End-----#####')
 
@@ -171,9 +171,9 @@ phase_log.save_log('3', 'Melt Sequence: End', 0, 0)
 melt_log.save_log('Melt Finished')
 
 #-send-#
-# print('Sending Data...')
-# send.send_data('Melt finished')
-# time.sleep(10)
+print('Sending Data...')
+send.send_data('Melt finished')
+time.sleep(10)
 
 print('#####-----Melt Sequence: End-----#####')
 
@@ -196,7 +196,7 @@ send.send_on()
 
 #-send-#
 print('Sending Data...')
-#basics.send_locations(lat=lat_test, lon=lon_test, text='GPS received')
+basics.send_locations(lat=lat_test, lon=lon_test, text='GPS received')
 #====================================================================================================#
 
 
@@ -213,7 +213,7 @@ phase_log.save_log('4', 'Parachute Avoid Sequence: Start', lat_log, lon_log)
 
 #-send-#
 print('Sending Data...')
-#basics.send_locations(lat=lat_log, lon=lon_log, text='Para Avo S')
+basics.send_locations(lat=lat_log, lon=lon_log, text='Para Avo S')
 
 #-Parachute Avoid-#
 t_start = time.time()
@@ -268,7 +268,7 @@ while True:
 
         if stuck_check_array[5] - expect_azimuth < 0: #本来回っているはずの角度を下回っているとき
             print('Rotation Stuck Detected')
-            add_pwr = 5
+            add_pwr = ADD_PWR
             stuck_check_array = deque([0]*6, maxlen=6) #スタックチェック用の配列の初期化
 
     lat_now, lon_now, para_dist, red_area, angle, isDistant_para, check_count = para_avoid.main(lat_land, lon_land, lat_dest=LAT_HUMAN, lon_dest=LON_HUMAN, check_count=check_count, add_pwr=add_pwr)
@@ -285,7 +285,7 @@ phase_log.save_log('4', 'Parachute Avoid Sequence: End', lat_log, lon_log)
 
 #-send-#
 print('Sending Data...')
-#basics.send_locations(lat=lat_log, lon=lon_log, text='Para Avo F')
+basics.send_locations(lat=lat_log, lon=lon_log, text='Para Avo F')
 
 print('#####-----Parachute Avoid Sequence: End-----#####')
 
@@ -316,22 +316,22 @@ while True: #1ループおおよそT_CAL秒
 
     #-T_CALごとに以下の情報を取得-#
     lat_now, lon_now, distance_to_dest, rover_azimuth, isReach_dest = PID.drive3(lon_dest=LON_HUMAN, lat_dest=LAT_HUMAN, thd_distance=THD_DISTANCE_DEST, t_cal=T_CAL, loop_num=LOOP_NUM, report_log=report_log)
-    print('disntance to dest=' + str(distance_to_dest) + 'm')
-    print('isReach_dest=' + str(isReach_dest))
 
     #-Log-#
-    # lat_now, lon_now = gps.location() #ログ用のGPS情報の取得
-    # report_log.save_log(lat_now, lon_now)
-    # gps_running_goal_log.save_log(lat_now, lon_now, distance_to_dest, rover_azimuth, isReach_dest)
-    
-    #-send-#
-    #lat_now, lon_now = gps.location()
-    #basics.send_locations(lat=lat_now, lon=lon_now, text='Run1')
+    lat_log, lon_log = gps.location() #ログ用のGPS情報の取得
+    direction = calibration.calculate_direction(lon2=LON_GOAL, lat2=LAT_GOAL)
+    distance_to_dest = direction["distance"]
+    gps_running_human_log.save_log(lat_log, lon_log, distance_to_dest, isReach_dest)
+    print('disntance to dest=' + str(distance_to_dest) + 'm')
+    print('isReach_dest=' + str(isReach_dest))
 
     if isReach_dest == 1: #ゴール判定
         break
 
-print(f'{distance_to_dest}m to Goal')
+    #-send-#
+    basics.send_locations(lat=lat_log, lon=lon_log, text='Run1 c')
+
+    time.sleep(1)
 
 #-Log-#
 print('Saving Log...')
@@ -415,8 +415,7 @@ while True:
 
         if stuck_check_array[5] - expect_azimuth < 0: #本来回っているはずの角度を下回っているとき
             print('Rotation Stuck Detected')
-            add_pwr = 5
-            add_pwr = min(add_pwr, 25) #最大で25
+            add_pwr = ADD_PWR
             stuck_check_array = deque([0]*6, maxlen=6) #スタックチェック用の配列の初期化
 
     result, judge_count, area_count, rotate_count, isHuman = human_detect.main(lat_human=LAT_HUMAN, lon_human=LON_HUMAN, model=ML_people, judge_count=judge_count, area_count=area_count, rotate_count=rotate_count, add_pwr=add_pwr, report_log=report_log)
@@ -632,7 +631,7 @@ phase_log.save_log('7', 'GPS Running Sequence to Goal: Start', lat_log, lon_log)
 
 #-send-#
 print('Sending Data...')
-#basics.send_locations(lat=lat_log, lon=lon_log, text='Run2 S')
+basics.send_locations(lat=lat_log, lon=lon_log, text='Run2 S')
 
 #-GPS Running2-#
 
@@ -644,22 +643,23 @@ while True: #1ループおおよそT_CAL秒
 
     #-T_CALごとに以下の情報を取得-#
     lat_now, lon_now, distance_to_dest, rover_azimuth, isReach_dest = PID.drive3(lon_dest=LON_GOAL, lat_dest=LAT_GOAL, thd_distance=THD_DISTANCE_DEST, t_cal=T_CAL, loop_num=LOOP_NUM, report_log=report_log)
-
-    print('disntance to dest=' + str(distance_to_dest) + 'm')
-    print('isReach_dest=' + str(isReach_dest))
     
     #-Log-#
-    # lat_now, lon_now = gps.location() #ログ用のGPS情報の取得
-    # report_log.save_log(lat_now, lon_now)
-    # gps_running_goal_log.save_log(lat_now, lon_now, distance_to_dest, rover_azimuth, isReach_dest)
-
-    #-send-#
-    #lat_now, lon_now = gps.location()
-    #basics.send_locations(lat=lat_now, lon=lon_now, text='Run2')
+    lat_now, lon_now = gps.location() #ログ用のGPS情報の取得
+    direction = calibration.calculate_direction(lon2=LON_GOAL, lat2=LAT_GOAL)
+    distance_to_dest = direction["distance"]
+    gps_running_goal_log.save_log(lat_now, lon_now, distance_to_dest, isReach_dest)
+    print('disntance to dest=' + str(distance_to_dest) + 'm')
+    print('isReach_dest=' + str(isReach_dest))
     
     if isReach_dest == 1: #ゴール判定
         print('Finishing GPS Running')
         break
+
+    #-send-#
+    basics.send_locations(lat=lat_log, lon=lon_log, text='Run2 c')
+
+    time.sleep(1)
 
 #-Log-#
 print('Saving Log...')
@@ -668,7 +668,7 @@ phase_log.save_log('7', 'GPS Running Sequence to Goal: End', lat_log, lon_log)
 
 #-send-#
 print('Sending Data...')
-#basics.send_locations(lat=lat_log, lon=lon_log, text='Run2 F')
+basics.send_locations(lat=lat_log, lon=lon_log, text='Run2 F')
 
 print('#####-----GPS Running Sequence to Goal: End-----#####')
 
@@ -733,8 +733,7 @@ while True:
 
         if stuck_check_array[5] - expect_azimuth < 0: #本来回っているはずの角度を下回っているとき
             print('Rotation Stuck Detected')
-            add_pwr = 5
-            add_pwr = min(add_pwr, 25)
+            add_pwr = ADD_PWR
             stuck_check_array = deque([0]*6, maxlen=6) #スタックチェック用の配列の初期化
 
     isReach_goal = goal_detect.main(lat_dest=LAT_GOAL, lon_dest=LON_GOAL, thd_distance_goal=THD_DISTANCE_GOAL, thd_red_area=THD_RED_RATIO, magx_off=magx_off, magy_off=magy_off, add_pwr=add_pwr, img_guide_log=image_guide_log)

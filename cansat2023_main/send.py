@@ -12,11 +12,11 @@ def send_data(data, port='/dev/ttyAMA0', baudrate=19200):
     IM920Serial.close()
 
 
-def receive_data(timeout, port='/dev/ttyAMA0', baudrate=19200):
+def receive_data(port='/dev/ttyAMA0', baudrate=19200):
     global IM920Serial
     IM920Serial = serial.Serial(port, baudrate)
-    IM920Serial.timeout = timeout
     IM920Serial.flushInput()  # 入力バッファをクリア
+    #IM920Serial.timeout = timeout
     received_data = IM920Serial.readline().strip().decode()  # データを読み込み、改行文字を削除
     return received_data
     

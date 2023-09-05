@@ -117,7 +117,6 @@ def main(lat_human, lon_human, model, judge_count, area_count, rotate_count, add
             print('Move to next area')
             lat_search, lon_serch = area_info[area_count]
             PID.drive3(lat_search, lon_serch, thd_distance=5, t_cal=60, loop_num=20, report_log=report_log)
-            # magx_off, magy_off = calibration.cal(40, -40, 30) 整地2回やってしまう
 
     return result, judge_count, area_count, rotate_count, isHuman
 

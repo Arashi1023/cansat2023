@@ -67,7 +67,7 @@ report_log = log.Logger(dir='../logs/0_report_log', filename='report', t_start=t
 release_log = log.Logger(dir='../logs/1_release_log', filename='release', t_start=t_start, columns=['latest_press', 'delta_press', 'press_release_count', 'isRelease'])
 land_log = log.Logger(dir='../logs/2_land_log', filename='land', t_start=t_start, columns=['latest_press', 'delta_press', 'press_land_count', 'isLand'])
 melt_log = log.Logger(dir='../logs/3_melt_log', filename='melt', t_start=t_start, columns=['condition'])
-para_avoid_log = log.Logger(dir='../logs/4_para_avoid_log', filename='para_avoid', t_start=t_start, columns=['lat', 'lon', 'distance_to_parachute', 'red_area', 'angle', 'isDistant_parachute', 'check_count'])
+para_avoid_log = log.Logger(dir='../logs/4_para_avoid_log', filename='para_avoid', t_start=t_start, columns=['lat', 'lon', 'distance_to_parachute', 'red_area', 'isDistant_parachute', 'control'])
 gps_running_human_log = log.Logger(dir='../logs/5_gps_running_human_log', filename='gps_running_human', t_start=t_start, columns=['lat', 'lon', 'distance_to_human', 'rover_azimuth', 'isReach_human'])
 human_detection_log = log.Logger(dir='../logs/6_human_detection_log', filename='human_detection', t_start=t_start, columns=['lat', 'lon', 'result', 'judge_count', 'area_count', 'rotate_count', 'add_pwr', 'isHuman'])
 gps_running_goal_log = log.Logger(dir='../logs/7_gps_running_goal_log', filename='gps_running_goal', t_start=t_start, columns=['lat', 'lon', 'distance_to_goal', 'rover_azimuth', 'isReach_goal'])
@@ -215,66 +215,12 @@ phase_log.save_log('4', 'Parachute Avoid Sequence: Start', lat_log, lon_log)
 print('Sending Data...')
 basics.send_locations(lat=lat_log, lon=lon_log, text='Para Avo S')
 
-#-Parachute Avoid-#
-t_start = time.time()
-stuck_check_array = deque([0]*6, maxlen=6)
-add_pwr = 0
-add_count = 0
-magx_off = -830
-magy_off = -980
-
-#-Log Set up-#
-
 print('Para Avoid Start')
 check_count = 0 #パラ回避用のカウンター
 lat_land, lon_land = gps.location()
-while True:
-    if time.time() - t_start >= 600: #10分たっても
-        red_area = para_avoid.detect_para()
-        if red_area == 0:
-            motor.move(60, -60, 2) #スタック回避
-            break
-        else:
-            print('Parachute is near')
-            print('Wait 10s')
-            time.sleep(10)
 
-    ###---現在のローバーの方位角を求める---###
-    magdata = bmx055.mag_dataRead()
-    magx, magy = magdata[0], magdata[1]
-    rover_aziimuth = calibration.angle(magx=magx, magy=magy, magx_off=magx_off, magy_off=magy_off)
-    stuck_check_array.append(rover_aziimuth)
+para_avoid.main2(lat_land, lon_land, lat_dest=LAT_HUMAN, lon_dest=LON_HUMAN, para_avoid_log=para_avoid_log)
 
-    # if add_pwr != 0 and stuck_check_array[3] != 0: #追加のパワーがあるとき
-    #     for i in range(3):
-    #         expect_azimuth_add = stuck_check_array[i] + 30
-    #         if expect_azimuth_add >= 360:
-    #             expect_azimuth_add = expect_azimuth_add % 360
-    #         if stuck_check_array[i+1] - expect_azimuth_add > 30: #add_pwrを追加していて回りすぎているとき
-    #             add_count += 1
-    #         else:
-    #             add_count = 0
-    #     if add_count == 3:
-    #         add_pwr = 0
-    #         add_count = 0
-    
-    add_pwr = 0 #追加のパワーをリセット
-
-    if stuck_check_array[5] != 0: #スタックチェックを判定できるデータがそろったとき
-        expect_azimuth = stuck_check_array[0] + 90
-
-        if expect_azimuth >= 360:
-            expect_azimuth = expect_azimuth % 360
-
-        if stuck_check_array[5] - expect_azimuth < 0: #本来回っているはずの角度を下回っているとき
-            print('Rotation Stuck Detected')
-            add_pwr = ADD_PWR
-            stuck_check_array = deque([0]*6, maxlen=6) #スタックチェック用の配列の初期化
-
-    isDistant_para = para_avoid.main(lat_land, lon_land, lat_dest=LAT_HUMAN, lon_dest=LON_HUMAN, check_count=check_count, add_pwr=add_pwr, para_avoid_log=para_avoid_log)
-
-    if isDistant_para == 1:
-        break
 print("Para Avoid End")
 
 #-Log-#

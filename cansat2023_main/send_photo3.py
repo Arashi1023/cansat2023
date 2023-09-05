@@ -491,6 +491,7 @@ if __name__ == '__main__':
             while time.time() - receive_time > delay:
                 receive_text = send.receive_data
                 if receive_text == "OK":
+                    print("OK")
                     break
             # time.sleep(delay)
             id_counter = id_counter +1

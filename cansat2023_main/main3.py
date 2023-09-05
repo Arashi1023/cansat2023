@@ -760,6 +760,7 @@ print('#####-----Image Guide Sequence: End-----#####')
 
 #####=====Mission End=====#####
 print('Mission Accomlished')
+
 #-send-#
 print('Sending Data...')
 send.send_data('Mission Accomlished')

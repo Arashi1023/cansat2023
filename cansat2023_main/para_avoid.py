@@ -429,6 +429,7 @@ def main(lat_land, lon_land, lat_dest, lon_dest, check_count :int, add_pwr: int,
     
 def main2(lat_land, lon_land, lat_dest, lon_dest, para_avoid_log):
     check_count = 0
+    isparafound = 0
 
     while True:
         #-Setup-#
@@ -445,16 +446,29 @@ def main2(lat_land, lon_land, lat_dest, lon_dest, para_avoid_log):
             if red_area > PARA_THD_COVERED:
                 print('Parachute On Top')
                 time.sleep(10)
-            elif red_area == 0 and check_count > 0:
+            elif red_area == 0 and isparafound == 1:
                 print('Parachute Not Found\nMoving Forward')
-                motor.motor_move(PARA    
-            elif red_area == 0 and check_count == 0:
-                print('Checking Around')
+                mag_data = bmx055.mag_dataRead()
+                mag_x, mag_y = mag_data[0], mag_data[1]
+                rover_azimuth = calibration.angle(mag_x, mag_y, magx_off=magx_off, magy_off=magy_off)
+                rover_azimuth = basics.standarize_angle(rover_azimuth)
+                target_azimuth = rover_azimuth
 
+                #-run forward-#
+                t_start_runf = time.time()
+                theta_array = [0]*5
+                while time.time() - t_start_runf <= 2: #2秒間前進
+                    PID.PID_run(target_azimuth, magx_off=magx_off, magy_off=magy_off, theta_array=theta_array, loop_num=20)
+                motor.deceleration(20, 20)
+                motor.motor_stop(0.2)
+                    
+            elif red_area == 0 and isparafound == 0:
+                print('Checking Around')
+                motor.move(PARA_PWR, -PARA_PWR, T_CHECK)
             else:
                 print('Parachute Found\nTurning Around')
                 motor.move(PARA_PWR, -PARA_PWR, T_ROTATE)
-                check_count += 1
+                isparafound = 1
 
         elif SHORT_THD_DIST < para_dist <= LONG_THD_DIST:
             pass

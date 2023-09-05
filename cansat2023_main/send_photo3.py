@@ -502,7 +502,7 @@ if __name__ == '__main__':
             #receive_text = send.receive_data(3)
             # time.sleep(delay)
 
-            receive_text = send.receive_data(1)
+            receive_text = send.receive_data()
 
             id_counter = id_counter +1
     

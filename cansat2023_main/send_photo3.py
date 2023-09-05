@@ -466,7 +466,7 @@ if __name__ == '__main__':
     
     wireless_start_time = time.time()  # プログラム開始時刻を記録
     
-    if time.time() - wireless_start_time >= 18000:
+    if time.time() - wireless_start_time <= 18000:
 
         send.send_data ("wireless_start")
         send.receive_data()

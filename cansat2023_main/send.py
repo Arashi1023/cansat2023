@@ -12,7 +12,7 @@ def send_data(data, port='/dev/ttyAMA0', baudrate=19200):
     IM920Serial.close()
 
 
-def receive_data(timeout, port='/dev/ttyAMA0', baudrate=19200):
+def receive_data(port='/dev/ttyAMA0', baudrate=19200):
     global IM920Serial
     IM920Serial = serial.Serial(port, baudrate)
     IM920Serial.flushInput()  # 入力バッファをクリア

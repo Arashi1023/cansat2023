@@ -302,11 +302,9 @@ def wgps_para_avoid(small_thd_dist :int, large_thd_dist :int, check_count :int, 
         while time.time() - t_start_run <= T_FORWARD:
             PID.PID_run(target_azimuth, magx_off, magy_off, theta_array, loop_num=25)
 
-def main(lat_land, lon_land, lat_dest, lon_dest, check_count :int, add_pwr: int):
+def main(lat_land, lon_land, lat_dest, lon_dest, check_count :int, add_pwr: int, para_avoid_log):
     '''
     目的：パラシュートを回避する
-
-
 
     田口作成 2023/08/29
     Parameters

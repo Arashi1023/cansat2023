@@ -489,7 +489,7 @@ if __name__ == '__main__':
             #受信できているかを確認する
             receive_time = time.time()
             receive_count = 0
-            while time.time() - receive_time > delay:
+            while time.time() - receive_time >= delay:
                 receive_text = send.receive_data
                 if receive_text == "OK":
                     print("OK")

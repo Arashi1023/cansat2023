@@ -215,37 +215,11 @@ phase_log.save_log('4', 'Parachute Avoid Sequence: Start', lat_log, lon_log)
 print('Sending Data...')
 basics.send_locations(lat=lat_log, lon=lon_log, text='Para Avo S')
 
-#-Parachute Avoid-#
-# t_start = time.time()
-# # stuck_check_array = deque([0]*6, maxlen=6)
-# # add_pwr = 0
-# # add_count = 0
-# # magx_off = -830
-# # magy_off = -980
-
-#-Log Set up-#
-
 print('Para Avoid Start')
 check_count = 0 #パラ回避用のカウンター
 lat_land, lon_land = gps.location()
 
 para_avoid.main2(lat_land, lon_land, lat_dest=LAT_HUMAN, lon_dest=LON_HUMAN, para_avoid_log=para_avoid_log)
-
-# while True:
-#     if time.time() - t_start >= 600: #10分たっても
-#         red_area = para_avoid.detect_para()
-#         if red_area == 0:
-#             motor.move(60, -60, 2) #スタック回避
-#             break
-#         else:
-#             print('Parachute is near')
-#             print('Wait 10s')
-#             time.sleep(10)
-
-#     isDistant_para = para_avoid.main(lat_land, lon_land, lat_dest=LAT_HUMAN, lon_dest=LON_HUMAN, para_avoid_log=para_avoid_log)
-
-#     if isDistant_para == 1:
-#         break
 
 print("Para Avoid End")
 

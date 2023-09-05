@@ -71,7 +71,7 @@ para_avoid_log = log.Logger(dir='../logs/4_para_avoid_log', filename='para_avoid
 gps_running_human_log = log.Logger(dir='../logs/5_gps_running_human_log', filename='gps_running_human', t_start=t_start, columns=['lat', 'lon', 'distance_to_human', 'rover_azimuth', 'isReach_human'])
 human_detection_log = log.Logger(dir='../logs/6_human_detection_log', filename='human_detection', t_start=t_start, columns=['lat', 'lon', 'result', 'judge_count', 'area_count', 'rotate_count', 'add_pwr', 'isHuman'])
 gps_running_goal_log = log.Logger(dir='../logs/7_gps_running_goal_log', filename='gps_running_goal', t_start=t_start, columns=['lat', 'lon', 'distance_to_goal', 'rover_azimuth', 'isReach_goal'])
-image_guide_log = log.Logger(dir='../logs/8_image_guide_log', filename='image_guide', t_start=t_start, columns=['lat', 'lon', 'distance_to_goal', 'area_ratio', 'angle', 'add_pwr', 'isReach_goal'])
+image_guide_log = log.Logger(dir='../logs/8_image_guide_log', filename='image_guide', t_start=t_start, columns=['lat', 'lon', 'distance_to_goal', 'area_ratio', 'target_azimuth', 'isReach_goal'])
 
 #####=====Mission Sequence=====#####
 
@@ -743,12 +743,7 @@ while True:
             add_pwr = min(add_pwr, 25)
             stuck_check_array = deque([0]*6, maxlen=6) #スタックチェック用の配列の初期化
 
-    lat_now, lon_now, distance_to_goal, area_ratio, angle, isReach_goal = goal_detect.main(lat_dest=LAT_GOAL, lon_dest=LON_GOAL, thd_distance_goal=THD_DISTANCE_GOAL, thd_red_area=THD_RED_RATIO, magx_off=magx_off, magy_off=magy_off, add_pwr=add_pwr)
-    
-    lat_now, lon_now = gps.location() #ログ用のGPS情報の取得
-    # report_log.save_log(lat_now, lon_now)
-    image_guide_log.save_log(lat_now, lon_now, distance_to_goal, area_ratio, angle, add_pwr, isReach_goal)
-    print('area_ratio: ' + str(area_ratio))
+    isReach_goal = goal_detect.main(lat_dest=LAT_GOAL, lon_dest=LON_GOAL, thd_distance_goal=THD_DISTANCE_GOAL, thd_red_area=THD_RED_RATIO, magx_off=magx_off, magy_off=magy_off, add_pwr=add_pwr, img_guide_log=image_guide_log)
 
     if isReach_goal == 1: #ゴール判定
         print('Goal')

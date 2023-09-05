@@ -271,9 +271,8 @@ while True:
             add_pwr = ADD_PWR
             stuck_check_array = deque([0]*6, maxlen=6) #スタックチェック用の配列の初期化
 
-    lat_now, lon_now, para_dist, red_area, angle, isDistant_para, check_count = para_avoid.main(lat_land, lon_land, lat_dest=LAT_HUMAN, lon_dest=LON_HUMAN, check_count=check_count, add_pwr=add_pwr)
-    print(lat_now, lon_now, para_dist, red_area, angle, isDistant_para, check_count)
-    para_avoid_log.save_log(lat_now, lon_now, para_dist, red_area, angle, isDistant_para, check_count)
+    isDistant_para = para_avoid.main(lat_land, lon_land, lat_dest=LAT_HUMAN, lon_dest=LON_HUMAN, check_count=check_count, add_pwr=add_pwr, para_avoid_log=para_avoid_log)
+
     if isDistant_para == 1:
         break
 print("Para Avoid End")

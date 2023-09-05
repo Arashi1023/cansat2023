@@ -25,7 +25,7 @@ PARA_PWR = 30 #パラシュートを見つけたときに回転するモータ�
 T_CHECK = 0.15
 T_ROTATE = 0.35 #パラシュートを見つけたときに回転する時間
 T_FORWARD = 3
-THD_AVOID_ANGLE = 15
+THD_AVOID_ANGLE = 30
 PARA_FORWARD_ANGLE = 45
 
 SHORT_THD_DIST = 5 #これ以上離れたときPID制御により走行する

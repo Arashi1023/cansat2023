@@ -219,7 +219,62 @@ check_count = 0 #パラ回避用のカウンター
 lat_land, lon_land = gps.location()
 
 #-Parachute Avoid-#
-para_avoid.main2(lat_land, lon_land, lat_dest=LAT_HUMAN, lon_dest=LON_HUMAN, para_avoid_log=para_avoid_log)
+t_start = time.time()
+stuck_check_array = deque([0]*6, maxlen=6)
+add_pwr = 0
+add_count = 0
+magx_off = -830
+magy_off = -980
+
+print('Para Avoid Start')
+check_count = 0 #パラ回避用のカウンター
+lat_land, lon_land = gps.location()
+while True:
+    if time.time() - t_start >= 600: #10分たっても
+        red_area = para_avoid.detect_para()
+        if red_area == 0:
+            motor.move(60, -60, 2)
+            break
+        else:
+            print('Parachute is near')
+            print('Wait 10s')
+            time.sleep(10)
+
+    ###---現在のローバーの方位角を求める---###
+    magdata = bmx055.mag_dataRead()
+    magx, magy = magdata[0], magdata[1]
+    rover_aziimuth = calibration.angle(magx=magx, magy=magy, magx_off=magx_off, magy_off=magy_off)
+    stuck_check_array.append(rover_aziimuth)
+
+    if add_pwr != 0 and stuck_check_array[3] != 0: #追加のパワーがあるとき
+        for i in range(3):
+            expect_azimuth_add = stuck_check_array[i] + 30
+            if expect_azimuth_add >= 360:
+                expect_azimuth_add = expect_azimuth_add % 360
+            if stuck_check_array[i+1] - expect_azimuth_add > 30: #add_pwrを追加していて回りすぎているとき
+                add_count += 1
+            else:
+                add_count = 0
+        if add_count == 3:
+            add_pwr = 0
+            add_count = 0
+
+    if stuck_check_array[5] != 0: #スタックチェックを判定できるデータがそろったとき
+        expect_azimuth = stuck_check_array[0] + 90
+
+        if expect_azimuth >= 360:
+            expect_azimuth = expect_azimuth % 360
+
+        if stuck_check_array[5] - expect_azimuth < 0: #本来回っているはずの角度を下回っているとき
+            print('Rotation Stuck Detected')
+            add_pwr = 5
+            stuck_check_array = deque([0]*6, maxlen=6) #スタックチェック用の配列の初期化
+
+    isDistant_para, check_count = para_avoid.main(lat_land, lon_land, lat_dest=LAT_HUMAN, lon_dest=LON_HUMAN, check_count=check_count, add_pwr=add_pwr, para_avoid_log=para_avoid_log)
+    print(isDistant_para, check_count)
+    # para_avoid_log.save_log(lat_now, lon_now, para_dist, red_area, angle, isDistant_para, check_count)
+    if isDistant_para == 1:
+        break
 
 print("Para Avoid End")
 

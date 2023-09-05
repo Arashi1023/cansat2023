@@ -187,6 +187,8 @@ print('#####-----Melt Sequence: End-----#####')
 print('Waiting for Stabilizer to be restored...')
 time.sleep(2) #本当は15秒まつ
 
+stuck2.ue_jug() #GPSアンテナを上の状態にしておく
+
 lat_test, lon_test = gps.location()
 phase_log.save_log('3', 'GPS Received', lat_test, lon_test) #GPS情報の取得とログの保存
 print('GPS received')

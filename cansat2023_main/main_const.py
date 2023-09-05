@@ -35,6 +35,9 @@ LONG_THD_DIST = 10 #これ以上離れたときPID制御により長く走行す
 PARA_RUN_SHORT = 3
 PARA_RUN_LONG = 10
 
+#-----スタック回避用-----#
+ADD_PWR = 10
+
 #-----GPS走行-----#
 STUCK_JUDGE_THD_DISTANCE = 10
 LOOP_NUM = 20 #0.05秒ごとに9軸センサを取得するので、20回のとき1秒間隔でGPSを取得する

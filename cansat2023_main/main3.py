@@ -268,7 +268,7 @@ while True:
 
         if stuck_check_array[5] - expect_azimuth < 0: #本来回っているはずの角度を下回っているとき
             print('Rotation Stuck Detected')
-            add_pwr = 5
+            add_pwr = ADD_PWR
             stuck_check_array = deque([0]*6, maxlen=6) #スタックチェック用の配列の初期化
 
     lat_now, lon_now, para_dist, red_area, angle, isDistant_para, check_count = para_avoid.main(lat_land, lon_land, lat_dest=LAT_HUMAN, lon_dest=LON_HUMAN, check_count=check_count, add_pwr=add_pwr)
@@ -415,8 +415,7 @@ while True:
 
         if stuck_check_array[5] - expect_azimuth < 0: #本来回っているはずの角度を下回っているとき
             print('Rotation Stuck Detected')
-            add_pwr = 5
-            add_pwr = min(add_pwr, 25) #最大で25
+            add_pwr = ADD_PWR
             stuck_check_array = deque([0]*6, maxlen=6) #スタックチェック用の配列の初期化
 
     result, judge_count, area_count, rotate_count, isHuman = human_detect.main(lat_human=LAT_HUMAN, lon_human=LON_HUMAN, model=ML_people, judge_count=judge_count, area_count=area_count, rotate_count=rotate_count, add_pwr=add_pwr, report_log=report_log)
@@ -734,8 +733,7 @@ while True:
 
         if stuck_check_array[5] - expect_azimuth < 0: #本来回っているはずの角度を下回っているとき
             print('Rotation Stuck Detected')
-            add_pwr = 5
-            add_pwr = min(add_pwr, 25)
+            add_pwr = ADD_PWR
             stuck_check_array = deque([0]*6, maxlen=6) #スタックチェック用の配列の初期化
 
     isReach_goal = goal_detect.main(lat_dest=LAT_GOAL, lon_dest=LON_GOAL, thd_distance_goal=THD_DISTANCE_GOAL, thd_red_area=THD_RED_RATIO, magx_off=magx_off, magy_off=magy_off, add_pwr=add_pwr, img_guide_log=image_guide_log)

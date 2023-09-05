@@ -165,12 +165,12 @@ def bme280_read():
 if __name__ == '__main__':
 	bme280_setup()
 	bme280_calib_param()
-	logpath=other.filename('/home/dendenmushi/cansat2023/sequence/log/bme280log','txt')
+	# logpath=other.filename('/home/dendenmushi/cansat2023/sequence/log/bme280log','txt')
 	try:
 		while 1:
 			temp,pres,hum,alt = bme280_read()
-			print(str(pres) + "\t" + str(alt) + "\t" + str(temp) + "\t" + str(hum))
-			other.log(logpath,datetime.datetime.now(),time.time(),temp,pres,hum,alt)
+			# print(str(pres) + "\t" + str(alt) + "\t" + str(temp) + "\t" + str(hum))
+			# other.log(logpath,datetime.datetime.now(),time.time(),temp,pres,hum,alt)
 			#with open("preslog.txt","w")as f:
 			#	f.write(str(pres)+ "\t" + str(alt) + "\t"+str(temp) + "\t" + str(hum) + "\n")
 			time.sleep(0.8)

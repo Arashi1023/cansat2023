@@ -413,7 +413,7 @@ def main(lat_land, lon_land, lat_dest, lon_dest, check_count :int, add_pwr: int,
         goal_azimuth = goal_info['azimuth1']
 
         if abs(goal_azimuth - para_azimuth) < THD_AVOID_ANGLE:
-            control_num = 7
+            control_num = 'Parachute is on the way'
             print('Parachute is on the way')
             target_azimuth = para_azimuth + PARA_FORWARD_ANGLE #パラシュートの方向から45度の方向に走らせる
             print("Heading " + str(target_azimuth) + " degrees")
@@ -430,7 +430,7 @@ def main(lat_land, lon_land, lat_dest, lon_dest, check_count :int, add_pwr: int,
             isDistant_para = 1
     
     time.sleep(1)
-    para_avoid_log.save_log(lat_now, lon_now, para_dist, red_area, control_num, isDistant_para)
+    para_avoid_log.save_log(lat_now, lon_now, para_dist, red_area, isDistant_para, control_num)
 
     return isDistant_para
     

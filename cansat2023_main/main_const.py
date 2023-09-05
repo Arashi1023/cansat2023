@@ -53,7 +53,7 @@ LON_HUMAN = 139.9124594
 
 JUDGE_PROBABILITY = 0.5 #人である確率がこれ以上のとき人がいると判定する
 ADDITIONAL_JUDGE_COUNT = 3 #人がいると判定したとき、追加の確認を行う回数
-ROTATE_COUNT = 36 # 1つの場所で回転する回数
+ROTATE_COUNT = 10 # 1つの場所で回転する回数
 
 HD_ROT_PWR = 25
 HD_ROT_TIME = 0.15

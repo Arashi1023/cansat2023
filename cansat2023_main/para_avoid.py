@@ -433,7 +433,7 @@ def main(lat_land, lon_land, lat_dest, lon_dest, check_count :int, add_pwr: int,
 
     return isDistant_para, check_count
     
-def main(lat_land, lon_land, lat_dest, lon_dest, add_pwr: int, para_avoid_log):
+def main2(lat_land, lon_land, lat_dest, lon_dest, para_avoid_log):
     '''
     目的：パラシュートを回避する
 
@@ -457,9 +457,40 @@ def main(lat_land, lon_land, lat_dest, lon_dest, add_pwr: int, para_avoid_log):
     angle = 0
     control_num = 0
     check_count = 0
-
+    para_count = 0
+    para_avo_start = time.time()
+    para_avo_stuck = time.time()
+    para_avo_stuck_count = 0
+    add_pwr = 0
+    timeout = 0
 
     while True:
+        #-上ジャッジ-#
+        stuck2.ue_jug()
+
+        if time.time() - para_avo_start >= 600:
+            print('Stuck Check')
+            red_area = detect_para()
+            if red_area == 0:
+                motor.move(60, -60, 2) #スタック回避
+            else:
+                print('Parachute is near')
+                print('Wait 10s')
+                time.sleep(10)
+            
+        if time.time() - para_avo_stuck > 60 and check_count == 0:
+            print('Adding Power')
+            if para_avo_stuck_count > 0:
+                add_pwr = 5*(para_avo_stuck_count+1)
+                add_pwr = min(add_pwr, 20)
+            
+            para_avo_stuck_count += 1
+        
+        if time.time() - para_avo_stuck > 1800:
+            print('Timeout')
+            timeout = 1
+            break
+
         para_info = calibration.calculate_direction(lon2=lon_land, lat2=lat_land)
         para_dist = para_info['distance'] #パラシュートまでの距離を計算
         para_azimuth = para_info['azimuth1'] #パラシュートの方位角を計算
@@ -574,6 +605,8 @@ def main(lat_land, lon_land, lat_dest, lon_dest, add_pwr: int, para_avoid_log):
         
         time.sleep(1)
         para_avoid_log.save_log(lat_now, lon_now, para_dist, red_area, isDistant_para, control_num)
+
+        para_count += 1
 
         if isDistant_para == 1:
             break

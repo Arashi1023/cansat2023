@@ -316,22 +316,22 @@ while True: #1ループおおよそT_CAL秒
 
     #-T_CALごとに以下の情報を取得-#
     lat_now, lon_now, distance_to_dest, rover_azimuth, isReach_dest = PID.drive3(lon_dest=LON_HUMAN, lat_dest=LAT_HUMAN, thd_distance=THD_DISTANCE_DEST, t_cal=T_CAL, loop_num=LOOP_NUM, report_log=report_log)
-    print('disntance to dest=' + str(distance_to_dest) + 'm')
-    print('isReach_dest=' + str(isReach_dest))
 
     #-Log-#
-    # lat_now, lon_now = gps.location() #ログ用のGPS情報の取得
-    # report_log.save_log(lat_now, lon_now)
-    # gps_running_goal_log.save_log(lat_now, lon_now, distance_to_dest, rover_azimuth, isReach_dest)
-    
-    #-send-#
-    #lat_now, lon_now = gps.location()
-    #basics.send_locations(lat=lat_now, lon=lon_now, text='Run1')
+    lat_log, lon_log = gps.location() #ログ用のGPS情報の取得
+    direction = calibration.calculate_direction(lon2=LON_GOAL, lat2=LAT_GOAL)
+    distance_to_dest = direction["distance"]
+    gps_running_human_log.save_log(lat_log, lon_log, distance_to_dest, isReach_dest)
+    print('disntance to dest=' + str(distance_to_dest) + 'm')
+    print('isReach_dest=' + str(isReach_dest))
 
     if isReach_dest == 1: #ゴール判定
         break
 
-print(f'{distance_to_dest}m to Goal')
+    #-send-#
+    basics.send_locations(lat=lat_log, lon=lon_log, text='Run1 c')
+
+    time.sleep(1)
 
 #-Log-#
 print('Saving Log...')
@@ -632,7 +632,7 @@ phase_log.save_log('7', 'GPS Running Sequence to Goal: Start', lat_log, lon_log)
 
 #-send-#
 print('Sending Data...')
-#basics.send_locations(lat=lat_log, lon=lon_log, text='Run2 S')
+basics.send_locations(lat=lat_log, lon=lon_log, text='Run2 S')
 
 #-GPS Running2-#
 
@@ -644,22 +644,23 @@ while True: #1ループおおよそT_CAL秒
 
     #-T_CALごとに以下の情報を取得-#
     lat_now, lon_now, distance_to_dest, rover_azimuth, isReach_dest = PID.drive3(lon_dest=LON_GOAL, lat_dest=LAT_GOAL, thd_distance=THD_DISTANCE_DEST, t_cal=T_CAL, loop_num=LOOP_NUM, report_log=report_log)
-
-    print('disntance to dest=' + str(distance_to_dest) + 'm')
-    print('isReach_dest=' + str(isReach_dest))
     
     #-Log-#
-    # lat_now, lon_now = gps.location() #ログ用のGPS情報の取得
-    # report_log.save_log(lat_now, lon_now)
-    # gps_running_goal_log.save_log(lat_now, lon_now, distance_to_dest, rover_azimuth, isReach_dest)
-
-    #-send-#
-    #lat_now, lon_now = gps.location()
-    #basics.send_locations(lat=lat_now, lon=lon_now, text='Run2')
+    lat_now, lon_now = gps.location() #ログ用のGPS情報の取得
+    direction = calibration.calculate_direction(lon2=LON_GOAL, lat2=LAT_GOAL)
+    distance_to_dest = direction["distance"]
+    gps_running_goal_log.save_log(lat_now, lon_now, distance_to_dest, isReach_dest)
+    print('disntance to dest=' + str(distance_to_dest) + 'm')
+    print('isReach_dest=' + str(isReach_dest))
     
     if isReach_dest == 1: #ゴール判定
         print('Finishing GPS Running')
         break
+
+    #-send-#
+    basics.send_locations(lat=lat_log, lon=lon_log, text='Run2 c')
+
+    time.sleep(1)
 
 #-Log-#
 print('Saving Log...')
@@ -668,7 +669,7 @@ phase_log.save_log('7', 'GPS Running Sequence to Goal: End', lat_log, lon_log)
 
 #-send-#
 print('Sending Data...')
-#basics.send_locations(lat=lat_log, lon=lon_log, text='Run2 F')
+basics.send_locations(lat=lat_log, lon=lon_log, text='Run2 F')
 
 print('#####-----GPS Running Sequence to Goal: End-----#####')
 

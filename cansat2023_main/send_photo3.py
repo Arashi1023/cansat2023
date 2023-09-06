@@ -487,7 +487,13 @@ if __name__ == '__main__':
                 send.send_data(line_with_id)
 
                 #受信確認
-                receive_text = send.receive_data()
+                while 1:
+                    receive_text = send.receive_data()
+                    if receive_text == "OK":
+                        print("送信されたよ")
+                        break
+                    else:
+                        print("だめ")
 
                 #何行目かを記録する
                 id_counter = id_counter +1

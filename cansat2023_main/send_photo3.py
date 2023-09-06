@@ -488,17 +488,21 @@ if __name__ == '__main__':
 
                 #受信確認
                 while 1:
-                    receive_text = send.receive_data()
-                    if receive_text == "OK":
-                        # print("送信されたよ")
-                        break
+                    if time.time() - wireless_start_time <= 60:
+                        receive_text = send.receive_data()
+                        if receive_text == "OK":
+                            # print("送信されたよ")
+                            break
+                    else:
+                        print("タイムアウト")
 
                 #何行目かを記録する
                 id_counter = id_counter +1
 
                 # ファイルに書き込む
                 f.write(line_with_id + "\n")
-                        
+            else:
+                print("タイムアウト")          
 
     send.send_data ("wireless_fin")
     send.receive_data()

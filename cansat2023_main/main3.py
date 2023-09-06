@@ -617,7 +617,7 @@ if isHuman != 1: #人を見つけたときに限り以下の処理を行い画�
 
     # phase_log.save_log('6', 'Image Sending Sequence: End', lat_log, lon_log)
 
-    #新しい画像伝送
+    #---------------------新しい画像伝送----------------------------#
     time.sleep(15)
     file_name = "../imgs/human_detect/send/send"  # 保存するファイル名を指定
     photo_take = take.picture(file_name, 320, 240)

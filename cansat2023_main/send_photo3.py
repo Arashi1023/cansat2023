@@ -501,10 +501,7 @@ if __name__ == '__main__':
                 id_counter = id_counter +1
 
                 # ファイルに書き込む
-                f.write(line_with_id + "\n")
-            else:
-                print("タイムアウト")   
-                break       
+                f.write(line_with_id + "\n")       
 
     send.send_data ("wireless_fin")
     send.receive_data()

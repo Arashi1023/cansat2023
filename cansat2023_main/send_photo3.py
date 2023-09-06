@@ -475,7 +475,7 @@ if __name__ == '__main__':
     # バイナリデータを32バイトずつ表示し、ファイルに保存する
     with open(output_filename, "w") as f:
         for i in range(0, len(data), chunk_size):
-            if time.time() - wireless_start_time <= 18000:
+            if time.time() - wireless_start_time <= 60:
                 chunk = data[i:i+chunk_size]
                 chunk_str = "".join(format(byte, "02X") for byte in chunk)
                 
@@ -490,10 +490,8 @@ if __name__ == '__main__':
                 while 1:
                     receive_text = send.receive_data()
                     if receive_text == "OK":
-                        print("送信されたよ")
+                        # print("送信されたよ")
                         break
-                    else:
-                        print("だめ")
 
                 #何行目かを記録する
                 id_counter = id_counter +1

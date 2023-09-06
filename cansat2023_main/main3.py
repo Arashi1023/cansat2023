@@ -23,7 +23,7 @@ import gps
 import gps_navigate
 import stuck2
 import other
-import send_photo
+import send_photo3 as send_photo
 import take
 from machine_learning import DetectPeople
 import calibration
@@ -541,83 +541,169 @@ if isHuman != 1: #人を見つけたときに限り以下の処理を行い画�
 
     #---------------------画像伝送----------------------------#
 
+    # time.sleep(15)
+    # #file_path = latest_picture_path
+    # file_name = "../imgs/human_detect/send/send"  # 保存するファイル名を指定
+    # photo_take = take.picture(file_name, 320, 240)
+    # print("撮影した写真のファイルパス：", photo_take)
+
+    # # 入力ファイルパスと出力ファイルパスを指定してリサイズ
+    # input_file = photo_take     # 入力ファイルのパスを適切に指定してください
+    # photo_name = "../imgs/human_detect/send/send_photo_resize.jpg"  # 出力ファイルのパスを適切に指定してください
+    # new_width = 60            # リサイズ後の幅を指定します
+    # new_height = 80           # リサイズ後の高さを指定します
+
+    # # リサイズを実行
+    # send_photo.resize_image(input_file, photo_name, new_width, new_height)
+
+    # print("写真撮影完了")
+
+    # # 圧縮したい画像のパスと出力先のパスを指定します
+    # input_image_path = photo_name
+    # compressed_image_path = '../imgs/human_detect/send/compressed_test.jpg'
+
+    # # 圧縮率を指定します（0から100の範囲の整数）
+    # compression_quality = photo_quality
+
+    # # 画像を圧縮します
+    # send_photo.compress_image(input_image_path, compressed_image_path, compression_quality)
+
+    # # 圧縮後の画像をバイナリ形式に変換します
+    # with open(compressed_image_path, 'rb') as f:
+    #     compressed_image_binary = f.read()
+
+
+    # data = compressed_image_binary  # バイナリデータを指定してください
+    # output_filename = "output.txt"  # 保存先のファイル名
+
+    # start_time = time.time()  # プログラム開始時刻を記録
+
+    # send.send_data ("wireless_start")
+
+    # print("写真伝送開始します")
+    # time.sleep(1)
+
+
+    # # バイナリデータを32バイトずつ表示し、ファイルに保存する
+    # with open(output_filename, "w") as f:
+    #     for i in range(0, len(data), chunk_size):
+    #         if id_counter%30==0:
+    #             time.sleep(10)
+    #         chunk = data[i:i+chunk_size]
+    #         chunk_str = "".join(format(byte, "02X") for byte in chunk)
+            
+    #         # 識別番号とデータを含む行の文字列を作成
+    #         line_with_id = f"{id_counter}-{chunk_str}"
+
+    #         #chunk_strにデータがある
+    #         print(line_with_id)
+    #         send.send_data(line_with_id)
+    #         # 表示間隔を待つ
+    #         time.sleep(delay)
+    #         id_counter = id_counter +1
+
+    #         # ファイルに書き込む
+    #         f.write(line_with_id + "\n")
+
+    # send.send_data ("wireless_fin")
+    # send.send_data("num=" + str(id_counter))
+    # time.sleep(10)
+
+    # end_time = time.time()  # プログラム終了時刻を記録
+    # execution_time = end_time - start_time  # 実行時間を計算
+
+    # print("実行時間:", execution_time, "秒")
+    # print("データを", output_filename, "に保存しました。")
+
+    # phase_log.save_log('6', 'Image Sending Sequence: End', lat_log, lon_log)
+
+    #新しい画像伝送
     time.sleep(15)
-    #file_path = latest_picture_path
     file_name = "../imgs/human_detect/send/send"  # 保存するファイル名を指定
     photo_take = take.picture(file_name, 320, 240)
     print("撮影した写真のファイルパス：", photo_take)
-
+    
     # 入力ファイルパスと出力ファイルパスを指定してリサイズ
-    input_file = photo_take     # 入力ファイルのパスを適切に指定してください
+    input_file = photo_take    # 入力ファイルのパスを適切に指定してください
     photo_name = "../imgs/human_detect/send/send_photo_resize.jpg"  # 出力ファイルのパスを適切に指定してください
     new_width = 60            # リサイズ後の幅を指定します
     new_height = 80           # リサイズ後の高さを指定します
 
     # リサイズを実行
     send_photo.resize_image(input_file, photo_name, new_width, new_height)
-
+    
     print("写真撮影完了")
-
+    
     # 圧縮したい画像のパスと出力先のパスを指定します
     input_image_path = photo_name
     compressed_image_path = '../imgs/human_detect/send/compressed_test.jpg'
-
+    
     # 圧縮率を指定します（0から100の範囲の整数）
     compression_quality = photo_quality
-
+    
     # 画像を圧縮します
     send_photo.compress_image(input_image_path, compressed_image_path, compression_quality)
+    
+    #送受信データのリスト
+    wireless_send = []
+    wireless_receive =[]
 
     # 圧縮後の画像をバイナリ形式に変換します
     with open(compressed_image_path, 'rb') as f:
         compressed_image_binary = f.read()
-
-
+    
+    
     data = compressed_image_binary  # バイナリデータを指定してください
     output_filename = "output.txt"  # 保存先のファイル名
+    
+    wireless_start_time = time.time()  # プログラム開始時刻を記録
+    
+    if time.time() - wireless_start_time <= 18000:
 
-    start_time = time.time()  # プログラム開始時刻を記録
+        send.send_data ("wireless_start")
+        send.receive_data()
+        print("写真伝送開始します")
+        time.sleep(1)
 
-    send.send_data ("wireless_start")
+        
+        # バイナリデータを32バイトずつ表示し、ファイルに保存する
+        with open(output_filename, "w") as f:
+            for i in range(0, len(data), chunk_size):
 
-    print("写真伝送開始します")
-    time.sleep(1)
+                chunk = data[i:i+chunk_size]
+                chunk_str = "".join(format(byte, "02X") for byte in chunk)
+                
+                # 識別番号とデータを含む行の文字列を作成
+                line_with_id = f"{id_counter}-{chunk_str}"
 
+                #chunk_strにデータがある
+                print(line_with_id)
+                send.send_data(line_with_id)
 
-    # バイナリデータを32バイトずつ表示し、ファイルに保存する
-    with open(output_filename, "w") as f:
-        for i in range(0, len(data), chunk_size):
-            if id_counter%30==0:
-                time.sleep(10)
-            chunk = data[i:i+chunk_size]
-            chunk_str = "".join(format(byte, "02X") for byte in chunk)
-            
-            # 識別番号とデータを含む行の文字列を作成
-            line_with_id = f"{id_counter}-{chunk_str}"
+                #受信確認
+                receive_text = send.receive_data()
 
-            #chunk_strにデータがある
-            print(line_with_id)
-            send.send_data(line_with_id)
-            # 表示間隔を待つ
-            time.sleep(delay)
-            id_counter = id_counter +1
+                #何行目かを記録する
+                id_counter = id_counter +1
+        
+                # ファイルに書き込む
+                f.write(line_with_id + "\n")
+                
 
-            # ファイルに書き込む
-            f.write(line_with_id + "\n")
-
-    send.send_data ("wireless_fin")
-    send.send_data("num=" + str(id_counter))
-    time.sleep(10)
-
+        send.send_data ("wireless_fin")
+        send.receive_data()
+        send.send_data("num=" + str(id_counter))
+        send.receive_data()
+        print("待ち時間")
+        time.sleep(15)
+    
     end_time = time.time()  # プログラム終了時刻を記録
-    execution_time = end_time - start_time  # 実行時間を計算
-
+    execution_time = end_time - wireless_start_time  # 実行時間を計算
+    
     print("実行時間:", execution_time, "秒")
     print("データを", output_filename, "に保存しました。")
 
     phase_log.save_log('6', 'Image Sending Sequence: End', lat_log, lon_log)
-
-
 
 ########################################################################################################################################
 

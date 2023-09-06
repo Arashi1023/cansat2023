@@ -502,12 +502,12 @@ if __name__ == '__main__':
                 f.write(line_with_id + "\n")
                         
 
-                send.send_data ("wireless_fin")
-                send.receive_data()
-                send.send_data("num=" + str(id_counter))
-                send.receive_data()
-                print("待ち時間")
-                time.sleep(15)
+    send.send_data ("wireless_fin")
+    send.receive_data()
+    send.send_data("num=" + str(id_counter))
+    send.receive_data()
+    print("待ち時間")
+    time.sleep(15)
         
     end_time = time.time()  # プログラム終了時刻を記録
     execution_time = end_time - wireless_start_time  # 実行時間を計算

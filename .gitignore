@@ -9,3 +9,4 @@ cansat2023_main/__pycache__
 imgs/parachute_avoid/all
 imgs/human_detect/all
 imgs
+logs/test_logs

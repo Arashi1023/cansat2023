@@ -495,6 +495,7 @@ if __name__ == '__main__':
                             break
                     else:
                         print("タイムアウト")
+                        break
 
                 #何行目かを記録する
                 id_counter = id_counter +1
@@ -502,7 +503,8 @@ if __name__ == '__main__':
                 # ファイルに書き込む
                 f.write(line_with_id + "\n")
             else:
-                print("タイムアウト")          
+                print("タイムアウト")   
+                break       
 
     send.send_data ("wireless_fin")
     send.receive_data()

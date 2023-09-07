@@ -1,0 +1,24 @@
+vibration test start	
+wait 3mins	
+land detect start	
+previous press=	1012.2514	latest press=	1012.268	
+0.016600000000039472	Press unfulfilled	
+previous press=	1012.268	latest press=	1012.2657	
+0.002299999999991087	Press unfulfilled	
+previous press=	1012.2657	latest press=	1012.2468	
+0.01890000000003056	Press unfulfilled	
+previous press=	1012.2468	latest press=	1012.2468	
+0.0	Press unfulfilled	
+previous press=	1012.2468	latest press=	1012.2256	
+0.021200000000021646	Press unfulfilled	
+previous press=	1012.2256	latest press=	1012.2127	
+landed	
+melt start	
+melt finish	
+move forward	
+accx	accy	accz	gyrx	gyry	gyrz	magx	magy	magz	temp	press	hum	alt	utc	lat	lon	sHeight	gHeight	
+0.9506	-1.7934	9.3492	-0.1824	-0.0608	15.3824	-93.0	-1222.0	-1436.0	25.1385	1012.2638	59.7236	6.3472	0	0	0	0	0	
+1.0878	-1.8816	9.3982	0.0	-15.5648	-0.304	-88.0	-1215.0	-1436.0	25.1537	1012.2886	59.6842	6.1335	0	0	0	0	0	
+0.9996	-1.96	9.3884	0.0	-15.5648	15.3216	-89.0	-1210.0	-1428.0	25.1638	1012.1965	59.6216	6.9279	0	0	0	0	0	
+1.0682	-1.9502	9.31	-0.1824	-0.0608	15.504	-91.0	-1207.0	-1424.0	25.1689	1012.2048	59.5589	6.8567	0	0	0	0	0	
+1.0486	-1.9012	9.3688	-0.3648	-0.0608	15.2608	-92.0	-1202.0	-1428.0	25.179	1012.2213	59.462	6.7142	0	0	0	0	0	

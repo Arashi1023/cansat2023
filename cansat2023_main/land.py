@@ -62,7 +62,7 @@ def land_main(press_land_count: int, press_array: list):
         delta_press = 0
         press_land_count = 0
     
-    time.sleep(5)
+    time.sleep(1)
     
     return latest_press, delta_press, press_land_count, isLand
 

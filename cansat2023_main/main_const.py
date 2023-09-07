@@ -52,7 +52,7 @@ T_CAL = 35 #キャリブレーションを行う間隔時間[sec] 30の倍数+5�
 #-----人検出-----#
 LAT_HUMAN = 35.9243068
 LON_HUMAN = 139.9124594
-#LAT_HUMAN = 35.9243785
+#LAT_HUMAN = 35.9243785s
 #LON_HUMAN = 139.9113644
 
 JUDGE_PROBABILITY = 0.5 #人である確率がこれ以上のとき人がいると判定する
@@ -61,6 +61,9 @@ ROTATE_COUNT = 5 # 1つの場所で回転する回数
 
 HD_ROT_PWR = 25
 HD_ROT_TIME = 0.15
+
+#-----画像伝送-----#
+SENDPIC_TIMEOUT = 1800 
 
 #-----ゴール地点-----#
 LAT_GOAL = 35.9242411 #グランドのゴール前

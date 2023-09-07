@@ -31,6 +31,7 @@ def save_img(img, img_path, img_name):
     print("photo_saved")
 
 def send_locations(lat: float, lon: float, text: str):
+    send.send_reset(t_reset = 10) #たまってたやつリセット
     send.send_data(text)
     time.sleep(10)
     lat_str = "{:.6f}".format(lat)  # 緯度を小数点以下8桁に整形

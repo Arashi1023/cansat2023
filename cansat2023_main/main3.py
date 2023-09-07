@@ -106,6 +106,7 @@ phase_log.save_log('1', 'Release Detect Sequence: Start', 0, 0)
 release_log.save_log('Release Detected')
 
 #-send-#
+send.send_on()
 print('Sending Data...')
 send.send_data('Release finished')
 time.sleep(10)
@@ -152,8 +153,8 @@ time.sleep(10)
 
 print('#####-----Land Detect Sequence: End-----#####')
 
-
-
+#-send_reset-#
+send.send_reset(t_reset = 5)
 
 
 #####===== 3 Melt Sequence=====#####
@@ -620,6 +621,7 @@ if isHuman != 1: #人を見つけたときに限り以下の処理を行い画�
 
     #---------------------新しい画像伝送----------------------------#
     time.sleep(15)
+
     file_name = "../imgs/human_detect/send/send"  # 保存するファイル名を指定
     photo_take = take.picture(file_name, 320, 240)
     print("撮影した写真のファイルパス：", photo_take)
@@ -659,18 +661,16 @@ if isHuman != 1: #人を見つけたときに限り以下の処理を行い画�
     
     wireless_start_time = time.time()  # プログラム開始時刻を記録
     
-    if time.time() - wireless_start_time <= 18000:
+    send.send_data ("wireless_start")
+    send.receive_data()
+    print("写真伝送開始します")
+    time.sleep(1)
 
-        send.send_data ("wireless_start")
-        send.receive_data()
-        print("写真伝送開始します")
-        time.sleep(1)
 
-        
-        # バイナリデータを32バイトずつ表示し、ファイルに保存する
-        with open(output_filename, "w") as f:
-            for i in range(0, len(data), chunk_size):
-
+    # バイナリデータを32バイトずつ表示し、ファイルに保存する
+    with open(output_filename, "w") as f:
+        for i in range(0, len(data), chunk_size):
+            if time.time() - wireless_start_time <= SENDPIC_TIMEOUT:
                 chunk = data[i:i+chunk_size]
                 chunk_str = "".join(format(byte, "02X") for byte in chunk)
                 
@@ -682,22 +682,29 @@ if isHuman != 1: #人を見つけたときに限り以下の処理を行い画�
                 send.send_data(line_with_id)
 
                 #受信確認
-                receive_text = send.receive_data()
+                while 1:
+                    if time.time() - wireless_start_time <= SENDPIC_TIMEOUT:
+                        receive_text = send.receive_data()
+                        if receive_text == "OK":
+                            # print("送信されたよ")
+                            break
+                    else:
+                        print("タイムアウト")
+                        break
 
                 #何行目かを記録する
                 id_counter = id_counter +1
-        
-                # ファイルに書き込む
-                f.write(line_with_id + "\n")
-                
 
-        send.send_data ("wireless_fin")
-        send.receive_data()
-        send.send_data("num=" + str(id_counter))
-        send.receive_data()
-        print("待ち時間")
-        time.sleep(15)
-    
+                # ファイルに書き込む
+                f.write(line_with_id + "\n")       
+
+    send.send_data ("wireless_fin")
+    send.receive_data()
+    send.send_data("num=" + str(id_counter))
+    send.receive_data()
+    print("待ち時間")
+    time.sleep(15)
+        
     end_time = time.time()  # プログラム終了時刻を記録
     execution_time = end_time - wireless_start_time  # 実行時間を計算
     

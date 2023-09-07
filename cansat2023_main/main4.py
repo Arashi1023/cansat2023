@@ -220,7 +220,7 @@ lat_land, lon_land = gps.location()
 
 #-Parachute Avoid-#
 t_start = time.time()
-stuck_check_array = deque([0]*6, maxlen=6)
+rotate_check_array = deque([0]*6, maxlen=6)
 add_pwr = 0
 add_count = 0
 magx_off = -830
@@ -244,14 +244,14 @@ while True:
     magdata = bmx055.mag_dataRead()
     magx, magy = magdata[0], magdata[1]
     rover_aziimuth = calibration.angle(magx=magx, magy=magy, magx_off=magx_off, magy_off=magy_off)
-    stuck_check_array.append(rover_aziimuth)
+    rotate_check_array.append(rover_aziimuth)
 
-    if add_pwr != 0 and stuck_check_array[3] != 0: #追加のパワーがあるとき
+    if add_pwr != 0 and rotate_check_array[3] != 0: #追加のパワーがあるとき
         for i in range(3):
-            expect_azimuth_add = stuck_check_array[i] + 30
+            expect_azimuth_add = rotate_check_array[i] + 30
             if expect_azimuth_add >= 360:
                 expect_azimuth_add = expect_azimuth_add % 360
-            if stuck_check_array[i+1] - expect_azimuth_add > 30: #add_pwrを追加していて回りすぎているとき
+            if rotate_check_array[i+1] - expect_azimuth_add > 30: #add_pwrを追加していて回りすぎているとき
                 add_count += 1
             else:
                 add_count = 0
@@ -259,16 +259,16 @@ while True:
             add_pwr = 0
             add_count = 0
 
-    if stuck_check_array[5] != 0: #スタックチェックを判定できるデータがそろったとき
-        expect_azimuth = stuck_check_array[0] + 90
+    if rotate_check_array[5] != 0: #スタックチェックを判定できるデータがそろったとき
+        expect_azimuth = rotate_check_array[0] + 90
 
         if expect_azimuth >= 360:
             expect_azimuth = expect_azimuth % 360
 
-        if stuck_check_array[5] - expect_azimuth < 0: #本来回っているはずの角度を下回っているとき
+        if rotate_check_array[5] - expect_azimuth < 0: #本来回っているはずの角度を下回っているとき
             print('Rotation Stuck Detected')
             add_pwr = 5
-            stuck_check_array = deque([0]*6, maxlen=6) #スタックチェック用の配列の初期化
+            rotate_check_array = deque([0]*6, maxlen=6) #スタックチェック用の配列の初期化
 
     isDistant_para, check_count = para_avoid.main(lat_land, lon_land, lat_dest=LAT_HUMAN, lon_dest=LON_HUMAN, check_count=check_count, add_pwr=add_pwr, para_avoid_log=para_avoid_log)
     print(isDistant_para, check_count)
@@ -371,7 +371,7 @@ area_count = 0
 rotate_count = 0
 isHuman = 0
 judge_count = 0
-stuck_check_array = deque([0]*6, maxlen=6)
+rotate_check_array = deque([0]*6, maxlen=6)
 add_pwr = 0
 add_count = 0
 t_start_detect = time.time()
@@ -382,7 +382,7 @@ while True:
     ###---回転場所の整地---###
     if rotate_count == 0: #ある地点で1枚目の写真を撮影するとき
         magx_off_stuck, magy_off_stuck = calibration.cal(40, -40, 30)
-        stuck_check_array = deque([0]*6, maxlen=6) #スタックチェック用の配列の初期化
+        rotate_check_array = deque([0]*6, maxlen=6) #スタックチェック用の配列の初期化
         add_pwr = 0 #捜索地点を変えたら追加のパワーをリセット
         lat_now, lon_now = gps.location()
         phase_log.save_log('6', f'Human Detection Sequence: Area{area_count}', lat_now, lon_now)
@@ -391,14 +391,14 @@ while True:
     magdata = bmx055.mag_dataRead()
     magx, magy = magdata[0], magdata[1]
     rover_aziimuth = calibration.angle(magx=magx, magy=magy, magx_off=magx_off, magy_off=magy_off)
-    stuck_check_array.append(rover_aziimuth)
+    rotate_check_array.append(rover_aziimuth)
 
-    if add_pwr != 0 and stuck_check_array[3] != 0: #追加のパワーがあるとき
+    if add_pwr != 0 and rotate_check_array[3] != 0: #追加のパワーがあるとき
         for i in range(3):
-            expect_azimuth_add = stuck_check_array[i] + 30
+            expect_azimuth_add = rotate_check_array[i] + 30
             if expect_azimuth_add >= 360:
                 expect_azimuth_add = expect_azimuth_add % 360
-            if stuck_check_array[i+1] - expect_azimuth_add > 30: #add_pwrを追加していて回りすぎているとき
+            if rotate_check_array[i+1] - expect_azimuth_add > 30: #add_pwrを追加していて回りすぎているとき
                 add_count += 1
             else:
                 add_count = 0
@@ -406,16 +406,16 @@ while True:
             add_pwr = 0
             add_count = 0
 
-    if stuck_check_array[5] != 0: #スタックチェックを判定できるデータがそろったとき
-        expect_azimuth = stuck_check_array[0] + 90
+    if rotate_check_array[5] != 0: #スタックチェックを判定できるデータがそろったとき
+        expect_azimuth = rotate_check_array[0] + 90
 
         if expect_azimuth >= 360:
             expect_azimuth = expect_azimuth % 360
 
-        if stuck_check_array[5] - expect_azimuth < 0: #本来回っているはずの角度を下回っているとき
+        if rotate_check_array[5] - expect_azimuth < 0: #本来回っているはずの角度を下回っているとき
             print('Rotation Stuck Detected')
             add_pwr = ADD_PWR
-            stuck_check_array = deque([0]*6, maxlen=6) #スタックチェック用の配列の初期化
+            rotate_check_array = deque([0]*6, maxlen=6) #スタックチェック用の配列の初期化
 
     result, judge_count, area_count, rotate_count, isHuman = human_detect.main(lat_human=LAT_HUMAN, lon_human=LON_HUMAN, model=ML_people, judge_count=judge_count, area_count=area_count, rotate_count=rotate_count, add_pwr=add_pwr, report_log=report_log)
 
@@ -691,7 +691,7 @@ print('Sending Data...')
 #-Image Guide Drive-#
 #-setup-#
 t_start_goal = time.time()
-stuck_check_array = deque([0]*6, maxlen=6)
+rotate_check_array = deque([0]*6, maxlen=6)
 add_pwr = 0
 add_count = 0
 
@@ -708,14 +708,14 @@ while True:
     magdata = bmx055.mag_dataRead()
     magx, magy = magdata[0], magdata[1]
     rover_aziimuth = calibration.angle(magx=magx, magy=magy, magx_off=magx_off, magy_off=magy_off)
-    stuck_check_array.append(rover_aziimuth)
+    rotate_check_array.append(rover_aziimuth)
 
-    # if add_pwr != 0 and stuck_check_array[3] != 0: #追加のパワーがあるとき
+    # if add_pwr != 0 and rotate_check_array[3] != 0: #追加のパワーがあるとき
     #     for i in range(3):
-    #         expect_azimuth_add = stuck_check_array[i] + 30
+    #         expect_azimuth_add = rotate_check_array[i] + 30
     #         if expect_azimuth_add >= 360:
     #             expect_azimuth_add = expect_azimuth_add % 360
-    #         if stuck_check_array[i+1] - expect_azimuth_add > 30: #add_pwrを追加していて回りすぎているとき
+    #         if rotate_check_array[i+1] - expect_azimuth_add > 30: #add_pwrを追加していて回りすぎているとき
     #             add_count += 1
     #         else:
     #             add_count = 0
@@ -725,16 +725,16 @@ while True:
 
     add_pwr = 0 #追加のパワーをリセット
 
-    if stuck_check_array[5] != 0: #スタックチェックを判定できるデータがそろったとき
-        expect_azimuth = stuck_check_array[0] + 90
+    if rotate_check_array[5] != 0: #スタックチェックを判定できるデータがそろったとき
+        expect_azimuth = rotate_check_array[0] + 90
 
         if expect_azimuth >= 360:
             expect_azimuth = expect_azimuth % 360
 
-        if stuck_check_array[5] - expect_azimuth < 0: #本来回っているはずの角度を下回っているとき
+        if rotate_check_array[5] - expect_azimuth < 0: #本来回っているはずの角度を下回っているとき
             print('Rotation Stuck Detected')
             add_pwr = ADD_PWR
-            stuck_check_array = deque([0]*6, maxlen=6) #スタックチェック用の配列の初期化
+            rotate_check_array = deque([0]*6, maxlen=6) #スタックチェック用の配列の初期化
 
     isReach_goal = goal_detect.main(lat_dest=LAT_GOAL, lon_dest=LON_GOAL, thd_distance_goal=THD_DISTANCE_GOAL, thd_red_area=THD_RED_RATIO, magx_off=magx_off, magy_off=magy_off, add_pwr=add_pwr, img_guide_log=image_guide_log)
 

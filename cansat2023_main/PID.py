@@ -661,7 +661,7 @@ def drive3(lon_dest :float, lat_dest: float, thd_distance: int, t_cal: float, lo
     stuck_count = 1
     isReach_dest = 0
     report_count = 0
-
+    control = 0
     #-----上向き判定-----#
     stuck2.ue_jug()
 

@@ -413,6 +413,7 @@ def main(lat_dest: float, lon_dest: float, thd_distance_goal: float, thd_red_are
 
     area_ratio = 0
     angle = 0
+    target_azimuth = 0
     isReach_goal = 0
 
     ###-----ゴールまでの距離を測定-----###

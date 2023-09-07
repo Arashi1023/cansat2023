@@ -1,0 +1,5 @@
+datetime(PDT),elapsed time,latest_press,delta_press,press_release_count,isRelease
+2023-09-06 17:36:53.972946,1.188117504119873,Release Detect Start
+2023-09-06 17:37:03.985091,11.20027494430542,1011.0859,0,0,0
+2023-09-06 17:37:03.986310,11.201484680175781,Release Sequence Timeout
+2023-09-06 17:37:03.992195,11.207370281219482,Release Detected

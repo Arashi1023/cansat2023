@@ -466,18 +466,16 @@ if __name__ == '__main__':
     
     wireless_start_time = time.time()  # プログラム開始時刻を記録
     
-    if time.time() - wireless_start_time <= 18000:
+    send.send_data ("wireless_start")
+    send.receive_data()
+    print("写真伝送開始します")
+    time.sleep(1)
 
-        send.send_data ("wireless_start")
-        send.receive_data()
-        print("写真伝送開始します")
-        time.sleep(1)
 
-        
-        # バイナリデータを32バイトずつ表示し、ファイルに保存する
-        with open(output_filename, "w") as f:
-            for i in range(0, len(data), chunk_size):
-
+    # バイナリデータを32バイトずつ表示し、ファイルに保存する
+    with open(output_filename, "w") as f:
+        for i in range(0, len(data), chunk_size):
+            if time.time() - wireless_start_time <= 60:
                 chunk = data[i:i+chunk_size]
                 chunk_str = "".join(format(byte, "02X") for byte in chunk)
                 
@@ -489,22 +487,29 @@ if __name__ == '__main__':
                 send.send_data(line_with_id)
 
                 #受信確認
-                receive_text = send.receive_data()
+                while 1:
+                    if time.time() - wireless_start_time <= 60:
+                        receive_text = send.receive_data()
+                        if receive_text == "OK":
+                            # print("送信されたよ")
+                            break
+                    else:
+                        print("タイムアウト")
+                        break
 
                 #何行目かを記録する
                 id_counter = id_counter +1
-        
-                # ファイルに書き込む
-                f.write(line_with_id + "\n")
-                
 
-        send.send_data ("wireless_fin")
-        send.receive_data()
-        send.send_data("num=" + str(id_counter))
-        send.receive_data()
-        print("待ち時間")
-        time.sleep(15)
-    
+                # ファイルに書き込む
+                f.write(line_with_id + "\n")       
+
+    send.send_data ("wireless_fin")
+    send.receive_data()
+    send.send_data("num=" + str(id_counter))
+    send.receive_data()
+    print("待ち時間")
+    time.sleep(15)
+        
     end_time = time.time()  # プログラム終了時刻を記録
     execution_time = end_time - wireless_start_time  # 実行時間を計算
     

@@ -23,7 +23,7 @@ import gps
 import gps_navigate
 import stuck2
 import other
-import send_photo
+import send_photo3 as send_photo
 import take
 from machine_learning import DetectPeople
 import calibration
@@ -45,6 +45,7 @@ send.send_data('CONNECTION TEST START')
 send.send_data('Wait for sometime')
 time.sleep(60) #繋げている状態で何分か待つ
 send.send_data('CONNECTION TEST FINISHED')
+time.sleep(20)
 #-Turning off wireless communication-#
 send.send_off() #分離機構の展開までの間は無線通信を切る
 
@@ -86,7 +87,7 @@ press_release_count = 0
 press_array = [0]*2
 
 while True:
-    if time.time() - t_start > 10: #RELEASE_TIMEOUT: タイムアウトの設定
+    if time.time() - t_start > RELEASE_TIMEOUT: #タイムアウトの設定
         print('Release Sequence Timeout')
         release_log.save_log('Release Sequence Timeout')
         break
@@ -184,7 +185,9 @@ print('#####-----Melt Sequence: End-----#####')
 #====================================================================================================#
 #####-----スタビライザーの復元-----#####
 print('Waiting for Stabilizer to be restored...')
-time.sleep(2) #本当は15秒まつ
+time.sleep(WAIT_STAB) #本当は15秒まつ
+
+stuck2.ue_jug() #GPSアンテナを上の状態にしておく
 
 lat_test, lon_test = gps.location()
 phase_log.save_log('3', 'GPS Received', lat_test, lon_test) #GPS情報の取得とログの保存
@@ -219,7 +222,65 @@ check_count = 0 #パラ回避用のカウンター
 lat_land, lon_land = gps.location()
 
 #-Parachute Avoid-#
-para_avoid.main2(lat_land, lon_land, lat_dest=LAT_HUMAN, lon_dest=LON_HUMAN, para_avoid_log=para_avoid_log)
+t_start = time.time()
+rotate_check_array = deque([0]*6, maxlen=6)
+add_pwr = 0
+add_count = 0
+magx_off = -830
+magy_off = -980
+
+#-Log Set up-#
+
+print('Para Avoid Start')
+check_count = 0 #パラ回避用のカウンター
+lat_land, lon_land = gps.location()
+while True:
+    if time.time() - t_start >= 600: #10分たっても
+        red_area = para_avoid.detect_para()
+        if red_area == 0:
+            motor.move(60, -60, 2)
+            break
+        else:
+            print('Parachute is near')
+            print('Wait 10s')
+            time.sleep(10)
+
+    ###---現在のローバーの方位角を求める---###
+    magdata = bmx055.mag_dataRead()
+    magx, magy = magdata[0], magdata[1]
+    rover_aziimuth = calibration.angle(magx=magx, magy=magy, magx_off=magx_off, magy_off=magy_off)
+    rotate_check_array.append(rover_aziimuth)
+
+    # if add_pwr != 0 and rotate_check_array[3] != 0: #追加のパワーがあるとき
+    #     for i in range(3):
+    #         expect_azimuth_add = rotate_check_array[i] + 30
+    #         if expect_azimuth_add >= 360:
+    #             expect_azimuth_add = expect_azimuth_add % 360
+    #         if rotate_check_array[i+1] - expect_azimuth_add > 30: #add_pwrを追加していて回りすぎているとき
+    #             add_count += 1
+    #         else:
+    #             add_count = 0
+    #     if add_count == 3:
+    #         add_pwr = 0
+    #         add_count = 0
+    
+    add_pwr = 0
+    if rotate_check_array[5] != 0: #スタックチェックを判定できるデータがそろったとき
+        expect_azimuth = rotate_check_array[0] + 90
+
+        if expect_azimuth >= 360:
+            expect_azimuth = expect_azimuth % 360
+
+        if rotate_check_array[5] - expect_azimuth < 0: #本来回っているはずの角度を下回っているとき
+            print('Rotation Stuck Detected')
+            add_pwr = 5
+            rotate_check_array = deque([0]*6, maxlen=6) #スタックチェック用の配列の初期化
+
+    isDistant_para, check_count = para_avoid.main(lat_land, lon_land, lat_dest=LAT_HUMAN, lon_dest=LON_HUMAN, check_count=check_count, add_pwr=add_pwr, para_avoid_log=para_avoid_log)
+    print(isDistant_para, check_count)
+
+    if isDistant_para == 1:
+        break
 
 print("Para Avoid End")
 
@@ -316,7 +377,7 @@ area_count = 0
 rotate_count = 0
 isHuman = 0
 judge_count = 0
-stuck_check_array = deque([0]*6, maxlen=6)
+rotate_check_array = deque([0]*6, maxlen=6)
 add_pwr = 0
 add_count = 0
 t_start_detect = time.time()
@@ -327,7 +388,7 @@ while True:
     ###---回転場所の整地---###
     if rotate_count == 0: #ある地点で1枚目の写真を撮影するとき
         magx_off_stuck, magy_off_stuck = calibration.cal(40, -40, 30)
-        stuck_check_array = deque([0]*6, maxlen=6) #スタックチェック用の配列の初期化
+        rotate_check_array = deque([0]*6, maxlen=6) #スタックチェック用の配列の初期化
         add_pwr = 0 #捜索地点を変えたら追加のパワーをリセット
         lat_now, lon_now = gps.location()
         phase_log.save_log('6', f'Human Detection Sequence: Area{area_count}', lat_now, lon_now)
@@ -336,14 +397,14 @@ while True:
     magdata = bmx055.mag_dataRead()
     magx, magy = magdata[0], magdata[1]
     rover_aziimuth = calibration.angle(magx=magx, magy=magy, magx_off=magx_off, magy_off=magy_off)
-    stuck_check_array.append(rover_aziimuth)
+    rotate_check_array.append(rover_aziimuth)
 
-    if add_pwr != 0 and stuck_check_array[3] != 0: #追加のパワーがあるとき
+    if add_pwr != 0 and rotate_check_array[3] != 0: #追加のパワーがあるとき
         for i in range(3):
-            expect_azimuth_add = stuck_check_array[i] + 30
+            expect_azimuth_add = rotate_check_array[i] + 30
             if expect_azimuth_add >= 360:
                 expect_azimuth_add = expect_azimuth_add % 360
-            if stuck_check_array[i+1] - expect_azimuth_add > 30: #add_pwrを追加していて回りすぎているとき
+            if rotate_check_array[i+1] - expect_azimuth_add > 30: #add_pwrを追加していて回りすぎているとき
                 add_count += 1
             else:
                 add_count = 0
@@ -351,16 +412,16 @@ while True:
             add_pwr = 0
             add_count = 0
 
-    if stuck_check_array[5] != 0: #スタックチェックを判定できるデータがそろったとき
-        expect_azimuth = stuck_check_array[0] + 90
+    if rotate_check_array[5] != 0: #スタックチェックを判定できるデータがそろったとき
+        expect_azimuth = rotate_check_array[0] + 90
 
         if expect_azimuth >= 360:
             expect_azimuth = expect_azimuth % 360
 
-        if stuck_check_array[5] - expect_azimuth < 0: #本来回っているはずの角度を下回っているとき
+        if rotate_check_array[5] - expect_azimuth < 0: #本来回っているはずの角度を下回っているとき
             print('Rotation Stuck Detected')
             add_pwr = ADD_PWR
-            stuck_check_array = deque([0]*6, maxlen=6) #スタックチェック用の配列の初期化
+            rotate_check_array = deque([0]*6, maxlen=6) #スタックチェック用の配列の初期化
 
     result, judge_count, area_count, rotate_count, isHuman = human_detect.main(lat_human=LAT_HUMAN, lon_human=LON_HUMAN, model=ML_people, judge_count=judge_count, area_count=area_count, rotate_count=rotate_count, add_pwr=add_pwr, report_log=report_log)
 
@@ -393,171 +454,257 @@ else:
 print('#####-----Human Detection Sequence: End-----#####')
 
 
-# if isHuman != 1: #人を見つけたときに限り以下の処理を行い画像伝送を行う
-#     print('#####-----Sending Image-----#####')
-#     #-Log-#
-#     print('Saving Log...')
-#     phase_log.save_log('6', 'Image Sending Sequence: Start', lat_log, lon_log)
+if isHuman != 1: #人を見つけたときに限り以下の処理を行い画像伝送を行う
+    print('#####-----Sending Image-----#####')
+    #-Log-#
+    print('Saving Log...')
+    phase_log.save_log('6', 'Image Sending Sequence: Start', lat_log, lon_log)
 
-#     #-Sending Photos-#
-#     chunk_size = 4   # 送る文字数。この数字の2倍の文字数が送られる。1ピクセルの情報は16進数で6文字で表せられるため、6の倍数の文字を送りたい。
-#     delay = 3   # 伝送間隔（秒）
-#     num_samples = 10 #GPSを読み取る回数
-#     photo_quality = 30 #伝送する画像の圧縮率
-#     count = 0
-#     count_v = 0
-#     count_error = 0
-#     id_counter = 1
+    #-Sending Photos-#
+    chunk_size = 4   # 送る文字数。この数字の2倍の文字数が送られる。1ピクセルの情報は16進数で6文字で表せられるため、6の倍数の文字を送りたい。
+    delay = 3   # 伝送間隔（秒）
+    num_samples = 10 #GPSを読み取る回数
+    photo_quality = 30 #伝送する画像の圧縮率
+    count = 0
+    count_v = 0
+    count_error = 0
+    id_counter = 1
 
-#     while True:
-#         try:
-#             utc, lat, lon, sHeight, gHeight = gps.read_gps()
-#             if utc == -1.0:
-#                 if lat == -1.0:
-#                     print("Reading gps Error")
-#                     count_error = count_error +1
-#                     if count_error > num_samples:
-#                         send.send_data("human_GPS_start")
-#                         print("human_GPS_start")
-#                         time.sleep(delay)
-#                         send.send_data("Reading gps Error")
-#                         print("Reading gps Error")
-#                         time.sleep(delay)
-#                         send.send_data("human_GPS_fin")
-#                         print("human_GPS_fin")
-#                         time.sleep(delay)
-#                         break
-#                     # pass
-#                 else:
-#                     # pass
-#                     print("Status V")
-#                     count_v = count_v + 1
-#                     if count_v > num_samples:
-#                         time.sleep(delay)
-#                         send.send_data("human_GPS_start")
-#                         print("human_GPS_start")
-#                         time.sleep(delay)
-#                         send.send_data("Status V")
-#                         print("Status V")
-#                         time.sleep(delay)
-#                         send.send_data("human_GPS_fin")
-#                         print("human_GPS_fin")
-#                         time.sleep(delay)
-#                         break
-#             else:
-#                 # pass
-#                 print(utc, lat, lon, sHeight, gHeight)
-#                 lat, lon = gps.location()
-#                 print(lat,lon)
-#                 count = count +1
-#                 if count % num_samples == 0:
-#                     send_lat = "{:.6f}".format(lat)
-#                     send_lon = "{:.6f}".format(lon)
-#                     print(send_lat,send_lon)
-#                 # 無線で送信
-#                     time.sleep(delay)
-#                     send.send_data("human_GPS_start")
-#                     print("human_GPS_start")
-#                     time.sleep(delay)
-#                     send.send_data(send_lat)
-#                     send.send_data(send_lon)
-#                     print(lat,lon)
-#                     time.sleep(delay)
-#                     send.send_data("human_GPS_fin")
-#                     print("human_GPS_fin")
-#                     time.sleep (delay)
-#                     break
-#             time.sleep(1)
-#         except KeyboardInterrupt:
-#             gps.close_gps()
-#             print("\r\nKeyboard Intruppted, Serial Closed")
-#         except:
-#             gps.close_gps()
-#             print(traceback.format_exc())
-
-
+    while True:
+        try:
+            utc, lat, lon, sHeight, gHeight = gps.read_gps()
+            if utc == -1.0:
+                if lat == -1.0:
+                    print("Reading gps Error")
+                    count_error = count_error +1
+                    if count_error > num_samples:
+                        send.send_data("human_GPS_start")
+                        print("human_GPS_start")
+                        time.sleep(delay)
+                        send.send_data("Reading gps Error")
+                        print("Reading gps Error")
+                        time.sleep(delay)
+                        send.send_data("human_GPS_fin")
+                        print("human_GPS_fin")
+                        time.sleep(delay)
+                        break
+                    # pass
+                else:
+                    # pass
+                    print("Status V")
+                    count_v = count_v + 1
+                    if count_v > num_samples:
+                        time.sleep(delay)
+                        send.send_data("human_GPS_start")
+                        print("human_GPS_start")
+                        time.sleep(delay)
+                        send.send_data("Status V")
+                        print("Status V")
+                        time.sleep(delay)
+                        send.send_data("human_GPS_fin")
+                        print("human_GPS_fin")
+                        time.sleep(delay)
+                        break
+            else:
+                # pass
+                print(utc, lat, lon, sHeight, gHeight)
+                lat, lon = gps.location()
+                print(lat,lon)
+                count = count +1
+                if count % num_samples == 0:
+                    send_lat = "{:.6f}".format(lat)
+                    send_lon = "{:.6f}".format(lon)
+                    print(send_lat,send_lon)
+                # 無線で送信
+                    time.sleep(delay)
+                    send.send_data("human_GPS_start")
+                    print("human_GPS_start")
+                    time.sleep(delay)
+                    send.send_data(send_lat)
+                    send.send_data(send_lon)
+                    print(lat,lon)
+                    time.sleep(delay)
+                    send.send_data("human_GPS_fin")
+                    print("human_GPS_fin")
+                    time.sleep (delay)
+                    break
+            time.sleep(1)
+        except KeyboardInterrupt:
+            gps.close_gps()
+            print("\r\nKeyboard Intruppted, Serial Closed")
+        except:
+            gps.close_gps()
+            print(traceback.format_exc())
 
 
 
-#     #---------------------画像伝送----------------------------#
-
-#     time.sleep(15)
-#     #file_path = latest_picture_path
-#     file_name = "../imgs/human_detect/send/send"  # 保存するファイル名を指定
-#     photo_take = take.picture(file_name, 320, 240)
-#     print("撮影した写真のファイルパス：", photo_take)
-
-#     # 入力ファイルパスと出力ファイルパスを指定してリサイズ
-#     input_file = photo_take     # 入力ファイルのパスを適切に指定してください
-#     photo_name = "../imgs/human_detect/send/send_photo_resize.jpg"  # 出力ファイルのパスを適切に指定してください
-#     new_width = 60            # リサイズ後の幅を指定します
-#     new_height = 80           # リサイズ後の高さを指定します
-
-#     # リサイズを実行
-#     send_photo.resize_image(input_file, photo_name, new_width, new_height)
-
-#     print("写真撮影完了")
-
-#     # 圧縮したい画像のパスと出力先のパスを指定します
-#     input_image_path = photo_name
-#     compressed_image_path = '../imgs/human_detect/send/compressed_test.jpg'
-
-#     # 圧縮率を指定します（0から100の範囲の整数）
-#     compression_quality = photo_quality
-
-#     # 画像を圧縮します
-#     send_photo.compress_image(input_image_path, compressed_image_path, compression_quality)
-
-#     # 圧縮後の画像をバイナリ形式に変換します
-#     with open(compressed_image_path, 'rb') as f:
-#         compressed_image_binary = f.read()
 
 
-#     data = compressed_image_binary  # バイナリデータを指定してください
-#     output_filename = "output.txt"  # 保存先のファイル名
+    #---------------------画像伝送----------------------------#
 
-#     start_time = time.time()  # プログラム開始時刻を記録
+    # time.sleep(15)
+    # #file_path = latest_picture_path
+    # file_name = "../imgs/human_detect/send/send"  # 保存するファイル名を指定
+    # photo_take = take.picture(file_name, 320, 240)
+    # print("撮影した写真のファイルパス：", photo_take)
 
-#     send.send_data ("wireless_start")
+    # # 入力ファイルパスと出力ファイルパスを指定してリサイズ
+    # input_file = photo_take     # 入力ファイルのパスを適切に指定してください
+    # photo_name = "../imgs/human_detect/send/send_photo_resize.jpg"  # 出力ファイルのパスを適切に指定してください
+    # new_width = 60            # リサイズ後の幅を指定します
+    # new_height = 80           # リサイズ後の高さを指定します
 
-#     print("写真伝送開始します")
-#     time.sleep(1)
+    # # リサイズを実行
+    # send_photo.resize_image(input_file, photo_name, new_width, new_height)
+
+    # print("写真撮影完了")
+
+    # # 圧縮したい画像のパスと出力先のパスを指定します
+    # input_image_path = photo_name
+    # compressed_image_path = '../imgs/human_detect/send/compressed_test.jpg'
+
+    # # 圧縮率を指定します（0から100の範囲の整数）
+    # compression_quality = photo_quality
+
+    # # 画像を圧縮します
+    # send_photo.compress_image(input_image_path, compressed_image_path, compression_quality)
+
+    # # 圧縮後の画像をバイナリ形式に変換します
+    # with open(compressed_image_path, 'rb') as f:
+    #     compressed_image_binary = f.read()
 
 
-#     # バイナリデータを32バイトずつ表示し、ファイルに保存する
-#     with open(output_filename, "w") as f:
-#         for i in range(0, len(data), chunk_size):
-#             if id_counter%30==0:
-#                 time.sleep(10)
-#             chunk = data[i:i+chunk_size]
-#             chunk_str = "".join(format(byte, "02X") for byte in chunk)
+    # data = compressed_image_binary  # バイナリデータを指定してください
+    # output_filename = "output.txt"  # 保存先のファイル名
+
+    # start_time = time.time()  # プログラム開始時刻を記録
+
+    # send.send_data ("wireless_start")
+
+    # print("写真伝送開始します")
+    # time.sleep(1)
+
+
+    # # バイナリデータを32バイトずつ表示し、ファイルに保存する
+    # with open(output_filename, "w") as f:
+    #     for i in range(0, len(data), chunk_size):
+    #         if id_counter%30==0:
+    #             time.sleep(10)
+    #         chunk = data[i:i+chunk_size]
+    #         chunk_str = "".join(format(byte, "02X") for byte in chunk)
             
-#             # 識別番号とデータを含む行の文字列を作成
-#             line_with_id = f"{id_counter}-{chunk_str}"
+    #         # 識別番号とデータを含む行の文字列を作成
+    #         line_with_id = f"{id_counter}-{chunk_str}"
 
-#             #chunk_strにデータがある
-#             print(line_with_id)
-#             send.send_data(line_with_id)
-#             # 表示間隔を待つ
-#             time.sleep(delay)
-#             id_counter = id_counter +1
+    #         #chunk_strにデータがある
+    #         print(line_with_id)
+    #         send.send_data(line_with_id)
+    #         # 表示間隔を待つ
+    #         time.sleep(delay)
+    #         id_counter = id_counter +1
 
-#             # ファイルに書き込む
-#             f.write(line_with_id + "\n")
+    #         # ファイルに書き込む
+    #         f.write(line_with_id + "\n")
 
-#     send.send_data ("wireless_fin")
-#     send.send_data("num=" + str(id_counter))
-#     time.sleep(10)
+    # send.send_data ("wireless_fin")
+    # send.send_data("num=" + str(id_counter))
+    # time.sleep(10)
 
-#     end_time = time.time()  # プログラム終了時刻を記録
-#     execution_time = end_time - start_time  # 実行時間を計算
+    # end_time = time.time()  # プログラム終了時刻を記録
+    # execution_time = end_time - start_time  # 実行時間を計算
 
-#     print("実行時間:", execution_time, "秒")
-#     print("データを", output_filename, "に保存しました。")
+    # print("実行時間:", execution_time, "秒")
+    # print("データを", output_filename, "に保存しました。")
 
-#     phase_log.save_log('6', 'Image Sending Sequence: End', lat_log, lon_log)
+    # phase_log.save_log('6', 'Image Sending Sequence: End', lat_log, lon_log)
 
+    #---------------------新しい画像伝送----------------------------#
+    time.sleep(15)
+    file_name = "../imgs/human_detect/send/send"  # 保存するファイル名を指定
+    photo_take = take.picture(file_name, 320, 240)
+    print("撮影した写真のファイルパス：", photo_take)
+    
+    # 入力ファイルパスと出力ファイルパスを指定してリサイズ
+    input_file = photo_take    # 入力ファイルのパスを適切に指定してください
+    photo_name = "../imgs/human_detect/send/send_photo_resize.jpg"  # 出力ファイルのパスを適切に指定してください
+    new_width = 60            # リサイズ後の幅を指定します
+    new_height = 80           # リサイズ後の高さを指定します
 
+    # リサイズを実行
+    send_photo.resize_image(input_file, photo_name, new_width, new_height)
+    
+    print("写真撮影完了")
+    
+    # 圧縮したい画像のパスと出力先のパスを指定します
+    input_image_path = photo_name
+    compressed_image_path = '../imgs/human_detect/send/compressed_test.jpg'
+    
+    # 圧縮率を指定します（0から100の範囲の整数）
+    compression_quality = photo_quality
+    
+    # 画像を圧縮します
+    send_photo.compress_image(input_image_path, compressed_image_path, compression_quality)
+    
+    #送受信データのリスト
+    wireless_send = []
+    wireless_receive =[]
+
+    # 圧縮後の画像をバイナリ形式に変換します
+    with open(compressed_image_path, 'rb') as f:
+        compressed_image_binary = f.read()
+    
+    
+    data = compressed_image_binary  # バイナリデータを指定してください
+    output_filename = "output.txt"  # 保存先のファイル名
+    
+    wireless_start_time = time.time()  # プログラム開始時刻を記録
+    
+    if time.time() - wireless_start_time <= 18000:
+
+        send.send_data ("wireless_start")
+        send.receive_data()
+        print("写真伝送開始します")
+        time.sleep(1)
+
+        
+        # バイナリデータを32バイトずつ表示し、ファイルに保存する
+        with open(output_filename, "w") as f:
+            for i in range(0, len(data), chunk_size):
+
+                chunk = data[i:i+chunk_size]
+                chunk_str = "".join(format(byte, "02X") for byte in chunk)
+                
+                # 識別番号とデータを含む行の文字列を作成
+                line_with_id = f"{id_counter}-{chunk_str}"
+
+                #chunk_strにデータがある
+                print(line_with_id)
+                send.send_data(line_with_id)
+
+                #受信確認
+                receive_text = send.receive_data()
+
+                #何行目かを記録する
+                id_counter = id_counter +1
+        
+                # ファイルに書き込む
+                f.write(line_with_id + "\n")
+                
+
+        send.send_data ("wireless_fin")
+        send.receive_data()
+        send.send_data("num=" + str(id_counter))
+        send.receive_data()
+        print("待ち時間")
+        time.sleep(15)
+    
+    end_time = time.time()  # プログラム終了時刻を記録
+    execution_time = end_time - wireless_start_time  # 実行時間を計算
+    
+    print("実行時間:", execution_time, "秒")
+    print("データを", output_filename, "に保存しました。")
+
+    phase_log.save_log('6', 'Image Sending Sequence: End', lat_log, lon_log)
 
 ########################################################################################################################################
 
@@ -635,7 +782,7 @@ basics.send_locations(lat=lat_log, lon=lon_log, text='Img Guide S')
 #-Image Guide Drive-#
 #-setup-#
 t_start_goal = time.time()
-stuck_check_array = deque([0]*6, maxlen=6)
+rotate_check_array = deque([0]*6, maxlen=6)
 add_pwr = 0
 add_count = 0
 
@@ -652,14 +799,14 @@ while True:
     magdata = bmx055.mag_dataRead()
     magx, magy = magdata[0], magdata[1]
     rover_aziimuth = calibration.angle(magx=magx, magy=magy, magx_off=magx_off, magy_off=magy_off)
-    stuck_check_array.append(rover_aziimuth)
+    rotate_check_array.append(rover_aziimuth)
 
-    # if add_pwr != 0 and stuck_check_array[3] != 0: #追加のパワーがあるとき
+    # if add_pwr != 0 and rotate_check_array[3] != 0: #追加のパワーがあるとき
     #     for i in range(3):
-    #         expect_azimuth_add = stuck_check_array[i] + 30
+    #         expect_azimuth_add = rotate_check_array[i] + 30
     #         if expect_azimuth_add >= 360:
     #             expect_azimuth_add = expect_azimuth_add % 360
-    #         if stuck_check_array[i+1] - expect_azimuth_add > 30: #add_pwrを追加していて回りすぎているとき
+    #         if rotate_check_array[i+1] - expect_azimuth_add > 30: #add_pwrを追加していて回りすぎているとき
     #             add_count += 1
     #         else:
     #             add_count = 0
@@ -669,16 +816,16 @@ while True:
 
     add_pwr = 0 #追加のパワーをリセット
 
-    if stuck_check_array[5] != 0: #スタックチェックを判定できるデータがそろったとき
-        expect_azimuth = stuck_check_array[0] + 90
+    if rotate_check_array[5] != 0: #スタックチェックを判定できるデータがそろったとき
+        expect_azimuth = rotate_check_array[0] + 90
 
         if expect_azimuth >= 360:
             expect_azimuth = expect_azimuth % 360
 
-        if stuck_check_array[5] - expect_azimuth < 0: #本来回っているはずの角度を下回っているとき
+        if rotate_check_array[5] - expect_azimuth < 0: #本来回っているはずの角度を下回っているとき
             print('Rotation Stuck Detected')
             add_pwr = ADD_PWR
-            stuck_check_array = deque([0]*6, maxlen=6) #スタックチェック用の配列の初期化
+            rotate_check_array = deque([0]*6, maxlen=6) #スタックチェック用の配列の初期化
 
     isReach_goal = goal_detect.main(lat_dest=LAT_GOAL, lon_dest=LON_GOAL, thd_distance_goal=THD_DISTANCE_GOAL, thd_red_area=THD_RED_RATIO, magx_off=magx_off, magy_off=magy_off, add_pwr=add_pwr, img_guide_log=image_guide_log)
 

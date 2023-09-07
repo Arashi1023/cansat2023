@@ -5,17 +5,21 @@
 RELEASE_THD_PRESS = 1.5 #？秒あたりの気圧の変化量がこれ以上あった場合に放出判定を行う
 RELEASE_JUDGE_COUNT = 4 #
 RELEASE_JUDGE_TIME = 10 #気圧データを取得する間隔
-RELEASE_TIMEOUT = 20 #(秒) プログラム開始時間からの経過時間
+RELEASE_TIMEOUT = 5 #(秒) プログラム開始時間からの経過時間
 
 
 #-----着地判定-----#
 LAND_THD_PRESS = 0.1
 LAND_JUDGE_COUNT = 4
+LAND_GET_PRESS_TIME = 5 #気圧データを取得する間隔
 LAND_TIMEOUT = 60*5 #(秒) プログラム開始時間からの経過時間
 
 #-----溶断回路-----#
 MELT_PIN = 4
 MELT_TIME = 4 #溶断回路に印加する時間
+
+#-----
+WAIT_STAB = 15 #スタビの復元
 
 #-----パラシュート回避-----#
 # PARA_CHECK_COUNT = 5
@@ -53,7 +57,7 @@ LON_HUMAN = 139.9124594
 
 JUDGE_PROBABILITY = 0.5 #人である確率がこれ以上のとき人がいると判定する
 ADDITIONAL_JUDGE_COUNT = 3 #人がいると判定したとき、追加の確認を行う回数
-ROTATE_COUNT = 36 # 1つの場所で回転する回数
+ROTATE_COUNT = 5 # 1つの場所で回転する回数
 
 HD_ROT_PWR = 25
 HD_ROT_TIME = 0.15

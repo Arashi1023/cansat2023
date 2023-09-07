@@ -661,7 +661,7 @@ def drive3(lon_dest :float, lat_dest: float, thd_distance: int, t_cal: float, lo
     stuck_count = 1
     isReach_dest = 0
     report_count = 0
-
+    control = 0
     #-----上向き判定-----#
     stuck2.ue_jug()
 
@@ -699,11 +699,12 @@ def drive3(lon_dest :float, lat_dest: float, thd_distance: int, t_cal: float, lo
         # if report_count % 30 == 0:
         #     report_log.save_log(lat_now, lon_now, target_azimuth)
 
-        #-----スタックチェック用の変数の更新-----#
-        lat_new, lon_new = lat_now, lon_now
+        # #-----スタックチェック用の変数の更新-----#
+        # lat_new, lon_new = lat_now, lon_now
 
         #-----スタックチェック-----#
         if stuck_count % 25 == 0:
+            lat_new, lon_new = lat_now, lon_now
             if stuck2.stuck_jug(lat_old, lon_old, lat_new, lon_new, thd=STUCK_JUDGE_THD_DISTANCE):
                 pass
             else:

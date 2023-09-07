@@ -11,11 +11,15 @@ RELEASE_TIMEOUT = 5 #(秒) プログラム開始時間からの経過時間
 #-----着地判定-----#
 LAND_THD_PRESS = 0.1
 LAND_JUDGE_COUNT = 4
+LAND_GET_PRESS_TIME = 5 #気圧データを取得する間隔
 LAND_TIMEOUT = 60*5 #(秒) プログラム開始時間からの経過時間
 
 #-----溶断回路-----#
 MELT_PIN = 4
 MELT_TIME = 4 #溶断回路に印加する時間
+
+#-----
+WAIT_STAB = 15 #スタビの復元
 
 #-----パラシュート回避-----#
 # PARA_CHECK_COUNT = 5

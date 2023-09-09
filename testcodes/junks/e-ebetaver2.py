@@ -6,21 +6,21 @@ import pigpio
 import traceback
 from math import sqrt
 
-import bme280
-import bmx055
-import motor
-import save_photo as save_img
-import send
-import gps
-import gps_navigate
-import stuck2
-import other
-import send_photo
-import take
-from machine_learning import DetectPeople
-import calibration
-import PID
-import log
+import libs.bme280 as bme280
+import libs.bmx055 as bmx055
+import libs.motor as motor
+import libs.save_photo as save_img
+import libs.send as send
+import libs.gps as gps
+import libs.gps_navigate as gps_navigate
+import libs.stuck2 as stuck2
+import libs.other as other
+import libs.send_photo as send_photo
+import libs.take as take
+from libs.machine_learning import DetectPeople
+import libs.calibration as calibration
+import libs.PID as PID
+import libs.log as log
 
 from main_const import *
 import release
@@ -29,7 +29,7 @@ import melt
 import beta_gps_running as gps_running
 import human_detection
 import para_avoid
-import goal_detect
+import wgps_beta_photo_running as imgguide
 
 #variable for log
 # log_phase=other.filename('/home/dendenmushi/cansat2023/sequence/log/phaselog/phaselog','txt')
@@ -442,7 +442,7 @@ if __name__=='__main__':
     threshold = 20 * 60
     # elapsed_time = time.time()-start_time
 
-    ML_people = DetectPeople(model_path="model_mobile.tflite" )
+    ML_people = DetectPeople(model_path="../model_mobile.tflite" )
 
     lat_n, lon_n, lat_e, lon_e, lat_s, lon_s, lat_w, lon_w = get_locations(lat_human, lon_human)
     
@@ -506,7 +506,7 @@ if __name__=='__main__':
             if break_outer_loop == True:
                 break
             else:
-                # lat_now, lon_now = gps.location()
+                lat_now, lon_now = gps.location()
                 count += 1
                 move_to_bulearea(count, lat_human, lon_human)
                 human_judge_count, break_outer_loop = take_and_rotation(human_judge_count=human_judge_count, break_outer_loop=break_outer_loop,judge_probability=judge_probability,start_time=start_time,logpath=log_humandetect, model=ML_people)
@@ -600,13 +600,13 @@ if __name__=='__main__':
     #     other.log(log_humandetect, datetime.datetime.now(), time.time() -
     #                   t_start,"画像伝送開始",lat_log,lon_log)
     #     #file_path = latest_picture_path
-    #     file_name = "../imgs/human_detect/all/jpg"  # 保存するファイル名を指定
+    #     file_name = "/home/dendenmushi/cansat2023/sequence/ML_imgs/jpg"  # 保存するファイル名を指定
     #     photo_take = take.picture(file_name, 320, 240)
     #     print("撮影した写真のファイルパス：", photo_take)
         
     #     # 入力ファイルパスと出力ファイルパスを指定してリサイズ
     #     input_file = photo_take     # 入力ファイルのパスを適切に指定してください
-    #     photo_name = "../imgs/human_detect/all/send_photo_resize.jpg"  # 出力ファイルのパスを適切に指定してください
+    #     photo_name = "/home/dendenmushi/cansat2023/sequence/ML_imgs/send_photo_resize.jpg"  # 出力ファイルのパスを適切に指定してください
     #     new_width = 60            # リサイズ後の幅を指定します
     #     new_height = 80           # リサイズ後の高さを指定します
 

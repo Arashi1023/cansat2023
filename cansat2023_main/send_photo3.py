@@ -488,7 +488,7 @@ if __name__ == '__main__':
 
                 #受信確認
                 while 1:
-                    if time.time() - wireless_start_time <= 60:
+                    if time.time() - wireless_start_time <= 1800:
                         receive_text = send.receive_data()
                         if receive_text == "OK":
                             # print("送信されたよ")

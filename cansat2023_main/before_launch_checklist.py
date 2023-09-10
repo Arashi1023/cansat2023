@@ -7,7 +7,7 @@ import bmx055
 import bme280
 import send
 
-def bf_launch(check):
+def bf_launch():
     start_time = time.time()
     try:
         print('Checking BME280')

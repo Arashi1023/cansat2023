@@ -5,7 +5,7 @@
 RELEASE_THD_PRESS = 1.5 #？秒あたりの気圧の変化量がこれ以上あった場合に放出判定を行う
 RELEASE_JUDGE_COUNT = 4 #
 RELEASE_JUDGE_TIME = 10 #気圧データを取得する間隔
-RELEASE_TIMEOUT = 5 #(秒) プログラム開始時間からの経過時間
+RELEASE_TIMEOUT = 5400 #(秒) プログラム開始時間からの経過時間
 
 
 #-----着地判定-----#
@@ -52,12 +52,12 @@ T_CAL = 35 #キャリブレーションを行う間隔時間[sec] 30の倍数+5�
 #-----人検出-----#
 LAT_HUMAN = 35.9243068
 LON_HUMAN = 139.9124594
-#LAT_HUMAN = 35.9243785s
+#LAT_HUMAN = 35.9243785
 #LON_HUMAN = 139.9113644
 
 JUDGE_PROBABILITY = 0.5 #人である確率がこれ以上のとき人がいると判定する
 ADDITIONAL_JUDGE_COUNT = 3 #人がいると判定したとき、追加の確認を行う回数
-ROTATE_COUNT = 5 # 1つの場所で回転する回数
+ROTATE_COUNT = 36 # 1つの場所で回転する回数
 
 HD_ROT_PWR = 25
 HD_ROT_TIME = 0.15

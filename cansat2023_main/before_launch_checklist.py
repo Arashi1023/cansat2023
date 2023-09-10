@@ -24,7 +24,7 @@ def bf_launch():
 
         print('Checking GPS')
         while time.time() - start_time < 15:
-            utc, lat, lon, sHeight, gHeight = read_gps()
+            utc, lat, lon, sHeight, gHeight = gps.read_gps()
             if utc == -1.0:
                 if lat == -1.0:
                     print("Reading gps Error")
@@ -47,13 +47,13 @@ def bf_launch():
         if text =="A":
             try:
                 print("キルで")
-                send_reset(t_reset = 10)
+                send.send_reset(t_reset = 10)
                 print("finish")
             except:
                 pi.write(sendPin, 0)
 
         
-        send_data(text)
+        send.send_data(text)
         print('送信しました')
         received_text = receive_data()
         receive_data

@@ -71,8 +71,7 @@ if __name__ == '__main__':
 
     time.sleep(1)
 
-    bf_launch()
-
     print('Before Launch Check Start')
+    bf_launch()
 
 

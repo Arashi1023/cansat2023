@@ -63,16 +63,16 @@ def bf_launch(check):
         print(e.message())
 
 if __name__ == '__main__':
-bmx055.bmx055_setup()
-bme280.bme280_setup()
-bme280.bme280_calib_param()
-gps.open_gps()
-motor.setup()
+    bmx055.bmx055_setup()
+    bme280.bme280_setup()
+    bme280.bme280_calib_param()
+    gps.open_gps()
+    motor.setup()
 
-time.sleep(1)
+    time.sleep(1)
 
-bf_launch()
+    bf_launch()
 
-print('Before Launch Check Start')
+    print('Before Launch Check Start')
 
 

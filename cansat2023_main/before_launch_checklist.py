@@ -29,7 +29,7 @@ def bf_launch(check):
                     # pass
                 else:
                     # pass
-                print("Status V")
+                    print("Status V")
             else:
                 # pass
                 print(utc, lat, lon, sHeight, gHeight)

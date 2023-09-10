@@ -13,11 +13,13 @@ def bf_launch():
         print('Checking BME280')
         while time.time() - start_time < 5:
             temp,pres,hum,alt = bme280.bme280_read()
+            print(temp,pres,hum,alt)
             time.sleep(0.8)
 
         print('Checking BMX055')
         while time.time() - start_time < 10:
             bmxData = bmx055.bmx055_read()
+            print(bmxData)
             time.sleep(1)
 
         print('Checking GPS')
@@ -59,8 +61,6 @@ def bf_launch():
 
     except KeyboardInterrupt:
         print("\r\n")
-    except Exception as e:
-        print(e.message())
 
 if __name__ == '__main__':
     bmx055.bmx055_setup()

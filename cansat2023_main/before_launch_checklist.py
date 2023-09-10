@@ -55,8 +55,8 @@ def bf_launch():
         
         send.send_data(text)
         print('送信しました')
-        received_text = receive_data()
-        receive_data
+        received_text = send.receive_data()
+        send.receive_data
         print("受信",received_text)
 
     except KeyboardInterrupt:

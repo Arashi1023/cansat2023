@@ -122,6 +122,7 @@ send.send_on()
 print('Sending Data...')
 send.send_data('Release f')
 time.sleep(10)
+send.send_reset(t_reset = 5)
 
 print('#####-----Release Detect Sequence: End-----#####')
 

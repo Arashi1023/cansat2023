@@ -46,17 +46,17 @@ ADD_PWR = 10
 STUCK_JUDGE_THD_DISTANCE = 10
 LOOP_NUM = 20 #0.05秒ごとに9軸センサを取得するので、20回のとき1秒間隔でGPSを取得する
 THD_DISTANCE_DEST = 5 #目的地に到達したと判定する距離
-T_CAL = 35 #キャリブレーションを行う間隔時間[sec] 30の倍数+5秒ぐらいがおそらくベスト？？
+T_CAL = 155 #キャリブレーションを行う間隔時間[sec] 30の倍数+5秒ぐらいがおそらくベスト？？
 
 
 #-----人検出-----#
-LAT_HUMAN = 40.89352
-LON_HUMAN = -119.10948
+LAT_HUMAN = 
+LON_HUMAN = 
 JUDGE_PROBABILITY = 0.5 #人である確率がこれ以上のとき人がいると判定する
 ADDITIONAL_JUDGE_COUNT = 3 #人がいると判定したとき、追加の確認を行う回数
 ROTATE_COUNT = 36 # 1つの場所で回転する回数
 
-HD_ROT_PWR = 25
+HD_ROT_PWR = 30
 HD_ROT_TIME = 0.15
 
 #-----画像伝送-----#
@@ -65,14 +65,7 @@ SENDPIC_TIMEOUT = 1800
 #-----ゴール地点-----#
 LAT_GOAL = 35.9242411 #グランドのゴール前
 LON_GOAL = 139.9120618 #グランドのゴール前
-#LAT_GOAL = 35.9240809
-#LON_GOAL = 139.9113835
-# LAT_GOAL = 35.9241007
-# LON_GOAL = 139.9124145
 
 
 THD_DISTANCE_GOAL = 5 #画像誘導の範囲設定
-THD_RED_RATIO = 70 #画面を占める赤色の割合の閾値 この割合を超えるとゴールしたと判定する
-
-LAT_TEST = 39.5846968
-LON_TEST = -119.1486899
+THD_RED_RATIO = 60 #画面を占める赤色の割合の閾値 この割合を超えるとゴールしたと判定する

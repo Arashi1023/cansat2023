@@ -791,7 +791,7 @@ if __name__ == "__main__":
 
     while True: #1ループおおよそT_CAL秒
         #-T_CALごとに以下の情報を取得-#
-        lat_now, lon_now, distance_to_dest, rover_azimuth, isReach_dest = drive2(lon_dest=LON_HUMAN, lat_dest=LAT_HUMAN, thd_distance=THD_DISTANCE_DEST, t_cal=T_CAL, loop_num=LOOP_NUM)
+        lat_now, lon_now, distance_to_dest, rover_azimuth, isReach_dest = drive2(lon_dest=LON_TEST, lat_dest=LAT_TEST, thd_distance=THD_DISTANCE_DEST, t_cal=T_CAL, loop_num=LOOP_NUM)
         
         print('isReach_dest = ', isReach_dest)
 

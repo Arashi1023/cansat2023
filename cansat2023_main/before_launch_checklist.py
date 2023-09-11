@@ -6,6 +6,7 @@ import motor
 import bmx055
 import bme280
 import send
+import take
 
 def bf_launch():
     start_time = time.time()
@@ -58,6 +59,10 @@ def bf_launch():
         received_text = send.receive_data()
         send.receive_data
         print("受信",received_text)
+        time.sleep(1)
+        print('Checking Camera')
+        take.picture('../imgs/test_imgs/take', 320, 240)
+        print('finish')
 
     except KeyboardInterrupt:
         print("\r\n")

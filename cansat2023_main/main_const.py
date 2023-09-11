@@ -12,7 +12,7 @@ RELEASE_TIMEOUT = 5400 #(秒) プログラム開始時間からの経過時間
 LAND_THD_PRESS = 0.1
 LAND_JUDGE_COUNT = 4
 LAND_GET_PRESS_TIME = 5 #気圧データを取得する間隔
-LAND_TIMEOUT = 60*5 #(秒) プログラム開始時間からの経過時間
+LAND_TIMEOUT = 7200 #(秒) プログラム開始時間からの経過時間
 
 #-----溶断回路-----#
 MELT_PIN = 4

@@ -61,17 +61,17 @@ print('Before Launch Check Finished')
 #-Setting up wireless communication-#
 send.send_data('CONNECTION TEST START')
 send.send_data('Wait for sometime')
-time.sleep(60) #繋げている状態で何分か待つ
+time.sleep(180) #繋げている状態で何分か待つ
 send.send_data('CONNECTION TEST FINISHED')
 time.sleep(20)
 #-Turning off wireless communication-#
 send.send_off() #分離機構の展開までの間は無線通信を切る
 
-
-
 #####=====clock setup=====#####
 t_start = time.time()
 print('Program Start at ' + str(datetime.datetime.now()))
+
+
 
 #####=====log setup=====#####
 phase_log = log.Logger(dir='../logs/0_phase_log', filename='phase', t_start=t_start, columns=['phase', 'condition', 'lat', 'lon'])

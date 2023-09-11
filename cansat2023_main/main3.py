@@ -48,6 +48,15 @@ bme280.bme280_setup()
 bme280.bme280_calib_param() #これなに？？？
 motor.setup()
 
+
+
+print('Before Launch Check Start')
+checklist.bf_launch()
+time.sleep(4)
+print('Before Launch Check Finished')
+
+
+
 #####=====wireless com=====#####
 #-Setting up wireless communication-#
 send.send_data('CONNECTION TEST START')
@@ -58,10 +67,6 @@ time.sleep(20)
 #-Turning off wireless communication-#
 send.send_off() #分離機構の展開までの間は無線通信を切る
 
-print('Before Launch Check Start')
-checklist.bf_launch()
-time.sleep(4)
-print('Before Launch Check Finished')
 
 
 #####=====clock setup=====#####

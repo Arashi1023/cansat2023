@@ -52,7 +52,7 @@ motor.setup()
 
 print('Before Launch Check Start')
 checklist.bf_launch()
-time.sleep(4)
+time.sleep(5)
 print('Before Launch Check Finished')
 
 
@@ -68,6 +68,7 @@ time.sleep(20)
 send.send_off() #分離機構の展開までの間は無線通信を切る
 
 #####=====clock setup=====#####
+print('Starting Program in 10secs')
 t_start = time.time()
 print('Program Start at ' + str(datetime.datetime.now()))
 
@@ -119,7 +120,7 @@ release_log.save_log('Release Detected')
 #-send-#
 send.send_on()
 print('Sending Data...')
-send.send_data('Release finished')
+send.send_data('Release f')
 time.sleep(10)
 
 print('#####-----Release Detect Sequence: End-----#####')
@@ -159,7 +160,7 @@ phase_log.save_log('2', 'Land Detect Sequence: End', 0, 0)
 
 #-send-#
 print('Sending Data...')
-send.send_data('Land finished')
+send.send_data('Land f')
 time.sleep(10)
 
 print('#####-----Land Detect Sequence: End-----#####')
@@ -185,7 +186,7 @@ melt_log.save_log('Melt Finished')
 
 #-send-#
 print('Sending Data...')
-send.send_data('Melt finished')
+send.send_data('Melt f')
 time.sleep(10)
 
 print('#####-----Melt Sequence: End-----#####')
@@ -247,10 +248,10 @@ print('Para Avoid Start')
 check_count = 0 #パラ回避用のカウンター
 lat_land, lon_land = gps.location()
 while True:
-    if time.time() - t_start >= 600: #10分たっても
+    if time.time() - t_start >= 300: #10分たっても
         red_area = para_avoid.detect_para()
         if red_area == 0:
-            motor.move(60, -60, 2)
+            motor.move(80, -80, 3)
             break
         else:
             print('Parachute is near')

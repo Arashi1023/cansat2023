@@ -29,6 +29,6 @@ def melt_down(meltPin, t_melt = 4.0):
 
 if __name__ == "__main__":
 	try:
-		down()
+		melt_down(4, 4)
 	except:
 		pi.write(meltPin, 0)

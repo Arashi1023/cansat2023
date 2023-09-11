@@ -63,8 +63,8 @@ HD_ROT_TIME = 0.15
 SENDPIC_TIMEOUT = 1800 
 
 #-----ゴール地点-----#
-LAT_GOAL = 35.9242411 #グランドのゴール前
-LON_GOAL = 139.9120618 #グランドのゴール前
+LAT_GOAL = 40.893549 #グランドのゴール前
+LON_GOAL = -119.109417 #グランドのゴール前
 
 
 THD_DISTANCE_GOAL = 5 #画像誘導の範囲設定

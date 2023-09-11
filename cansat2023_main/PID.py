@@ -736,6 +736,9 @@ def drive3(lon_dest :float, lat_dest: float, thd_distance: int, t_cal: float, lo
 
 if __name__ == "__main__":
 
+    lat_test = 40.893549
+    lon_test = -119.109417
+
     #-----セットアップ-----#
     motor.setup()
     bmx055.bmx055_setup()
@@ -786,12 +789,12 @@ if __name__ == "__main__":
     # pid_test_log = log.Logger(dir='', filename='pid_test', t_start=time.time(), columns=['lat', 'lon', 'distance', 'rover_azimuth', 'isReach_dest'])
 
 
-    direction = calibration.calculate_direction(lon2=LON_HUMAN, lat2=LAT_HUMAN)
+    direction = calibration.calculate_direction(lon2=lon_test, lat2=lat_test)
     distance_to_goal = direction["distance"]
 
     while True: #1ループおおよそT_CAL秒
         #-T_CALごとに以下の情報を取得-#
-        lat_now, lon_now, distance_to_dest, rover_azimuth, isReach_dest = drive2(lon_dest=LON_TEST, lat_dest=LAT_TEST, thd_distance=THD_DISTANCE_DEST, t_cal=T_CAL, loop_num=LOOP_NUM)
+        lat_now, lon_now, distance_to_dest, rover_azimuth, isReach_dest = drive2(lon_dest=lon_test, lat_dest=lat_test, thd_distance=THD_DISTANCE_DEST, t_cal=T_CAL, loop_num=LOOP_NUM)
         
         print('isReach_dest = ', isReach_dest)
 

@@ -55,6 +55,10 @@ checklist.bf_launch()
 time.sleep(5)
 print('Before Launch Check Finished')
 
+x = input('Enter a to start program:')
+if x != 'a':
+    print('Program Stop')
+    sys.exit()
 
 
 #####=====wireless com=====#####

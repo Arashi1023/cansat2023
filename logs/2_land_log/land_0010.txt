@@ -1,1 +1,0 @@
-datetime,elapsed time,latest_press,delta_press,press_land_count,isLand

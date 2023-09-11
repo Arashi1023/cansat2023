@@ -1,2 +1,0 @@
-datetime,elapsed time,latest_press,delta_press,press_release_count,isRelease
-2023-09-01 19:05:45.118380,1.1330935955047607,Release Detect Start

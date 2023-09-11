@@ -1,7 +1,0 @@
-datetime,elapsed time,phase,condition,lat,lon
-2023-08-31 03:07:25.093753,1.1440863609313965,1,Release Detect Sequence: Start,0,0
-2023-08-31 03:08:25.182274,61.232924461364746,1,Release Detect Sequence: Start,0,0
-2023-08-31 03:08:25.184682,61.23500108718872,2,Land Detect Sequence: Start,0,0
-2023-08-31 03:08:30.213928,66.26425838470459,2,Land Detect Sequence: End,0,0
-2023-08-31 03:08:30.216560,66.26692128181458,3,Melt Sequence: Start,0,0
-2023-08-31 03:08:36.223295,72.27363085746765,3,Melt Sequence: End,0,0

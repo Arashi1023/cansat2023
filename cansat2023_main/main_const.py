@@ -50,11 +50,18 @@ T_CAL = 35 #キャリブレーションを行う間隔時間[sec] 30の倍数+5�
 
 
 #-----人検出-----#
+<<<<<<< HEAD
+#LAT_HUMAN = 35.9243068
+#LON_HUMAN = 139.9124594
+#LAT_HUMAN = 35.9243785s
+=======
 LAT_HUMAN = 35.9243068
 LON_HUMAN = 139.9124594
 #LAT_HUMAN = 35.9243785
+>>>>>>> 2b572a36459ed8e7b17261df23ad98ca353202eb
 #LON_HUMAN = 139.9113644
-
+LAT_HUMAN = 40.89352
+LON_HUMAN = -119.10948
 JUDGE_PROBABILITY = 0.5 #人である確率がこれ以上のとき人がいると判定する
 ADDITIONAL_JUDGE_COUNT = 3 #人がいると判定したとき、追加の確認を行う回数
 ROTATE_COUNT = 36 # 1つの場所で回転する回数

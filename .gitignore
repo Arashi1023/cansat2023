@@ -11,3 +11,9 @@ imgs/human_detect/all
 imgs
 logs/test_logs
 logs
+
+sequence
+testcodes
+test_EM
+test_BBM
+cansat2023_sub

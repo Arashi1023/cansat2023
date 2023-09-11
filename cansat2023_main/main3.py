@@ -251,9 +251,10 @@ while True:
     if time.time() - t_start >= 300: #10分たっても
         red_area = para_avoid.detect_para()
         if red_area == 0:
-            motor.move(80, -80, 3)
+            motor.move(80, 80, 3)
             break
         else:
+            motor.move(30, -30, 0.3)
             print('Parachute is near')
             print('Wait 10s')
             time.sleep(10)

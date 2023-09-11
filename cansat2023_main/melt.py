@@ -28,7 +28,4 @@ def melt_down(meltPin, t_melt = 4.0):
 	time.sleep(1)
 
 if __name__ == "__main__":
-	try:
-		melt_down(4, 4)
-	except:
-		pi.write(meltPin, 0)
+	melt_down(meltPin=4, t_melt=4.0)

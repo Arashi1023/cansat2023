@@ -38,6 +38,15 @@ import melt
 import human_detect
 import para_avoid
 import goal_detect
+import before_launch_checklist as checklist
+
+#####=====machine set up=====#####
+print('Start machine set up')
+gps.open_gps()
+bmx055.bmx055_setup()
+bme280.bme280_setup()
+bme280.bme280_calib_param() #これなに？？？
+motor.setup()
 
 #####=====wireless com=====#####
 #-Setting up wireless communication-#
@@ -49,18 +58,15 @@ time.sleep(20)
 #-Turning off wireless communication-#
 send.send_off() #分離機構の展開までの間は無線通信を切る
 
+print('Before Launch Check Start')
+checklist.bf_launch()
+time.sleep(4)
+print('Before Launch Check Finished')
 
 
 #####=====clock setup=====#####
 t_start = time.time()
-
-#####=====machine set up=====#####
-print('Start machine set up')
-gps.open_gps()
-bmx055.bmx055_setup()
-bme280.bme280_setup()
-bme280.bme280_calib_param() #これなに？？？
-motor.setup()
+print('Program Start at ' + str(datetime.datetime.now()))
 
 #####=====log setup=====#####
 phase_log = log.Logger(dir='../logs/0_phase_log', filename='phase', t_start=t_start, columns=['phase', 'condition', 'lat', 'lon'])

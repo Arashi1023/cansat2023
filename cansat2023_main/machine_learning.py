@@ -51,7 +51,7 @@ if __name__ == "__main__":
     # image_path = 'imgs/saru.jpg'
     # ML_people.predict(image_path)
     while 1:
-        img_path = take.picture('../../imgs/human_detect/image', 320, 240)
+        img_path = take.picture('../imgs/human_detect/image', 320, 240)
         # img_path = './imgs/overhead_people.jpg'
         ML_people.predict(image_path=img_path)
         # time.sleep(3)

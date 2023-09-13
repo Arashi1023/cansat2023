@@ -50,10 +50,10 @@ motor.setup()
 
 
 
-print('Before Launch Check Start')
-checklist.bf_launch()
-time.sleep(5)
-print('Before Launch Check Finished')
+# print('Before Launch Check Start')
+# checklist.bf_launch()
+# time.sleep(5)
+# print('Before Launch Check Finished')
 
 x = input('Enter a to start program:')
 if x != 'a':
@@ -71,6 +71,11 @@ time.sleep(20)
 #-Turning off wireless communication-#
 send.send_off() #分離機構の展開までの間は無線通信を切る
 
+#####=====kill button=====#####
+x = input('Enter a to start program:')
+if x != 'a':
+    print('Program Stop')
+    sys.exit()
 #####=====clock setup=====#####
 print('Starting Program in 10secs')
 t_start = time.time()

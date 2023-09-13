@@ -15,7 +15,7 @@ reboot_checker = 0
 
 a = time.time()
 
-while : time.time() - a < 30:
+while time.time() - a < 30:
     reboot_log.save_log(reboot_checker)
     reboot_checker += 1
     time.sleep(1)

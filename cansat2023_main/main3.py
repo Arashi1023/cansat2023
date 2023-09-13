@@ -55,14 +55,14 @@ motor.setup()
 
 #####=====wireless com=====#####
 #-Setting up wireless communication-#
-send.send_data('CTS')
-time.sleep(10)
-send.send_data('Wait')
-time.sleep(10) #繋げている状態で何分か待つ
-send.send_data('CTF')
-time.sleep(10)
-#-Turning off wireless communication-#
-send.send_off() #分離機構の展開までの間は無線通信を切る
+# send.send_data('CTS')
+# time.sleep(10)
+# send.send_data('Wait')
+# time.sleep(10) #繋げている状態で何分か待つ
+# send.send_data('CTF')
+# time.sleep(10)
+# #-Turning off wireless communication-#
+# send.send_off() #分離機構の展開までの間は無線通信を切る
 
 #####=====kill button=====#####
 x = input('Enter a to start program:')

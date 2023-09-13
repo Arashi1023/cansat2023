@@ -21,7 +21,7 @@ a = time.time()
 #     time.sleep(1)
 
 def deamon():
-    while 1:
+    while True:
         reboot_log.save_log(reboot_checker)
         reboot_checker += 1
         print("deamon")

@@ -9,7 +9,7 @@ import time
 
 import log
 
-reboot_log = log.Log(dir='log/reboot_log', filename='reboot_test', t_start=0, columns=['reboot_test'])
+reboot_log = log.Logger(dir='log/reboot_log', filename='reboot_test', t_start=0, columns=['reboot_test'])
 
 reboot_checker = 0
 

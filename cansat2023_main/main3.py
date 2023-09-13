@@ -64,7 +64,7 @@ motor.setup()
 # #-Turning off wireless communication-#
 # send.send_off() #分離機構の展開までの間は無線通信を切る
 
-#####=====kill button=====#####
+#####=====kill switch=====#####
 x = input('Enter a to start program:')
 if x != 'a':
     print('Program Stop')
@@ -74,8 +74,6 @@ if x != 'a':
 print('Starting Program in 10secs')
 t_start = time.time()
 print('Program Start at ' + str(datetime.datetime.now()))
-
-
 
 #####=====log setup=====#####
 phase_log = log.Logger(dir='../logs/0_phase_log', filename='phase', t_start=t_start, columns=['phase', 'condition', 'lat', 'lon'])
@@ -111,6 +109,8 @@ while True:
     latest_press, delta_press, press_release_count, isRelease = release.release_main(press_release_count=press_release_count, press_array=press_array)
     #-Log-#
     release_log.save_log(latest_press, delta_press, press_release_count, isRelease)
+
+    #-動作確認用-#
     print(f'system_check {system_checker}')
     print(f'delta press {delta_press}')
     print('isRelease: ' + str(isRelease))

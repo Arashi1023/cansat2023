@@ -69,6 +69,7 @@ x = input('Enter a to start program:')
 if x != 'a':
     print('Program Stop')
     sys.exit()
+
 #####=====clock setup=====#####
 print('Starting Program in 10secs')
 t_start = time.time()
@@ -99,6 +100,7 @@ release_log.save_log('Release Detect Start')
 #-Release Detect-#
 press_release_count = 0
 press_array = [0]*2
+system_checker = 0
 
 while True:
     if time.time() - t_start > RELEASE_TIMEOUT: #タイムアウトの設定
@@ -109,10 +111,14 @@ while True:
     latest_press, delta_press, press_release_count, isRelease = release.release_main(press_release_count=press_release_count, press_array=press_array)
     #-Log-#
     release_log.save_log(latest_press, delta_press, press_release_count, isRelease)
+    print(f'system_check {system_checker}')
+    print(f'delta press {delta_press}')
     print('isRelease: ' + str(isRelease))
+
     if isRelease == 1:
         print('Release Detected')
         break
+    syste_checker += 1
 
 #-Log-#
 print('Saving Log...')

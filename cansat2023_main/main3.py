@@ -122,7 +122,7 @@ while True:
 
 #-Log-#
 print('Saving Log...')
-phase_log.save_log('1', 'Release Detect Sequence: Start', 0, 0)
+phase_log.save_log('1', 'Release Detect Sequence: End', 0, 0)
 release_log.save_log('Release Detected')
 
 #-send-#

@@ -1,4 +1,4 @@
-import time
+# import time
 
 # try:
 #     while True:
@@ -13,7 +13,7 @@ reboot_log = log.Logger(dir='log/reboot_log', filename='reboot_test', t_start=0,
 
 reboot_checker = 0
 
-a = time.time()
+# a = time.time()
 
 # while time.time() - a < 30:
 #     reboot_log.save_log(reboot_checker)

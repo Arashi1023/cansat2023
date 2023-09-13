@@ -55,8 +55,8 @@ motor.setup()
 # time.sleep(5)
 # print('Before Launch Check Finished')
 
-x = input('Enter a to start program:')
-if x != 'a':
+x = input('Enter start to start program:')
+if x != 'start':
     print('Program Stop')
     sys.exit()
 

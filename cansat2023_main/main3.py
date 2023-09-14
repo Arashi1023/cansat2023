@@ -88,7 +88,7 @@ gps_running_goal_log = log.Logger(dir='../logs/7_gps_running_goal_log', filename
 image_guide_log = log.Logger(dir='../logs/8_image_guide_log', filename='image_guide', t_start=t_start, columns=['lat', 'lon', 'distance_to_goal', 'area_ratio', 'target_azimuth', 'isReach_goal'])
 
 #####=====Mission Sequence=====#####
-
+send.senda_data('Mission Start')
 
 #####===== 1 Release Detect Sequence=====#####
 print('#####-----Release Detect Sequence: Start-----#####')

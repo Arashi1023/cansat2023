@@ -81,10 +81,10 @@ while True:
     else:
         print('Invalid input')
 
-print('#####=====Starting Program=====#####S')
+print('#####=====Starting Program=====#####')
 
 #####=====clock setup=====#####
-print('Starting Program in 10secs')
+print('Set clock')
 t_start = time.time()
 print('Program Start at ' + str(datetime.datetime.now()))
 
@@ -228,7 +228,7 @@ print('#####-----Melt Sequence: End-----#####')
 #====================================================================================================#
 #####-----スタビライザーの復元-----#####
 print('Waiting for Stabilizer to be restored...')
-time.sleep(WAIT_STAB) #本当は15秒まつ
+time.sleep(WAIT_STAB)
 
 stuck2.ue_jug() #GPSアンテナを上の状態にしておく
 

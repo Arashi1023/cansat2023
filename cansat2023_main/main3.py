@@ -70,12 +70,16 @@ while True:
     if x != 'start':
         y = input('Are you sure you want to turn off the program? (y/n)')
         if y == 'y':
-            print('Program Stop')
+            print('#####=====Program Stop=====#####')
             sys.exit()
         elif y == 'n':
-            print('Try again')
+            print('Canceled')
         else:
             print('Invalid input')
+    elif x == 'start':
+        break
+    else:
+        print('Invalid input')
 
 print('#####=====Starting Program=====#####S')
 

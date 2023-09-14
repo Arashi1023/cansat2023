@@ -524,7 +524,8 @@ if __name__ == "__main__":
     #-log-#
     t_start_goal = time.time()
 
-    image_guide_log = log.Logger(dir='../logs/test_logs/image_guide_test', filename='Image_guide_test', t_start=t_start_goal, columns=['lat', 'lon', 'distance_to_goal', 'area_ratio', 'angle', 'isReach_goal'])
+    image_guide_log = log.Logger(dir='../logs/test_logs/image_guide_test', filename='Image_guide_test', t_start=t_start_goal, columns=['lat', 'lon', 'distance_to_goal', 'area_ratio', 'target_azimuth
+    ', 'isReach_goal'])
 
     #-Image Guide Drive-#
     magx_off, magy_off = calibration.cal(30, -30, 30) #キャリブレーション
@@ -567,8 +568,8 @@ if __name__ == "__main__":
                 add_pwr = min(add_pwr, 25)
                 stuck_check_array = deque([0]*6, maxlen=6) #スタックチェック用の配列の初期化
 
-        lat_now, lon_now, distance_to_goal, area_ratio, angle, isReach_goal = main(lat_dest=LAT_GOAL, lon_dest=LON_GOAL, thd_distance_goal=THD_DISTANCE_GOAL, thd_red_area=THD_RED_RATIO, magx_off=magx_off, magy_off=magy_off, add_pwr=add_pwr)
-        image_guide_log.save_log(lat_now, lon_now, distance_to_goal, area_ratio, angle, isReach_goal)
+        lat_now, lon_now, distance_to_goal, area_ratio, angle, isReach_goal = main(lat_dest=LAT_GOAL, lon_dest=LON_GOAL, thd_distance_goal=THD_DISTANCE_GOAL, thd_red_area=THD_RED_RATIO, magx_off=magx_off, magy_off=magy_off, add_pwr=add_pwr, img_guide_log=image_guide_log)
+        # image_guide_log.save_log(lat_now, lon_now, distance_to_goal, area_ratio, angle, isReach_goal)
         print('distance_to_goal = ', distance_to_goal)
         print('area_ratio = ', area_ratio)
         print('angle = ', angle, '%')

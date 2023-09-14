@@ -55,12 +55,12 @@ motor.setup()
 
 #####=====wireless com=====#####
 #-Setting up wireless communication-#
-# send.send_data('CTS')
-# time.sleep(10)
-# send.send_data('Wait')
-# time.sleep(10) #繋げている状態で何分か待つ
-# send.send_data('CTF')
-# time.sleep(10)
+send.send_data('CTS')
+time.sleep(10)
+send.send_data('Wait')
+time.sleep(10) #繋げている状態で何分か待つ
+send.send_data('CTF')
+time.sleep(10)
 # #-Turning off wireless communication-#
 # send.send_off() #分離機構の展開までの間は無線通信を切る
 
@@ -99,6 +99,7 @@ release_log.save_log('Release Detect Start')
 press_release_count = 0
 press_array = [0]*2
 system_checker = 0
+wireless_judge_count = 0
 
 while True:
     if time.time() - t_start > RELEASE_TIMEOUT: #タイムアウトの設定
@@ -115,10 +116,15 @@ while True:
     print(f'delta press {delta_press}')
     print('isRelease: ' + str(isRelease))
 
+    #-無線確認用-#
+    if wireless_judge_count % 6 == 0 : #1分毎に無線通信
+        send.send_data('Release Judging')
+    wireless_judge_count += 1
+
     if isRelease == 1:
         print('Release Detected')
         break
-    syste_checker += 1
+    system_checker += 1
 
 #-Log-#
 print('Saving Log...')
@@ -126,7 +132,7 @@ phase_log.save_log('1', 'Release Detect Sequence: End', 0, 0)
 release_log.save_log('Release Detected')
 
 #-send-#
-send.send_on()
+#send.send_on()
 print('Sending Data...')
 send.send_data('Release f')
 time.sleep(10)
@@ -216,7 +222,7 @@ phase_log.save_log('3', 'GPS Received', lat_test, lon_test) #GPS情報の取得�
 print('GPS received')
 
 #-Turning On wireless communication-#
-send.send_on()
+#send.send_on()
 
 #-send-#
 print('Sending Data...')

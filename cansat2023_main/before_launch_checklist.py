@@ -56,10 +56,9 @@ def bf_launch():
         
         send.send_data(text)
         print('送信しました')
-        received_text = send.receive_data()
-        send.receive_data
-        print("受信",received_text)
+
         time.sleep(1)
+
         print('Checking Camera')
         take.picture('../imgs/test_imgs/take', 320, 240)
         print('finish')

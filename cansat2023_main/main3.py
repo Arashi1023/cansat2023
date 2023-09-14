@@ -70,6 +70,8 @@ if x != 'a':
     print('Program Stop')
     sys.exit()
 
+print('Starting Program')
+
 #####=====clock setup=====#####
 print('Starting Program in 10secs')
 t_start = time.time()

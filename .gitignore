@@ -6,10 +6,10 @@ sequence/photo_imageguide
 sequence/photo_storage
 
 cansat2023_main/__pycache__
+cansat2023_main/log
 imgs/parachute_avoid/all
 imgs/human_detect/all
 imgs
-logs/test_logs
 logs
 
 sequence

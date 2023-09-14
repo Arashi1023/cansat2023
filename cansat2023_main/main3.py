@@ -65,10 +65,17 @@ time.sleep(10)
 # send.send_off() #分離機構の展開までの間は無線通信を切る
 
 #####=====kill switch=====#####
-x = input('Enter start to turn on the program:')
-if x != 'start':
-    print('Program Stop')
-    sys.exit()
+while True:
+    x = input('Enter start to start program:')
+    if x != 'start':
+        y = input('Are you sure you want to turn off the program? (y/n)')
+        if y == 'y':
+            print('Program Stop')
+            sys.exit()
+        elif y == 'n':
+            print('Try again')
+        else:
+            print('Invalid input')
 
 print('#####=====Starting Program=====#####S')
 
@@ -90,7 +97,7 @@ gps_running_goal_log = log.Logger(dir='../logs/7_gps_running_goal_log', filename
 image_guide_log = log.Logger(dir='../logs/8_image_guide_log', filename='image_guide', t_start=t_start, columns=['lat', 'lon', 'distance_to_goal', 'area_ratio', 'target_azimuth', 'isReach_goal'])
 
 #####=====Mission Sequence=====#####
-send.senda_data('Mission Start')
+send.send_data('Mission Start')
 
 #####===== 1 Release Detect Sequence=====#####
 print('#####-----Release Detect Sequence: Start-----#####')
@@ -124,7 +131,7 @@ while True:
     if isRelease == 1:
         print('Release Detected')
         break
-        
+
     system_checker += 1
 
 #-Log-#
@@ -183,6 +190,9 @@ print('#####-----Land Detect Sequence: End-----#####')
 
 #-send_reset-#
 send.send_reset(t_reset = 5)
+
+
+
 
 
 #####===== 3 Melt Sequence=====#####
@@ -255,8 +265,8 @@ t_start = time.time()
 rotate_check_array = deque([0]*6, maxlen=6)
 add_pwr = 0
 add_count = 0
-magx_off = -830
-magy_off = -980
+magx_off = -174
+magy_off = -108
 
 #-Log Set up-#
 
@@ -412,7 +422,7 @@ add_pwr = 0
 add_count = 0
 t_start_detect = time.time()
 
-magx_off, magy_off = calibration.cal(30, -30, 30)
+magx_off, magy_off = calibration.cal(40, -40, 30)
 
 while True:
     ###---回転場所の整地---###
@@ -484,6 +494,9 @@ else:
 print('#####-----Human Detection Sequence: End-----#####')
 
 
+
+
+#画像伝送#
 if isHuman != 1: #人を見つけたときに限り以下の処理を行い画像伝送を行う
     print('#####-----Sending Image-----#####')
     #-Log-#

@@ -65,12 +65,12 @@ time.sleep(10)
 # send.send_off() #分離機構の展開までの間は無線通信を切る
 
 #####=====kill switch=====#####
-x = input('Enter a to start program:')
-if x != 'a':
+x = input('Enter start to turn on the program:')
+if x != 'start':
     print('Program Stop')
     sys.exit()
 
-print('Starting Program')
+print('#####=====Starting Program=====#####S')
 
 #####=====clock setup=====#####
 print('Starting Program in 10secs')
@@ -101,7 +101,6 @@ release_log.save_log('Release Detect Start')
 press_release_count = 0
 press_array = [0]*2
 system_checker = 0
-wireless_judge_count = 0
 
 while True:
     if time.time() - t_start > RELEASE_TIMEOUT: #タイムアウトの設定
@@ -119,13 +118,13 @@ while True:
     print('isRelease: ' + str(isRelease))
 
     #-無線確認用-#
-    if wireless_judge_count % 6 == 0 : #1分毎に無線通信
+    if system_checker % 6 == 0 : #1分毎に無線通信
         send.send_data('Release Judging')
-    wireless_judge_count += 1
 
     if isRelease == 1:
         print('Release Detected')
         break
+        
     system_checker += 1
 
 #-Log-#
